@@ -16,6 +16,7 @@
     "@kubb/core": "^3.0.14",
     "@kubb/plugin-client": "^3.0.14",
     "@kubb/plugin-oas": "^3.0.14",
+    "@kubb/plugin-react-query": "^3.0.14",
     "@kubb/plugin-ts": "^3.0.14",
     "@kubb/plugin-zod": "^3.0.14",
     "@vitejs/plugin-react": "^4.3.4",
@@ -24,6 +25,7 @@
     "fs.promises": "^0.1.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-query": "^3.39.3",
     "tsx": "^4.19.2",
     "zod": "^3.23.8"
   },
@@ -37,6 +39,7 @@
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.14",
     "globals": "^15.12.0",
+    "prettier": "^3.4.2",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.15.0",
     "vite": "^6.0.1"

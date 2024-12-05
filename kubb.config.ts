@@ -1,34 +1,35 @@
-import { defineConfig } from '@kubb/core'
-import { pluginClient } from '@kubb/plugin-client'
-import { pluginOas } from '@kubb/plugin-oas'
-import { pluginTs } from '@kubb/plugin-ts'
-import { pluginZod } from '@kubb/plugin-zod'
+import { defineConfig } from "@kubb/core";
+import { pluginClient } from "@kubb/plugin-client";
+import { pluginOas } from "@kubb/plugin-oas";
+import { pluginTs } from "@kubb/plugin-ts";
+import { pluginZod } from "@kubb/plugin-zod";
+import { pluginReactQuery } from "@kubb/plugin-react-query";
 
 export default defineConfig(() => {
   return {
-    root: '.',
+    root: ".",
     input: {
-      path: './swaggerApi.json',
+      path: "./swaggerApi.json",
     },
     output: {
-      path: './src/api/generated',
+      path: "./src/api/generated",
       clean: true,
     },
     plugins: [
       pluginOas({
         output: {
-          path: "./jsonApi"
-        }
+          path: "./jsonApi",
+        },
       }),
       pluginTs({
         output: {
-          path: "./types"
+          path: "./types",
         },
         group: {
           type: "tag",
-          name: ({group}) => `${group}Type`
+          name: ({ group }) => `${group}Type`,
         },
-        dateType: 'date',
+        dateType: "date",
       }),
       pluginZod({
         output: {
@@ -36,24 +37,25 @@ export default defineConfig(() => {
         },
         group: {
           type: "tag",
-          name: ({group}) => `${group}Schemas`,
+          name: ({ group }) => `${group}Schemas`,
         },
         typed: true,
-        dateType: 'date',
+        dateType: "date",
       }),
       pluginClient({
         output: {
-          path: "./clients"
+          path: "./clients",
         },
         group: {
-          type: 'tag',
+          type: "tag",
         },
         operations: true,
         dataReturnType: "full",
         paramsType: "inline",
         parser: "zod",
         baseURL: "http://localhost",
-      })
+      }),
+      pluginReactQuery({}),
     ],
-  }
-})
+  };
+});
