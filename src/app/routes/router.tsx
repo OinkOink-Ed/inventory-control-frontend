@@ -3,62 +3,91 @@ import { ErrorBoundary } from "../ErrorBoundary";
 
 export const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/auth",
+
+    // loader TODO проверка на не авторизацию
+
     async lazy() {
-      const { App } = await import("@/app/App");
-      return { Component: App };
+      const { Login } = await import("@/app/pages/auth/Login");
+      return { Component: Login };
+    },
+    errorElement: <ErrorBoundary />,
+  },
+
+  {
+    async lazy() {
+      const { AppLayout } = await import("@/app/Layouts/AppLayout");
+      return { Component: AppLayout };
     },
     children: [
       {
-        index: true,
-
-        // TODO подумать какой компонент будет отображаться сразу
-        // async lazy() {
-        //   const { AdminPanel } = await import(
-        //     "@/app/pages/AdminPanel/AdminPanel"
-        //   );
-        //   return { Component: AdminPanel };
-        // },
-      },
-      {
-        path: "management",
-        // loader:  TODO проверка доступа нужна + загрузка данных
+        path: "/",
+        // TODO Получается, что тут будет реализован выбор катриджа и его модели для выдачи + генерация пдф
         async lazy() {
-          const { AdminPanel } = await import(
-            "@/app/pages/AdminPanel/AdminPanel"
-          );
-          return { Component: AdminPanel };
+          const { Delivery } = await import("@/app/pages/delivery/Delivery");
+          return { Component: Delivery };
         },
       },
       {
-        path: "profile",
-        // TODO А нужен ли мне компонент профиля
-        // async lazy() {
-        //   const { AdminPanel } = await import(
-        //     "@/app/pages/AdminPanel/AdminPanel"
-        //   );
-        //   return { Component: AdminPanel };
-        // },
+        // loader:  TODO проверка доступа нужна
+        async lazy() {
+          const { ManagementLayout } = await import(
+            "@/app/Layouts/ManagementLayout"
+          );
+          return { Component: ManagementLayout };
+        },
+        children: [
+          {
+            path: "/management",
+
+            // TODO приём картриджей поставленых в учреждение
+
+            async lazy() {
+              const { Acceptance } = await import(
+                "@/app/pages/acceptance/Acceptance"
+              );
+              return { Component: Acceptance };
+            },
+          },
+          {
+            path: "users",
+
+            // TODO список пользователей + создание
+            async lazy() {
+              const { Users } = await import("@/app/pages/users/Users");
+              return { Component: Users };
+            },
+          },
+          {
+            path: "supplement",
+
+            // TODO Добавление новых моделей картриджей
+
+            async lazy() {
+              const { Supplement } = await import(
+                "@/app/pages/supplement/Supplement"
+              );
+              return { Component: Supplement };
+            },
+          },
+        ],
+        errorElement: <ErrorBoundary />,
       },
       {
-        path: "reports",
+        path: "/profile",
+        // TODO Компонент профиля
+        async lazy() {
+          const { Profile } = await import("@/app/pages/profile/Profile");
+          return { Component: Profile };
+        },
+      },
+      {
+        path: "/reports",
         // TODO Подумать какие отчёты нужны
-        // async lazy() {
-        //   const { AdminPanel } = await import(
-        //     "@/app/pages/AdminPanel/AdminPanel"
-        //   );
-        //   return { Component: AdminPanel };
-        // },
-      },
-      {
-        path: "delivery",
-        // TODO Получается, что тут будет реализован выбор катриджа и его модели для выдачи + генерация пдф
-        // async lazy() {
-        //   const { AdminPanel } = await import(
-        //     "@/app/pages/AdminPanel/AdminPanel"
-        //   );
-        //   return { Component: AdminPanel };
-        // },
+        async lazy() {
+          const { Reports } = await import("@/app/pages/reports/Reports");
+          return { Component: Reports };
+        },
       },
     ],
     errorElement: <ErrorBoundary />,
