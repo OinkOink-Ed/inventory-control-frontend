@@ -9,6 +9,5 @@
   },
   "editor.quickSuggestions": {
     "strings": "on"
-  },
-  "json.schemas": []
+  }
 }
