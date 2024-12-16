@@ -11,7 +11,7 @@ async function main() {
   console.log("Generated Complite");
 
   console.log("Transformation of types into interfaces");
-  execSync("npx eslint src/api/generated/types --fix");
+  execSync("npx eslint src/app/api/generated/types --fix");
   console.log("Transformation Complite");
 }
 

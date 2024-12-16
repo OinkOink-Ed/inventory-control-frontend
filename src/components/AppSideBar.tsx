@@ -66,7 +66,7 @@ export function AppSideBar() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            {/* Я так понял, что нужна будет своя кнопка обёртка этому компоненту с логикой */}
+            {/* Нужно дать сюда логику выхода */}
             <SidebarMenuButton>Выход</SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

@@ -50,7 +50,7 @@ export const router = createBrowserRouter([
             },
           },
           {
-            path: "users",
+            path: "/users",
 
             // TODO список пользователей + создание
             async lazy() {
@@ -59,7 +59,7 @@ export const router = createBrowserRouter([
             },
           },
           {
-            path: "supplement",
+            path: "/supplement",
 
             // TODO Добавление новых моделей картриджей
 
