@@ -2,6 +2,7 @@ import { Archive, Bolt, Book, PackageCheck, User } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -62,6 +63,14 @@ export function AppSideBar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            {/* Я так понял, что нужна будет своя кнопка обёртка этому компоненту с логикой */}
+            <SidebarMenuButton>Выход</SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 }
