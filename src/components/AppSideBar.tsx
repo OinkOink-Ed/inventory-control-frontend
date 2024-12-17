@@ -13,7 +13,7 @@ import {
 
 const itemsUser = [
   {
-    title: "Выд",
+    title: "Выдача",
     url: "/",
     icon: Home,
   },
