@@ -3,7 +3,7 @@ import { ErrorBoundary } from "../ErrorBoundary";
 
 export const router = createBrowserRouter([
   {
-    path: "/auth",
+    path: "auth",
 
     // loader TODO проверка на не авторизацию
 
@@ -11,6 +11,10 @@ export const router = createBrowserRouter([
       const { Login } = await import("@/app/pages/auth/Login");
       return { Component: Login };
     },
+
+    // При ленивой загрузке и loader нужен такой элемент - подумать и написать
+    hydrateFallbackElement: <div>Загрузка</div>,
+
     errorElement: <ErrorBoundary />,
   },
 
@@ -38,7 +42,7 @@ export const router = createBrowserRouter([
         },
         children: [
           {
-            path: "/management",
+            path: "management",
 
             // TODO приём картриджей поставленых в учреждение
 
@@ -50,7 +54,7 @@ export const router = createBrowserRouter([
             },
           },
           {
-            path: "/users",
+            path: "users",
 
             // TODO список пользователей + создание
             async lazy() {
@@ -59,7 +63,7 @@ export const router = createBrowserRouter([
             },
           },
           {
-            path: "/supplement",
+            path: "supplement",
 
             // TODO Добавление новых моделей картриджей
 
@@ -74,7 +78,7 @@ export const router = createBrowserRouter([
         errorElement: <ErrorBoundary />,
       },
       {
-        path: "/profile",
+        path: "profile",
         // TODO Компонент профиля
         async lazy() {
           const { Profile } = await import("@/app/pages/profile/Profile");
@@ -82,7 +86,7 @@ export const router = createBrowserRouter([
         },
       },
       {
-        path: "/reports",
+        path: "reports",
         // TODO Подумать какие отчёты нужны
         async lazy() {
           const { Reports } = await import("@/app/pages/reports/Reports");

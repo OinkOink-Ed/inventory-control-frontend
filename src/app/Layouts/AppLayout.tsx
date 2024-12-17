@@ -1,9 +1,6 @@
 import { AppSideBar } from "@/components/AppSideBar";
 import { Outlet } from "react-router";
-import {
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/Sidebar/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 // Нужно реализовать роли через Context Provider
 
@@ -15,9 +12,8 @@ export function AppLayout() {
   // TODO Базовые стили приложения
   return (
     <SidebarProvider /*defaultOpen={defaultOpen}*/>
-      <AppSideBar />
       <main className="flex h-svh w-full">
-        <SidebarTrigger />
+        <AppSideBar />
         <Outlet />
       </main>
     </SidebarProvider>

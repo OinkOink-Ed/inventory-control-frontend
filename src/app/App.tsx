@@ -5,10 +5,10 @@ import { AppLayout } from "./Layouts/AppLayout";
 
 export function App() {
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <QueryClientProvider client={queryClientInstans}>
+    <QueryClientProvider client={queryClientInstans}>
+      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
         <AppLayout />
-      </QueryClientProvider>
-    </ThemeProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }

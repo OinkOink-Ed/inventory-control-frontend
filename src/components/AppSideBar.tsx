@@ -1,4 +1,4 @@
-import { Archive, Bolt, Book, PackageCheck, User } from "lucide-react";
+import { Archive, Book, Home, PackageCheck, User, User2 } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -9,30 +9,18 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "./ui/Sidebar/sidebar";
+} from "./ui/sidebar";
 
-// Нужно будет вынести константу (сделать их две + отдавать сюда в зависимости от роли)
-
-const items = [
+const itemsUser = [
   {
-    title: "Profile",
+    title: "Выд",
+    url: "/",
+    icon: Home,
+  },
+  {
+    title: "Профиль",
     url: "/profile",
     icon: User,
-  },
-  {
-    title: "Панель Администратора",
-    url: "/management",
-    icon: Bolt,
-  },
-  {
-    title: "Приём картриджей",
-    url: "/",
-    icon: PackageCheck,
-  },
-  {
-    title: "Модели картриджей",
-    url: "/supplement",
-    icon: Book,
   },
   {
     title: "Отчёты",
@@ -41,15 +29,52 @@ const items = [
   },
 ];
 
+const itemsAdmin = [
+  {
+    title: "Пользователи",
+    url: "/users",
+    icon: User2,
+  },
+  {
+    title: "Приём картриджей",
+    url: "/management",
+    icon: PackageCheck,
+  },
+  {
+    title: "Модели картриджей",
+    url: "/supplement",
+    icon: Book,
+  },
+];
+
 export function AppSideBar() {
   return (
-    <Sidebar>
+    <Sidebar collapsible="none">
       <SidebarContent>
+        <SidebarGroupLabel>Inventory</SidebarGroupLabel>
         <SidebarGroup>
-          <SidebarGroupLabel>Inventory</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
+              {itemsUser.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <a href={item.url}>
+                      <item.icon />
+                      <span>{item.title}</span>
+                    </a>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        {/* Отображать через условный рендеринг */}
+        <SidebarGroupLabel>Admin Panel</SidebarGroupLabel>
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {itemsAdmin.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <a href={item.url}>

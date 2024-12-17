@@ -1,6 +1,10 @@
-import { PropsWithChildren } from "react";
+import { Outlet } from "react-router";
 
-export function ManagementLayout({ children }: PropsWithChildren) {
+export function ManagementLayout() {
   // TODO Базовые стили Админ панели
-  return <main className="flex h-svh w-full">{children}</main>;
+  return (
+    <main className="flex h-svh w-full">
+      <Outlet />
+    </main>
+  );
 }

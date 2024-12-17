@@ -1,3 +1,3 @@
 export function Acceptance() {
-  return <div>АПриёмка картриджей</div>;
+  return <div>Приёмка картриджей</div>;
 }
