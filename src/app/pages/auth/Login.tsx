@@ -8,7 +8,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/Button/Button";
 import { z } from "zod";
@@ -22,17 +22,14 @@ export function Login() {
     },
   });
 
-  // function testSubmit(data: AuthRequestDto) {
-  //   console.log(data);
-  // }
-
-  const onSubmit: SubmitHandler<AuthRequestDto> = (data) => console.log(data);
+  function onSubmit(data: AuthRequestDto): void {
+    console.log(data);
+  }
 
   return (
     <div className="flex h-svh justify-center bg-slate-300">
       <Form {...form}>
         <form
-          //Спросил у нейронки и лазил на форуме
           onSubmit={(event) => void form.handleSubmit(onSubmit)(event)}
           className="w-80 flex-col space-y-8 self-center rounded-lg border-2 border-slate-600 bg-slate-100 p-8"
         >
