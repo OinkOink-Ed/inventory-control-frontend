@@ -1,20 +1,18 @@
 import { createBrowserRouter } from "react-router";
 import { ErrorBoundary } from "../ErrorBoundary";
+import publicRoute from "./loaders/Public";
+import privateRoute from "./loaders/Private";
+import LoginSkeleton from "../pages/auth/LoginSkeleton";
 
 export const router = createBrowserRouter([
   {
     path: "auth",
-
-    // loader TODO проверка на не авторизацию
-
+    loader: publicRoute,
     async lazy() {
       const { Login } = await import("@/app/pages/auth/Login");
       return { Component: Login };
     },
-
-    // При ленивой загрузке и loader нужен такой элемент - подумать и написать
-    hydrateFallbackElement: <div>Загрузка</div>,
-
+    hydrateFallbackElement: <LoginSkeleton />,
     errorElement: <ErrorBoundary />,
   },
 
@@ -27,6 +25,9 @@ export const router = createBrowserRouter([
       {
         path: "/",
         // TODO Получается, что тут будет реализован выбор катриджа и его модели для выдачи + генерация пдф
+
+        loader: privateRoute,
+
         async lazy() {
           const { Delivery } = await import("@/app/pages/delivery/Delivery");
           return { Component: Delivery };

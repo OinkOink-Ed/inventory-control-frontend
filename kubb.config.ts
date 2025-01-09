@@ -53,7 +53,7 @@ export default defineConfig(() => {
         dataReturnType: "full",
         paramsType: "inline",
         parser: "zod",
-        baseURL: "http://localhost",
+        importPath: "../../../client.ts",
       }),
       // pluginReactQuery({
       //   output: {
