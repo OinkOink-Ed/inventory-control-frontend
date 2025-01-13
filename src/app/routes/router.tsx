@@ -9,8 +9,8 @@ export const router = createBrowserRouter([
     path: "auth",
     loader: publicRoute,
     async lazy() {
-      const { Login } = await import("@/app/pages/auth/Login");
-      return { Component: Login };
+      const { LoginLayout } = await import("@/app/Layouts/LoginLayout");
+      return { Component: LoginLayout };
     },
     hydrateFallbackElement: <LoginSkeleton />,
     errorElement: <ErrorBoundary />,

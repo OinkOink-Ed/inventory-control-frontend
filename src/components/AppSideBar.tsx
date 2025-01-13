@@ -10,6 +10,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "./ui/sidebar";
+import { decryptedProfile } from "@/app/helpers/decryptedProfile";
 
 const itemsUser = [
   {
@@ -69,24 +70,30 @@ export function AppSideBar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        {/* Отображать через условный рендеринг */}
-        <SidebarGroupLabel>Admin Panel</SidebarGroupLabel>
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {itemsAdmin.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        {/* Изначально хотел использовать ReactContext, потом понял, что вроде как бессмысленно */}
+        {decryptedProfile()?.role.roleName !== "Admin" ? (
+          <></>
+        ) : (
+          <>
+            <SidebarGroupLabel>Admin Panel</SidebarGroupLabel>
+            <SidebarGroup>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {itemsAdmin.map((item) => (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton asChild>
+                        <a href={item.url}>
+                          <item.icon />
+                          <span>{item.title}</span>
+                        </a>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          </>
+        )}
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>

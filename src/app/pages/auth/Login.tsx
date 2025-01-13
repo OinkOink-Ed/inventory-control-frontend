@@ -18,12 +18,18 @@ import { Button } from "@/components/ui/Button/Button";
 import { z } from "zod";
 import { AxiosError } from "axios";
 import { toast, Toaster } from "sonner";
-import { useAuthStore } from "./state/useAuthStore";
-import { redirect } from "react-router";
+import { useAuthStore } from "./store/useAuthStore";
+import { useNavigate } from "react-router";
+import { useProfileStore } from "@/app/stores/profile/useProfileStore";
+// import { decryptedProfile } from "@/app/helpers/decryptedProfile";
 
 export function Login() {
-  //наверное этот метод стора можно вызывать в другом сторе, в котором я буду сохранять профайл
+  console.log("Рендер Login Page");
+  //Просто хочу несколько сторов
   const setAuth = useAuthStore((state) => state.setAuth);
+  const setProfile = useProfileStore((state) => state.setProfile);
+
+  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof authRequestDtoSchema>>({
     resolver: zodResolver(authRequestDtoSchema),
@@ -39,13 +45,13 @@ export function Login() {
     //Это механика рефреш аксесс, + на сервере я так ещё не умею делать.
 
     try {
-      const res = await authControllerSighIn(data);
+      const res = (await authControllerSighIn(data)).data.access_token;
+
+      setProfile(res);
       setAuth();
 
-      //Нужно ещё и профиль сохранить
-      redirect("/");
-
-      console.log(res);
+      //TS подсвечивает что navigate теперь async (по-моему в react-router-dom v6 не была async)
+      await navigate("/");
     } catch (error) {
       //В целом можно разобраться как на сервере типизировать ошибки и работать с ними, чтобы потом через kubb из swagger тянуть типизацию этих ошибок
       //И свободно их использовать здесь (наверное). Пока что буду как-то так через axios и понимание того, что мне приходит message
@@ -65,12 +71,12 @@ export function Login() {
   }
 
   return (
-    <div className="flex h-svh justify-center bg-slate-300">
+    <div className="flex h-svh justify-center">
       <Toaster richColors />
       <Form {...form}>
         <form
           onSubmit={(event) => void form.handleSubmit(onSubmit)(event)}
-          className="w-80 flex-col space-y-8 self-center rounded-lg border-2 border-slate-600 bg-slate-100 p-8"
+          className="w-80 flex-col space-y-8 self-center rounded-lg border-2 p-8"
         >
           <FormField
             control={form.control}
