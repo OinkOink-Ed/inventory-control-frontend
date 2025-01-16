@@ -1,13 +1,14 @@
 import { createBrowserRouter } from "react-router";
 import { ErrorBoundary } from "../ErrorBoundary";
-import publicRoute from "./loaders/Public";
-import privateRoute from "./loaders/Private";
+import PublicRoute from "./loaders/Public";
+import PrivateRoute from "./loaders/Private";
 import LoginSkeleton from "../pages/auth/LoginSkeleton";
+import AdminRoute from "./loaders/AdminRoute";
 
 export const router = createBrowserRouter([
   {
     path: "auth",
-    loader: publicRoute,
+    loader: PublicRoute,
     async lazy() {
       const { LoginLayout } = await import("@/app/Layouts/LoginLayout");
       return { Component: LoginLayout };
@@ -26,7 +27,7 @@ export const router = createBrowserRouter([
         path: "/",
         // TODO Получается, что тут будет реализован выбор катриджа и его модели для выдачи + генерация пдф
 
-        loader: privateRoute,
+        loader: PrivateRoute,
 
         async lazy() {
           const { Delivery } = await import("@/app/pages/delivery/Delivery");
@@ -34,7 +35,8 @@ export const router = createBrowserRouter([
         },
       },
       {
-        // loader:  TODO проверка доступа нужна
+        loader: AdminRoute,
+
         async lazy() {
           const { ManagementLayout } = await import(
             "@/app/Layouts/ManagementLayout"
