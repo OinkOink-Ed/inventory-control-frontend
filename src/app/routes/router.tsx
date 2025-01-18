@@ -33,6 +33,7 @@ export const router = createBrowserRouter([
           const { Delivery } = await import("@/app/pages/delivery/Delivery");
           return { Component: Delivery };
         },
+        // hydrateFallbackElement: <Нужен Элемент скелета />,
       },
       {
         loader: AdminRoute,
@@ -87,6 +88,7 @@ export const router = createBrowserRouter([
           const { Profile } = await import("@/app/pages/profile/Profile");
           return { Component: Profile };
         },
+        // hydrateFallbackElement: <Нужен Элемент скелета />,
       },
       {
         path: "reports",
@@ -95,6 +97,7 @@ export const router = createBrowserRouter([
           const { Reports } = await import("@/app/pages/reports/Reports");
           return { Component: Reports };
         },
+        // hydrateFallbackElement: <Нужен Элемент скелета />,
       },
     ],
     errorElement: <ErrorBoundary />,

@@ -24,7 +24,6 @@ import { useProfileStore } from "@/app/stores/profile/useProfileStore";
 // import { decryptedProfile } from "@/app/helpers/decryptedProfile";
 
 export function Login() {
-  console.log("Рендер Login Page");
   //Просто хочу несколько сторов
   const setAuth = useAuthStore((state) => state.setAuth);
   const setProfile = useProfileStore((state) => state.setProfile);
