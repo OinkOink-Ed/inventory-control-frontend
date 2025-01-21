@@ -103,7 +103,7 @@ export function Login() {
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <Button type="submit">Войти</Button>
         </form>
       </Form>
     </div>

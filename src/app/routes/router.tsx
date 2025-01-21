@@ -72,10 +72,10 @@ export const router = createBrowserRouter([
             // TODO Добавление новых моделей картриджей
 
             async lazy() {
-              const { Supplement } = await import(
-                "@/app/pages/supplement/Supplement"
+              const { SupplementLayout } = await import(
+                "@/app/Layouts/SupplementLayout"
               );
-              return { Component: Supplement };
+              return { Component: SupplementLayout };
             },
           },
         ],

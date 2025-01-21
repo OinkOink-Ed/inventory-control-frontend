@@ -1,12 +1,12 @@
 import { UserDto } from "@/app/api/generated";
 import { jwtDecode, JwtPayload } from "jwt-decode";
 
-export function decryptedProfile(): UserDto | null {
-  const cryptProfile = localStorage.getItem("profileStorage");
+export function decryptedProfile(): UserDto {
+  const cryptProfile = localStorage.getItem("profileStorage")
+    ? localStorage.getItem("profileStorage")!
+    : "";
 
-  const profile = cryptProfile
-    ? (jwtDecode<JwtPayload>(cryptProfile).sub as unknown as UserDto)
-    : null;
+  const profile = jwtDecode<JwtPayload>(cryptProfile).sub as unknown as UserDto;
 
   return profile;
 }
