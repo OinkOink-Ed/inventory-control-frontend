@@ -45,9 +45,7 @@ export function SupplementForm() {
   function onSubmit(data: CreateModelCartridgeDto): void {
     try {
       data.creator.id = decryptedProfile().id;
-      console.log(data);
       mutation.mutate(data);
-      console.log(mutation.error);
     } catch (error) {
       console.log(error);
     }

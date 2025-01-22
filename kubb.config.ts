@@ -39,7 +39,7 @@ export default defineConfig(() => {
           name: ({ group }) => `${group}Schemas`,
         },
         typed: true,
-        dateType: "string",
+        dateType: "date",
       }),
       pluginClient({
         output: {
