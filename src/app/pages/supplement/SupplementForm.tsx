@@ -1,6 +1,7 @@
 import {
   CreateModelCartridgeDto,
   createModelCartridgeDtoSchema,
+  modelCartridgesControllerCreate,
 } from "@/app/api/generated";
 import { decryptedProfile } from "@/app/helpers/decryptedProfile";
 import { Button } from "@/components/ui/Button/Button";
@@ -14,11 +15,23 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { Toaster } from "sonner";
 import { z } from "zod";
 
 export function SupplementForm() {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: modelCartridgesControllerCreate,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["modelsCartridges"],
+      });
+    },
+  });
+
   const form = useForm<z.infer<typeof createModelCartridgeDtoSchema>>({
     resolver: zodResolver(createModelCartridgeDtoSchema),
     defaultValues: {
@@ -32,6 +45,9 @@ export function SupplementForm() {
   function onSubmit(data: CreateModelCartridgeDto): void {
     try {
       data.creator.id = decryptedProfile().id;
+      console.log(data);
+      mutation.mutate(data);
+      console.log(mutation.error);
     } catch (error) {
       console.log(error);
     }
@@ -49,13 +65,13 @@ export function SupplementForm() {
             control={form.control}
             name="modelName"
             render={({ field }) => (
-              <FormItem className="h-20">
-                <FormLabel>Название модели картриджа</FormLabel>
+              <FormItem className="h-20 w-full">
+                <FormLabel>Добавить новую модель картриджа</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="Введите модель картриджа"
                     {...field}
-                    className="w-[300px]"
+                    className="w-full"
                   />
                 </FormControl>
                 <FormMessage />

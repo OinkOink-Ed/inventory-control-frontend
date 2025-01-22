@@ -6,7 +6,21 @@ export function decryptedProfile(): UserDto {
     ? localStorage.getItem("profileStorage")!
     : "";
 
-  const profile = jwtDecode<JwtPayload>(cryptProfile).sub as unknown as UserDto;
+  let profile: UserDto = {
+    id: 0,
+    name: "",
+    nickname: "",
+    password: "",
+    patronimyc: "",
+    role: { roleName: "" },
+    surname: "",
+  };
 
-  return profile;
+  try {
+    profile = jwtDecode<JwtPayload>(cryptProfile).sub as unknown as UserDto;
+    return profile;
+  } catch (error) {
+    console.log(error);
+    return profile;
+  }
 }
