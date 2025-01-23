@@ -38,8 +38,8 @@ export default defineConfig(() => {
           type: "tag",
           name: ({ group }) => `${group}Schemas`,
         },
-        typed: true,
         dateType: "date",
+        inferred: true,
       }),
       pluginClient({
         output: {

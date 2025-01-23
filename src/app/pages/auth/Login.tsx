@@ -1,7 +1,7 @@
 import {
   authControllerSighIn,
   AuthRequestDto,
-  authRequestDtoSchema,
+  AuthRequestDtoSchema,
 } from "@/app/api/generated";
 import {
   Form,
@@ -15,13 +15,12 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/Button/Button";
-import { z } from "zod";
 import { AxiosError } from "axios";
 import { toast, Toaster } from "sonner";
 import { useAuthStore } from "./store/useAuthStore";
 import { useNavigate } from "react-router";
 import { useProfileStore } from "@/app/stores/profile/useProfileStore";
-// import { decryptedProfile } from "@/app/helpers/decryptedProfile";
+import { authRequestDtoSchemaZOD } from "./shema";
 
 export function Login() {
   //Просто хочу несколько сторов
@@ -30,8 +29,8 @@ export function Login() {
 
   const navigate = useNavigate();
 
-  const form = useForm<z.infer<typeof authRequestDtoSchema>>({
-    resolver: zodResolver(authRequestDtoSchema),
+  const form = useForm<AuthRequestDtoSchema>({
+    resolver: zodResolver(authRequestDtoSchemaZOD),
     defaultValues: {
       nickname: "",
       password: "",

@@ -11,6 +11,7 @@ import {
   SidebarMenuItem,
 } from "./ui/sidebar";
 import { decryptedProfile } from "@/app/helpers/decryptedProfile";
+import { Link } from "react-router";
 
 const itemsUser = [
   {
@@ -59,10 +60,10 @@ export function AppSideBar() {
               {itemsUser.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                    <Link to={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -82,10 +83,10 @@ export function AppSideBar() {
                   {itemsAdmin.map((item) => (
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton asChild>
-                        <a href={item.url}>
+                        <Link to={item.url}>
                           <item.icon />
                           <span>{item.title}</span>
-                        </a>
+                        </Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                   ))}

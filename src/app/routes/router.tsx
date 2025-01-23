@@ -22,6 +22,7 @@ export const router = createBrowserRouter([
       const { AppLayout } = await import("@/app/Layouts/AppLayout");
       return { Component: AppLayout };
     },
+    // hydrateFallbackElement: <Нужен Элемент скелета причем можно грузить чисто appBar />,
     children: [
       {
         path: "/",
@@ -33,7 +34,6 @@ export const router = createBrowserRouter([
           const { Delivery } = await import("@/app/pages/delivery/Delivery");
           return { Component: Delivery };
         },
-        // hydrateFallbackElement: <Нужен Элемент скелета />,
       },
       {
         loader: AdminRoute,
@@ -88,7 +88,6 @@ export const router = createBrowserRouter([
           const { Profile } = await import("@/app/pages/profile/Profile");
           return { Component: Profile };
         },
-        // hydrateFallbackElement: <Нужен Элемент скелета />,
       },
       {
         path: "reports",
@@ -97,7 +96,6 @@ export const router = createBrowserRouter([
           const { Reports } = await import("@/app/pages/reports/Reports");
           return { Component: Reports };
         },
-        // hydrateFallbackElement: <Нужен Элемент скелета />,
       },
     ],
     errorElement: <ErrorBoundary />,
