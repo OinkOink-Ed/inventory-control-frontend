@@ -38,7 +38,7 @@ const itemsAdmin = [
     icon: User2,
   },
   {
-    title: "Приём картриджей",
+    title: "Склад",
     url: "/management",
     icon: PackageCheck,
   },

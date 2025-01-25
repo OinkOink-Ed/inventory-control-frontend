@@ -14,7 +14,7 @@ export function AppLayout() {
   return (
     <SidebarProvider /*defaultOpen={defaultOpen}*/>
       <main className="flex h-svh w-full">
-        <Toaster />
+        <Toaster richColors />
         <AppSideBar />
         <Outlet />
       </main>

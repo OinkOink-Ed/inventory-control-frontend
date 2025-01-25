@@ -28,13 +28,13 @@ export function SupplementTable() {
       <TableBody>
         {getModelCartridges.data.map((item) => (
           <TableRow key={item.id}>
-            <TableCell>{item.modelName}</TableCell>
-            <TableCell>{item.printerName}</TableCell>
-            <TableCell>
+            <TableCell className="w-[300px]">{item.modelName}</TableCell>
+            <TableCell className="w-[300px]">{item.printerName}</TableCell>
+            <TableCell className="w-[300px]">
               {`${item.creator.name} ${item.creator.patronimyc} ${item.creator.surname}`}
             </TableCell>
-            <TableCell>{item.createdAt}</TableCell>
-            <TableCell>{item.updatedAt}</TableCell>
+            <TableCell className="w-[300px]">{item.createdAt}</TableCell>
+            <TableCell className="w-[300px]">{item.updatedAt}</TableCell>
           </TableRow>
         ))}
       </TableBody>

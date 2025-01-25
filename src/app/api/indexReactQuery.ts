@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   modelCartridgesControllerCreate,
   modelCartridgesControllerGetAll,
+  roleControllerGetAll,
   usersControllerCreate,
   usersControllerGetAll,
 } from "./generated";
@@ -51,10 +52,18 @@ export function useIndexReactQuery() {
     },
   });
 
+  //Получить роли пользователей
+  const getUserRoles = useQuery({
+    queryKey: ["roles"],
+    queryFn: roleControllerGetAll,
+    staleTime: 5 * 60 * 1000,
+  });
+
   return {
     getModelCartridges,
     createModelCartridge,
     getUsers,
     createuser,
+    getUserRoles,
   };
 }

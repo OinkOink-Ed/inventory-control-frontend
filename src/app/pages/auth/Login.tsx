@@ -16,7 +16,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/Button/Button";
 import { AxiosError } from "axios";
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
 import { useAuthStore } from "./store/useAuthStore";
 import { useNavigate } from "react-router";
 import { useProfileStore } from "@/app/stores/profile/useProfileStore";
@@ -48,7 +48,7 @@ export function Login() {
       setProfile(res);
       setAuth();
 
-      //TS подсвечивает что navigate теперь async (по-моему в react-router-dom v6 не была async)
+      //ESLint подсвечивает что navigate теперь async (по-моему в react-router-dom v6 не была async)
       await navigate("/");
     } catch (error) {
       //В целом можно разобраться как на сервере типизировать ошибки и работать с ними, чтобы потом через kubb из swagger тянуть типизацию этих ошибок
@@ -70,7 +70,6 @@ export function Login() {
 
   return (
     <div className="flex h-svh justify-center">
-      <Toaster richColors />
       <Form {...form}>
         <form
           onSubmit={(event) => void form.handleSubmit(onSubmit)(event)}

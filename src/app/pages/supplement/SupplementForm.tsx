@@ -15,7 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Toaster } from "sonner";
+import { toast } from "sonner";
 import { createModelCartridgeDtoSchemaZOD } from "./shema";
 import { useIndexReactQuery } from "@/app/api/indexReactQuery";
 
@@ -33,10 +33,13 @@ export function SupplementForm() {
     },
   });
 
-  function onSubmit(data: CreateModelCartridgeDto): void {
+  async function onSubmit(data: CreateModelCartridgeDto): Promise<void> {
     try {
       data.creator.id = decryptedProfile().id;
-      createModelCartridge.mutate(data);
+      const res = await createModelCartridge.mutateAsync(data);
+      toast.success(`${res.data.message}`, {
+        // position: "top-center",
+      });
     } catch (error) {
       console.log(error);
     }
@@ -44,7 +47,6 @@ export function SupplementForm() {
 
   return (
     <>
-      <Toaster richColors />
       <Form {...form}>
         <form
           onSubmit={(event) => void form.handleSubmit(onSubmit)(event)}

@@ -51,10 +51,10 @@ export const router = createBrowserRouter([
             // TODO приём картриджей поставленых в учреждение
 
             async lazy() {
-              const { Acceptance } = await import(
-                "@/app/pages/acceptance/Acceptance"
+              const { Warehouse } = await import(
+                "@/app/pages/warehouse/Warehouse"
               );
-              return { Component: Acceptance };
+              return { Component: Warehouse };
             },
           },
           {
@@ -62,8 +62,8 @@ export const router = createBrowserRouter([
 
             // TODO список пользователей + создание
             async lazy() {
-              const { Users } = await import("@/app/pages/users/Users");
-              return { Component: Users };
+              const { UsersLayout } = await import("@/app/Layouts/UsersLayout");
+              return { Component: UsersLayout };
             },
           },
           {
