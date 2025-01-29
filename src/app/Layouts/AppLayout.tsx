@@ -5,7 +5,7 @@ import { Toaster } from "sonner";
 
 // Нужно реализовать роли через Context Provider
 
-export function AppLayout() {
+export default function AppLayout() {
   // Это пример из доки shdcn - не ясно работает ли он
   // const cookieStore = await cookies();
   // const defaultOpen = cookieStore.get("sidebar:state")?.value === "true";

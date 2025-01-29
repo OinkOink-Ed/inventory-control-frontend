@@ -2,81 +2,95 @@ import { createBrowserRouter } from "react-router";
 import { ErrorBoundary } from "../ErrorBoundary";
 import PublicRoute from "./loaders/Public";
 import PrivateRoute from "./loaders/Private";
-import LoginSkeleton from "../pages/auth/LoginSkeleton";
 import AdminRoute from "./loaders/AdminRoute";
+import { Suspense } from "react";
+import LoginSkeleton from "../pages/auth/LoginSkeleton";
+import {
+  AppLayout,
+  Delivery,
+  LoginLayout,
+  ManagementLayout,
+  Profile,
+  Reports,
+  SupplementLayout,
+  UsersLayout,
+  Warehouse,
+} from "../lazyImports";
+import { SpinnerLoad } from "@/components/SpinnerLoad";
+
+// SpinnerLoad можно будет заменить на Skeleton различный в дальнейшем
 
 export const router = createBrowserRouter([
   {
     path: "auth",
     loader: PublicRoute,
-    async lazy() {
-      const { LoginLayout } = await import("@/app/Layouts/LoginLayout");
-      return { Component: LoginLayout };
-    },
-    hydrateFallbackElement: <LoginSkeleton />,
+    element: (
+      <Suspense fallback={<LoginSkeleton />}>
+        <LoginLayout />
+      </Suspense>
+    ),
     errorElement: <ErrorBoundary />,
   },
 
   {
-    async lazy() {
-      const { AppLayout } = await import("@/app/Layouts/AppLayout");
-      return { Component: AppLayout };
-    },
-    // hydrateFallbackElement: <Нужен Элемент скелета причем можно грузить чисто appBar />,
+    element: (
+      <Suspense fallback={<SpinnerLoad />}>
+        <AppLayout />
+      </Suspense>
+    ),
+
     children: [
       {
         path: "/",
         // TODO Получается, что тут будет реализован выбор катриджа и его модели для выдачи + генерация пдф
-
         loader: PrivateRoute,
 
-        async lazy() {
-          const { Delivery } = await import("@/app/pages/delivery/Delivery");
-          return { Component: Delivery };
-        },
+        element: (
+          <Suspense fallback={<SpinnerLoad />}>
+            <Delivery />
+          </Suspense>
+        ),
       },
       {
         loader: AdminRoute,
 
-        async lazy() {
-          const { ManagementLayout } = await import(
-            "@/app/Layouts/ManagementLayout"
-          );
-          return { Component: ManagementLayout };
-        },
+        element: (
+          <Suspense fallback={<SpinnerLoad />}>
+            <ManagementLayout />
+          </Suspense>
+        ),
         children: [
           {
             path: "management",
 
             // TODO приём картриджей поставленых в учреждение
-
-            async lazy() {
-              const { Warehouse } = await import(
-                "@/app/pages/warehouse/Warehouse"
-              );
-              return { Component: Warehouse };
-            },
+            element: (
+              <Suspense fallback={<SpinnerLoad />}>
+                <Warehouse />
+              </Suspense>
+            ),
           },
           {
             path: "users",
 
             // TODO список пользователей + создание
-            async lazy() {
-              const { UsersLayout } = await import("@/app/Layouts/UsersLayout");
-              return { Component: UsersLayout };
-            },
+
+            element: (
+              <Suspense fallback={<SpinnerLoad />}>
+                <UsersLayout />
+              </Suspense>
+            ),
           },
           {
             path: "supplement",
 
             // TODO Добавление новых моделей картриджей
 
-            async lazy() {
-              const { SupplementLayout } = await import(
-                "@/app/Layouts/SupplementLayout"
-              );
-              return { Component: SupplementLayout };
-            },
+            element: (
+              <Suspense fallback={<SpinnerLoad />}>
+                <SupplementLayout />
+              </Suspense>
+            ),
           },
         ],
         errorElement: <ErrorBoundary />,
@@ -84,18 +98,22 @@ export const router = createBrowserRouter([
       {
         path: "profile",
         // TODO Компонент профиля
-        async lazy() {
-          const { Profile } = await import("@/app/pages/profile/Profile");
-          return { Component: Profile };
-        },
+
+        element: (
+          <Suspense fallback={<SpinnerLoad />}>
+            <Profile />
+          </Suspense>
+        ),
       },
       {
         path: "reports",
         // TODO Подумать какие отчёты нужны
-        async lazy() {
-          const { Reports } = await import("@/app/pages/reports/Reports");
-          return { Component: Reports };
-        },
+
+        element: (
+          <Suspense fallback={<SpinnerLoad />}>
+            <Reports />
+          </Suspense>
+        ),
       },
     ],
     errorElement: <ErrorBoundary />,

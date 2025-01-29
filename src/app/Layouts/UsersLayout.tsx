@@ -1,7 +1,7 @@
 import { UserForm } from "../pages/users/UserForm";
 import { UsersTable } from "../pages/users/UsersTable";
 
-export function UsersLayout() {
+export default function UsersLayout() {
   return (
     <div className="flex h-svh w-full flex-grow flex-col">
       <UserForm />

@@ -1,5 +1,5 @@
 import { Login } from "../pages/auth/Login";
 
-export function LoginLayout() {
+export default function LoginLayout() {
   return <Login />;
 }
