@@ -1,7 +1,7 @@
-import { authRequestDtoSchema } from "@/app/api/generated";
+import { postAuthDtoSchema } from "@api/generated";
 import { z } from "zod";
 
-export const authRequestDtoSchemaZOD = authRequestDtoSchema.extend({
+export const authRequestDtoSchemaZOD = postAuthDtoSchema.extend({
   nickname: z.string().min(1, { message: "Поле должно быть заполнено" }),
   password: z.string().min(1, { message: "Поле должно быть заполнено" }),
 });

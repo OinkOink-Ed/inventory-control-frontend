@@ -1,4 +1,3 @@
-import { CreateUserDto, CreateUserDtoSchema } from "@/app/api/generated";
 import { Button } from "@/components/ui/Button/Button";
 import {
   Form,
@@ -12,7 +11,6 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { useIndexReactQuery } from "@/app/api/indexReactQuery";
 import {
   Select,
   SelectContent,
@@ -21,25 +19,32 @@ import {
 } from "@/components/ui/select";
 import { RoleList } from "./RoleList";
 import { createUserDtoSchemaZOD } from "./shema";
+import { useIndexReactQuery } from "@api/indexReactQuery";
+import { PostCreateUserDto } from "@api/generated";
 
 export function UserForm() {
-  const { createuser } = useIndexReactQuery();
+  const { userCreateUser } = useIndexReactQuery();
 
-  const form = useForm<CreateUserDtoSchema>({
+  const form = useForm<PostCreateUserDto>({
     resolver: zodResolver(createUserDtoSchemaZOD),
     defaultValues: {
       name: "",
-      nickname: "",
+      username: "",
       password: "",
       patronimyc: "",
       role: {},
-      surname: "",
+      lastname: "",
+      division: {},
+      creator: {},
+      state: "active",
+      telephone: "",
     },
   });
 
-  async function onSubmit(data: CreateUserDto): Promise<void> {
+  async function onSubmit(data: PostCreateUserDto): Promise<void> {
     try {
-      const res = await createuser.mutateAsync(data);
+      //нужно подмешивать creator
+      const res = await userCreateUser.mutateAsync(data);
       toast.success(`${res.data.message}`, {
         // position: "top-center",
       });
@@ -57,7 +62,7 @@ export function UserForm() {
         >
           <FormField
             control={form.control}
-            name="nickname"
+            name="username"
             render={({ field }) => (
               <FormItem className="w-[400px]">
                 <FormLabel>Логин</FormLabel>
@@ -74,7 +79,7 @@ export function UserForm() {
           />
           <FormField
             control={form.control}
-            name="surname"
+            name="lastname"
             render={({ field }) => (
               <FormItem className="h-24 w-[400px]">
                 <FormLabel>Фамилия</FormLabel>
@@ -162,6 +167,7 @@ export function UserForm() {
               </FormItem>
             )}
           />
+          {/* {Нужно добавить дополнительные поля} */}
           <Button type="submit" className="self-center">
             Добавить
           </Button>

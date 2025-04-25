@@ -3,7 +3,7 @@ import {
   Theme,
   ThemeProviderContext,
   ThemeProviderProps,
-} from "../hooks/useTheme";
+} from "../shudcn/hooks/useTheme";
 
 export function ThemeProvider({
   children,

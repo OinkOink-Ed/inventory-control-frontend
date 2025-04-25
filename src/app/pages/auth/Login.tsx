@@ -1,9 +1,4 @@
 import {
-  authControllerSighIn,
-  AuthRequestDto,
-  AuthRequestDtoSchema,
-} from "@/app/api/generated";
-import {
   Form,
   FormControl,
   FormField,
@@ -11,15 +6,16 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/Button/Button";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
-import { useAuthStore } from "./store/useAuthStore";
 import { useNavigate } from "react-router";
-import { useProfileStore } from "@/app/stores/profile/useProfileStore";
+import { authControllerSignIn, PostAuthDto } from "@api/generated";
+import { Input } from "@/components/ui/input";
+import { useProfileStore } from "@stores/profile/useProfileStore";
+import { useAuthStore } from "./store/useAuthStore";
 import { authRequestDtoSchemaZOD } from "./shema";
 
 export function Login() {
@@ -29,21 +25,21 @@ export function Login() {
 
   const navigate = useNavigate();
 
-  const form = useForm<AuthRequestDtoSchema>({
+  const form = useForm<PostAuthDto>({
     resolver: zodResolver(authRequestDtoSchemaZOD),
     defaultValues: {
-      nickname: "",
+      username: "",
       password: "",
     },
   });
 
-  async function onSubmit(data: AuthRequestDto): Promise<void> {
+  async function onSubmit(data: PostAuthDto): Promise<void> {
     //Если бы у меня на сервере было бы обновление токенов, то я мог бы хранить его уже в QueryClient (насколько я понял), и к нему я мог бы через инстантс провайдера обращаться
     //А значит мог бы делать запрос через некоторое время в фоне, после того как умрёт токен (зная время его жизни), посылать запрос на получение токена.
     //Это механика рефреш аксесс, + на сервере я так ещё не умею делать.
 
     try {
-      const res = (await authControllerSighIn(data)).data.access_token;
+      const res = (await authControllerSignIn(data)).data.access_token;
 
       setProfile(res);
       setAuth();
@@ -58,7 +54,7 @@ export function Login() {
       if (typedError.status === 401) {
         const text = typedError.response?.data as { message: string };
 
-        form.setError("nickname", { message: `${text.message}` });
+        form.setError("username", { message: `${text.message}` });
         form.setError("password", { message: `${text.message}` });
       } else {
         toast.error("Неизвестная ошибка сервера!", {
@@ -77,7 +73,7 @@ export function Login() {
         >
           <FormField
             control={form.control}
-            name="nickname"
+            name="username"
             render={({ field }) => (
               <FormItem className="h-20">
                 <FormLabel>Логин</FormLabel>

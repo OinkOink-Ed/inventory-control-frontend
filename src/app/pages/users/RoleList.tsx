@@ -1,11 +1,11 @@
-import { useIndexReactQuery } from "@/app/api/indexReactQuery";
 import { SelectItem } from "@/components/ui/select";
+import { useIndexReactQuery } from "@api/indexReactQuery";
 
 export function RoleList() {
-  const { getUserRoles } = useIndexReactQuery();
+  const { roleGetAll } = useIndexReactQuery();
 
-  return getUserRoles.isSuccess ? (
-    getUserRoles.data.data.map((item) => (
+  return roleGetAll.isSuccess ? (
+    roleGetAll.data.data.map((item) => (
       <SelectItem key={item.roleName} value={item.id.toString()}>
         {item.roleName}
       </SelectItem>

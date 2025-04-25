@@ -1,8 +1,3 @@
-import {
-  CreateModelCartridgeDto,
-  CreateModelCartridgeDtoSchema,
-} from "@/app/api/generated";
-import { decryptedProfile } from "@/app/helpers/decryptedProfile";
 import { Button } from "@/components/ui/Button/Button";
 import {
   Form,
@@ -17,26 +12,27 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { createModelCartridgeDtoSchemaZOD } from "./shema";
-import { useIndexReactQuery } from "@/app/api/indexReactQuery";
+import { useIndexReactQuery } from "@api/indexReactQuery";
+import { decryptedProfile } from "@helpers/decryptedProfile";
+import { PostCreateCartridgeModelDto } from "@api/generated";
 
 export function SupplementForm() {
-  const { createModelCartridge } = useIndexReactQuery();
+  const { cartridgeModelCreate } = useIndexReactQuery();
 
-  const form = useForm<CreateModelCartridgeDtoSchema>({
+  const form = useForm<PostCreateCartridgeModelDto>({
     resolver: zodResolver(createModelCartridgeDtoSchemaZOD),
     defaultValues: {
       creator: {
         id: 0,
       },
-      modelName: "",
-      printerName: "",
+      name: "",
     },
   });
 
-  async function onSubmit(data: CreateModelCartridgeDto): Promise<void> {
+  async function onSubmit(data: PostCreateCartridgeModelDto): Promise<void> {
     try {
       data.creator.id = decryptedProfile().id;
-      const res = await createModelCartridge.mutateAsync(data);
+      const res = await cartridgeModelCreate.mutateAsync(data);
       toast.success(`${res.data.message}`, {
         // position: "top-center",
       });
@@ -54,30 +50,13 @@ export function SupplementForm() {
         >
           <FormField
             control={form.control}
-            name="modelName"
+            name="name"
             render={({ field }) => (
               <FormItem className="w-[300px]">
                 <FormLabel>Введите модель картриджа</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="Введите модель картриджа"
-                    {...field}
-                    className="w-full"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="printerName"
-            render={({ field }) => (
-              <FormItem className="h-24 w-[300px]">
-                <FormLabel>Введите модель принтера</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Введите модель принтера"
                     {...field}
                     className="w-full"
                   />

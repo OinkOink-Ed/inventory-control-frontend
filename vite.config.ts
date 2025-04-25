@@ -17,13 +17,14 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "@api": path.resolve(__dirname, "./src/app/api"),
-      "@Layouts": path.resolve(__dirname, "./src/app/Layouts"),
-      "@components": path.resolve(__dirname, "./src/components"),
-      "@pages": path.resolve(__dirname, "./src/app/pages"),
-      "@loaders": path.resolve(__dirname, "./src/app/routes/loaders"),
-      "@helpers": path.resolve(__dirname, "./src/app/helpers"),
-      "@lazyImports": path.resolve(__dirname, "./src/app/lazyImports.ts"),
+      "@/*": path.resolve(__dirname, "./shudcn/*"),
+      "@api": path.resolve(__dirname, "./app/api"),
+      "@Layouts": path.resolve(__dirname, "./app/Layouts"),
+      "@pages": path.resolve(__dirname, "./app/pages"),
+      "@loaders": path.resolve(__dirname, "./app/routes/loaders"),
+      "@helpers": path.resolve(__dirname, "./app/helpers"),
+      "@lazyImports": path.resolve(__dirname, "./app/lazyImports.ts"),
+      "@stores": path.resolve(__dirname, "./app/stores"),
     },
   },
 });

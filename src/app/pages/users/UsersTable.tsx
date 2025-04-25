@@ -7,12 +7,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useIndexReactQuery } from "@/app/api/indexReactQuery";
+import { useIndexReactQuery } from "@api/indexReactQuery";
 
 export function UsersTable() {
-  const { getUsers } = useIndexReactQuery();
+  const { userGetAll } = useIndexReactQuery();
 
-  return getUsers.isSuccess ? (
+  return userGetAll.isSuccess ? (
     <Table>
       <TableCaption>Список пользователей</TableCaption>
       <TableHeader>
@@ -23,10 +23,10 @@ export function UsersTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {getUsers.data.data.map((item) => (
+        {userGetAll.data.data.map((item) => (
           <TableRow key={item.id}>
-            <TableCell className="w-[300px]">{item.nickname}</TableCell>
-            <TableCell className="w-[300px]">{`${item.surname} ${item.name} ${item.patronimyc}`}</TableCell>
+            <TableCell className="w-[300px]">{item.username}</TableCell>
+            <TableCell className="w-[300px]">{`${item.lastname} ${item.name} ${item.patronimyc}`}</TableCell>
             <TableCell className="w-[300px]">{item.role.roleName}</TableCell>
           </TableRow>
         ))}

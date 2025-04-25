@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import { AuthActions, AuthState } from "./types";
 import { AES } from "crypto-ts";
+import { AuthActions, AuthState } from "./types";
 
 const key = "NDhjk142`+-g_G;.==1asmv";
 

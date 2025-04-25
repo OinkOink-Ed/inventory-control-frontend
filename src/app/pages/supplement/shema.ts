@@ -1,16 +1,11 @@
-import {
-  createModelCartridgeDtoSchema,
-  userWhenCreatemodelDtoSchema,
-} from "@/app/api/generated";
+import { postCreateCartridgeModelDtoSchema } from "@api/generated";
 import { z } from "zod";
 
 export const createModelCartridgeDtoSchemaZOD =
-  createModelCartridgeDtoSchema.extend({
-    modelName: z
-      .string()
-      .min(1, { message: "Поле обязательно для заполнения" }),
-    printerName: z
-      .string()
-      .min(1, { message: "Поле обязательно для заполнения" }),
-    creator: z.lazy(() => userWhenCreatemodelDtoSchema),
+  postCreateCartridgeModelDtoSchema.extend({
+    name: z.string().min(1, { message: "Поле обязательно для заполнения" }),
+    creator: z.object(
+      { id: z.number().optional() },
+      { message: "Поле обязательно для заполнения" },
+    ),
   });

@@ -9,7 +9,7 @@ interface UserDto {
   role: { roleName: string };
   lastname: string;
 }
-
+//Здесь нужно будет ещё и decrypted
 export function decryptedProfile() {
   const cryptProfile = localStorage.getItem("profileStorage")
     ? localStorage.getItem("profileStorage")!

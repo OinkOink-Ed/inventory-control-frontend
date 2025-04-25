@@ -3,7 +3,7 @@ import { ErrorBoundary } from "../ErrorBoundary";
 import { Suspense } from "react";
 import PublicRoute from "@loaders/Public";
 import LoginSkeleton from "@pages/auth/LoginSkeleton";
-import { SpinnerLoad } from "@components/SpinnerLoad";
+import { SpinnerLoad } from "@/components/SpinnerLoad";
 import {
   AppLayout,
   Delivery,
@@ -14,6 +14,7 @@ import {
   SupplementLayout,
   UsersLayout,
   Warehouse,
+  // Warehouse,
 } from "@lazyImports";
 import AdminRoute from "@loaders/AdminRoute";
 import PrivateRoute from "@loaders/Private";

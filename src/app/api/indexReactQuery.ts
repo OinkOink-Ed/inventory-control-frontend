@@ -12,7 +12,7 @@ export function useIndexReactQuery() {
   const queryClient = useQueryClient();
 
   //Получить модели картриджей
-  const getModelCartridges = useQuery({
+  const cartridgeModelGetAll = useQuery({
     queryKey: ["modelsCartridges"],
     queryFn: cartridgeModelControllerGetAll,
     staleTime: 5 * 60 * 1000,
@@ -24,7 +24,7 @@ export function useIndexReactQuery() {
   });
 
   //Создание модели картриджа
-  const createModelCartridge = useMutation({
+  const cartridgeModelCreate = useMutation({
     mutationFn: cartridgeModelControllerCreate,
     onSuccess: async () => {
       await queryClient.invalidateQueries({
@@ -34,14 +34,14 @@ export function useIndexReactQuery() {
   });
 
   //Получить пользователей
-  const getUsers = useQuery({
+  const userGetAll = useQuery({
     queryKey: ["users"],
     queryFn: userControllerGetAll,
     staleTime: 5 * 60 * 1000,
   });
 
   //Создать пользователя
-  const createUser = useMutation({
+  const userCreateUser = useMutation({
     mutationFn: userControllerCreateUser,
     onSuccess: async () => {
       await queryClient.invalidateQueries({
@@ -51,7 +51,7 @@ export function useIndexReactQuery() {
   });
 
   //Создать Администратор
-  const createAdmin = useMutation({
+  const userCreateAdmin = useMutation({
     mutationFn: userControllerCreateAdmin,
     onSuccess: async () => {
       await queryClient.invalidateQueries({
@@ -61,18 +61,18 @@ export function useIndexReactQuery() {
   });
 
   //Получить роли пользователей
-  const getUserRoles = useQuery({
+  const roleGetAll = useQuery({
     queryKey: ["roles"],
     queryFn: roleControllerGetAll,
     staleTime: 5 * 60 * 1000,
   });
 
   return {
-    getModelCartridges,
-    createModelCartridge,
-    getUsers,
-    createUser,
-    getUserRoles,
-    createAdmin,
+    roleGetAll,
+    cartridgeModelCreate,
+    userCreateAdmin,
+    userCreateUser,
+    userGetAll,
+    cartridgeModelGetAll,
   };
 }

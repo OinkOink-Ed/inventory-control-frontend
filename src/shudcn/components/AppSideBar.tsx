@@ -10,8 +10,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "./ui/sidebar";
-import { decryptedProfile } from "@/app/helpers/decryptedProfile";
 import { Link } from "react-router";
+import { decryptedProfile } from "@helpers/decryptedProfile";
 
 const itemsUser = [
   {

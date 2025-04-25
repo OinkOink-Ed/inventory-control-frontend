@@ -1,10 +1,10 @@
-import { CustomErrorForbidden } from "@/app/Errors/CustomErrorForbidden";
-import { decryptedProfile } from "@/app/helpers/decryptedProfile";
+import { decryptedProfile } from "@helpers/decryptedProfile";
+import { isAuth } from "@helpers/isAuth";
+import { CustomErrorForbidden } from "app/Errors/CustomErrorForbidden";
 import { redirect } from "react-router";
-import { isAuth } from "@/app/helpers/isAuth";
 
-export default async function AdminRoute() {
-  if (!(await isAuth())) {
+export default function AdminRoute() {
+  if (!isAuth()) {
     return redirect("/auth");
   }
 
