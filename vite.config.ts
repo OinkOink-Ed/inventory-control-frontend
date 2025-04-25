@@ -17,7 +17,13 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
+      "@api": path.resolve(__dirname, "./src/app/api"),
+      "@Layouts": path.resolve(__dirname, "./src/app/Layouts"),
+      "@components": path.resolve(__dirname, "./src/components"),
+      "@pages": path.resolve(__dirname, "./src/app/pages"),
+      "@loaders": path.resolve(__dirname, "./src/app/routes/loaders"),
+      "@helpers": path.resolve(__dirname, "./src/app/helpers"),
+      "@lazyImports": path.resolve(__dirname, "./src/app/lazyImports.ts"),
     },
   },
 });

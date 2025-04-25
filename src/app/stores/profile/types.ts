@@ -1,5 +1,5 @@
 export interface ProfileStore {
-  profile: null | string;
+  token: string;
 }
 
 export interface ProfileActions {

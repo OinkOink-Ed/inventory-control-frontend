@@ -1,5 +1,5 @@
 export interface AuthState {
-  isAuth: boolean;
+  isAuth: string;
 }
 
 export interface AuthActions {

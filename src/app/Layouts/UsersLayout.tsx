@@ -1,5 +1,5 @@
-import { UserForm } from "../pages/users/UserForm";
-import { UsersTable } from "../pages/users/UsersTable";
+import { UserForm } from "@pages/users/UserForm";
+import { UsersTable } from "@pages/users/UsersTable";
 
 export default function UsersLayout() {
   return (

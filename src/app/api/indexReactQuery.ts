@@ -1,12 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
-  modelCartridgesControllerCreate,
-  modelCartridgesControllerGetAll,
+  cartridgeModelControllerCreate,
+  cartridgeModelControllerGetAll,
   roleControllerGetAll,
-  usersControllerCreate,
-  usersControllerGetAll,
+  userControllerCreateAdmin,
+  userControllerCreateUser,
+  userControllerGetAll,
 } from "./generated";
-import { formateDate } from "../helpers/formateDate";
 
 export function useIndexReactQuery() {
   const queryClient = useQueryClient();
@@ -14,20 +14,18 @@ export function useIndexReactQuery() {
   //Получить модели картриджей
   const getModelCartridges = useQuery({
     queryKey: ["modelsCartridges"],
-    queryFn: modelCartridgesControllerGetAll,
+    queryFn: cartridgeModelControllerGetAll,
     staleTime: 5 * 60 * 1000,
     select: (data) => {
       return data.data.map((item) => ({
         ...item,
-        createdAt: formateDate(item.createdAt),
-        updatedAt: formateDate(item.updatedAt),
       }));
     },
   });
 
   //Создание модели картриджа
   const createModelCartridge = useMutation({
-    mutationFn: modelCartridgesControllerCreate,
+    mutationFn: cartridgeModelControllerCreate,
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: ["modelsCartridges"],
@@ -38,13 +36,23 @@ export function useIndexReactQuery() {
   //Получить пользователей
   const getUsers = useQuery({
     queryKey: ["users"],
-    queryFn: usersControllerGetAll,
+    queryFn: userControllerGetAll,
     staleTime: 5 * 60 * 1000,
   });
 
   //Создать пользователя
-  const createuser = useMutation({
-    mutationFn: usersControllerCreate,
+  const createUser = useMutation({
+    mutationFn: userControllerCreateUser,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["users"],
+      });
+    },
+  });
+
+  //Создать Администратор
+  const createAdmin = useMutation({
+    mutationFn: userControllerCreateAdmin,
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: ["users"],
@@ -63,7 +71,8 @@ export function useIndexReactQuery() {
     getModelCartridges,
     createModelCartridge,
     getUsers,
-    createuser,
+    createUser,
     getUserRoles,
+    createAdmin,
   };
 }

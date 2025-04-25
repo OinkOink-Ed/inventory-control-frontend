@@ -21,10 +21,15 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
-
-    "baseUrl": ".",
+    "baseUrl": "src",
     "paths": {
-      "@/*": ["./src/*"]
+      "@api/*": ["app/api/*"],
+      "@Layouts/*": ["app/Layouts/*"],
+      "@components/*": ["components/*"],
+      "@pages/*": ["app/pages/*"],
+      "@loaders/*": ["app/routes/loaders/*"],
+      "@helpers/*": ["app/helpers/*"],
+      "@lazyImports": ["app/lazyImports.ts"]
     }
   },
   "include": ["src", "kubb.config.ts", "getApiSwagger.ts", "kubb.ts"]

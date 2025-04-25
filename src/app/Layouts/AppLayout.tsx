@@ -1,6 +1,6 @@
-import { AppSideBar } from "@/components/AppSideBar";
+import { AppSideBar } from "@components/AppSideBar";
+import { SidebarProvider } from "@components/ui/sidebar";
 import { Outlet } from "react-router";
-import { SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "sonner";
 
 // Нужно реализовать роли через Context Provider

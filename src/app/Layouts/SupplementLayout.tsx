@@ -1,5 +1,5 @@
-import { SupplementForm } from "../pages/supplement/SupplementForm";
-import { SupplementTable } from "../pages/supplement/SupplementTable";
+import { SupplementForm } from "@pages/supplement/SupplementForm";
+import { SupplementTable } from "@pages/supplement/SupplementTable";
 
 export default function SupplementLayout() {
   return (

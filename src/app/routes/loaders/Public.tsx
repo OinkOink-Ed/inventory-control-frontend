@@ -1,10 +1,11 @@
-import { redirect } from "react-router";
+import { redirect, LoaderFunction } from "react-router";
 import { isAuth } from "../../helpers/isAuth";
 
-export default async function PublicRoute() {
+export const PublicRoute: LoaderFunction = async () => {
   if (await isAuth()) {
     return redirect("/");
   }
+  return null;
+};
 
-  return false;
-}
+export default PublicRoute;

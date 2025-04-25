@@ -5,8 +5,8 @@ import { ProfileActions, ProfileStore } from "./types";
 export const useProfileStore = create<ProfileStore & ProfileActions>()(
   persist(
     (set) => ({
-      profile: null,
-      setProfile: (res) => set({ profile: res }),
+      token: "",
+      setProfile: (res) => set({ token: res }),
     }),
     {
       name: "profileStorage",

@@ -1,10 +1,9 @@
 import { createBrowserRouter } from "react-router";
 import { ErrorBoundary } from "../ErrorBoundary";
-import PublicRoute from "./loaders/Public";
-import PrivateRoute from "./loaders/Private";
-import AdminRoute from "./loaders/AdminRoute";
 import { Suspense } from "react";
-import LoginSkeleton from "../pages/auth/LoginSkeleton";
+import PublicRoute from "@loaders/Public";
+import LoginSkeleton from "@pages/auth/LoginSkeleton";
+import { SpinnerLoad } from "@components/SpinnerLoad";
 import {
   AppLayout,
   Delivery,
@@ -15,8 +14,9 @@ import {
   SupplementLayout,
   UsersLayout,
   Warehouse,
-} from "../lazyImports";
-import { SpinnerLoad } from "@/components/SpinnerLoad";
+} from "@lazyImports";
+import AdminRoute from "@loaders/AdminRoute";
+import PrivateRoute from "@loaders/Private";
 
 // SpinnerLoad можно будет заменить на Skeleton различный в дальнейшем
 

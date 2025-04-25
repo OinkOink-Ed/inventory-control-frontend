@@ -1,19 +1,28 @@
-import { UserDto } from "@/app/api/generated";
 import { jwtDecode, JwtPayload } from "jwt-decode";
 
-export function decryptedProfile(): UserDto {
+interface UserDto {
+  id: number;
+  name: string;
+  username: string;
+  password: string;
+  patronimyc: string;
+  role: { roleName: string };
+  lastname: string;
+}
+
+export function decryptedProfile() {
   const cryptProfile = localStorage.getItem("profileStorage")
     ? localStorage.getItem("profileStorage")!
     : "";
 
-  let profile: UserDto = {
+  let profile = {
     id: 0,
     name: "",
-    nickname: "",
+    username: "",
     password: "",
     patronimyc: "",
     role: { roleName: "" },
-    surname: "",
+    lastname: "",
   };
 
   try {
