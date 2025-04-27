@@ -12,11 +12,11 @@ import { Button } from "@/components/ui/Button/Button";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
-import { authControllerSignIn, PostAuthDto } from "@api/generated";
 import { Input } from "@/components/ui/input";
-import { useProfileStore } from "@stores/profile/useProfileStore";
 import { useAuthStore } from "./store/useAuthStore";
 import { authRequestDtoSchemaZOD } from "./shema";
+import { useProfileStore } from "@/app/stores/profile/useProfileStore";
+import { authControllerSignIn, PostAuthDto } from "@/app/api/generated";
 
 export function Login() {
   //Просто хочу несколько сторов

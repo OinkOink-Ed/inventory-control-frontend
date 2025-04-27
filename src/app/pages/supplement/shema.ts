@@ -1,4 +1,4 @@
-import { postCreateCartridgeModelDtoSchema } from "@api/generated";
+import { postCreateCartridgeModelDtoSchema } from "@/app/api/generated";
 import { z } from "zod";
 
 export const createModelCartridgeDtoSchemaZOD =

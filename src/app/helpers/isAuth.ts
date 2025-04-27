@@ -1,21 +1,24 @@
-import { AES } from "crypto-ts";
+import { AES, enc } from "crypto-ts";
 
 interface Auth {
-  isAuth: string;
+  state: {
+    isAuth: string;
+  };
 }
 
-const key = "NDhjk142`+-g_G;.==1asmv";
+const key = "X7pL9qW3zT2rY8mB5nK4vJ6hF1cD0aE2";
 
 export function isAuth() {
-  const storedAuth = localStorage.getItem("profileStorage")
-    ? localStorage.getItem("profileStorage")!
-    : "";
+  const storedAuth = localStorage.getItem("authStorage");
 
-  const auth = (JSON.parse(storedAuth) as Auth).isAuth;
+  let result = "";
 
-  const result = AES.decrypt(auth, key).toString();
+  if (storedAuth) {
+    const isAuth = (JSON.parse(storedAuth) as Auth).state.isAuth;
+    result = AES.decrypt(isAuth, key).toString(enc.Utf8);
+  }
 
   if (result === "true") {
-    return auth;
+    return true;
   } else return false;
 }

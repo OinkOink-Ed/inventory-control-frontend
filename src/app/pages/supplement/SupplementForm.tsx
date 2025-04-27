@@ -12,12 +12,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { createModelCartridgeDtoSchemaZOD } from "./shema";
-import { useIndexReactQuery } from "@api/indexReactQuery";
-import { decryptedProfile } from "@helpers/decryptedProfile";
-import { PostCreateCartridgeModelDto } from "@api/generated";
+import { useIndexReactQuery } from "@/app/api/indexReactQuery";
+import { decryptedProfile } from "@/app/helpers/decryptedProfile";
+import { PostCreateCartridgeModelDto } from "@/app/api/generated";
 
 export function SupplementForm() {
-  const { cartridgeModelCreate } = useIndexReactQuery();
+  const { mutateAsync } = useIndexReactQuery().cartridgeModelCreate;
 
   const form = useForm<PostCreateCartridgeModelDto>({
     resolver: zodResolver(createModelCartridgeDtoSchemaZOD),
@@ -32,7 +32,7 @@ export function SupplementForm() {
   async function onSubmit(data: PostCreateCartridgeModelDto): Promise<void> {
     try {
       data.creator.id = decryptedProfile().id;
-      const res = await cartridgeModelCreate.mutateAsync(data);
+      const res = await mutateAsync(data);
       toast.success(`${res.data.message}`, {
         // position: "top-center",
       });

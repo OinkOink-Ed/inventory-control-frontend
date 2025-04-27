@@ -1,4 +1,4 @@
-import { postCreateUserDtoSchema } from "@api/generated";
+import { postCreateUserDtoSchema } from "@/app/api/generated";
 import { z } from "zod";
 
 export const createUserDtoSchemaZOD = postCreateUserDtoSchema.extend({

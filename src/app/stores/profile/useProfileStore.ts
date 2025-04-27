@@ -3,7 +3,7 @@ import { persist, createJSONStorage } from "zustand/middleware";
 import { ProfileActions, ProfileStore } from "./types";
 import { AES } from "crypto-ts";
 
-const key = "NDhjk142`+-g_G;.==1asmv";
+const key = "X7pL9qW3zT2rY8mB5nK4vJ6hF1cD0aE2";
 
 export const useProfileStore = create<ProfileStore & ProfileActions>()(
   persist(

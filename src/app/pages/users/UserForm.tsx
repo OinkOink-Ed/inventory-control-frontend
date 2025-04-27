@@ -19,11 +19,15 @@ import {
 } from "@/components/ui/select";
 import { RoleList } from "./RoleList";
 import { createUserDtoSchemaZOD } from "./shema";
-import { useIndexReactQuery } from "@api/indexReactQuery";
-import { PostCreateUserDto } from "@api/generated";
+import { useIndexReactQuery } from "@/app/api/indexReactQuery";
+import { PostCreateUserDto } from "@/app/api/generated";
 
 export function UserForm() {
-  const { userCreateUser } = useIndexReactQuery();
+  // Множественные рендеры из-за использования - пока не могу выяснить почему
+  // Причем они идут ещё до вызова - проверял - родитель рендерится 1 раз
+  const { mutateAsync } = useIndexReactQuery().userCreateUser;
+
+  console.log("UserForm");
 
   const form = useForm<PostCreateUserDto>({
     resolver: zodResolver(createUserDtoSchemaZOD),
@@ -44,7 +48,7 @@ export function UserForm() {
   async function onSubmit(data: PostCreateUserDto): Promise<void> {
     try {
       //нужно подмешивать creator
-      const res = await userCreateUser.mutateAsync(data);
+      const res = await mutateAsync(data);
       toast.success(`${res.data.message}`, {
         // position: "top-center",
       });
@@ -146,7 +150,7 @@ export function UserForm() {
               </FormItem>
             )}
           />
-          {/* Это должен быть select - и нужно получать роли пользователей */}
+
           <FormField
             control={form.control}
             name="role.id"

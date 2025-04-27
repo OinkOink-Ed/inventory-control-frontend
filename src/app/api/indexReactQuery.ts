@@ -16,11 +16,6 @@ export function useIndexReactQuery() {
     queryKey: ["modelsCartridges"],
     queryFn: cartridgeModelControllerGetAll,
     staleTime: 5 * 60 * 1000,
-    select: (data) => {
-      return data.data.map((item) => ({
-        ...item,
-      }));
-    },
   });
 
   //Создание модели картриджа
@@ -43,6 +38,7 @@ export function useIndexReactQuery() {
   //Создать пользователя
   const userCreateUser = useMutation({
     mutationFn: userControllerCreateUser,
+    //Пытался комментировать это - не помогло
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: ["users"],

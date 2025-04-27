@@ -5,16 +5,9 @@
     { "path": "./tsconfig.node.json" }
   ],
   "compilerOptions": {
-    "baseUrl": "src",
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./shudcn/*"],
-      "@api/*": ["./app/api/*"],
-      "@Layouts/*": ["./app/Layouts/*"],
-      "@pages/*": ["./app/pages/*"],
-      "@loaders/*": ["./app/routes/loaders/*"],
-      "@helpers/*": ["./app/helpers/*"],
-      "@lazyImports": ["./app/lazyImports.ts"],
-      "@stores/*": ["./app/stores/*"]
+      "@/*": ["./src/*"]
     }
   }
 }

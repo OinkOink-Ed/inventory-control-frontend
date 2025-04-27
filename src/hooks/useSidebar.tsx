@@ -1,5 +1,5 @@
 import React from "react";
-import { SidebarContext as context } from "../components/ui/sidebar";
+import { SidebarContext as context } from "@/components/ui/sidebar";
 
 export const SidebarContext = React.createContext<context | null>(null);
 

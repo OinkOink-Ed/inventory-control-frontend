@@ -1,11 +1,9 @@
-import { isAuth } from "@helpers/isAuth";
-import { redirect, LoaderFunction } from "react-router";
+import { isAuth } from "@/app/helpers/isAuth";
+import { redirect } from "react-router";
 
-export const PrivateRoute: LoaderFunction = () => {
+export default function PrivateRoute() {
   if (isAuth()) {
     return null; // Пользователь авторизован, продолжаем рендеринг
   }
   return redirect("/auth");
-};
-
-export default PrivateRoute;
+}

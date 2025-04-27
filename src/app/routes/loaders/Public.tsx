@@ -1,11 +1,9 @@
-import { redirect, LoaderFunction } from "react-router";
-import { isAuth } from "../../helpers/isAuth";
+import { isAuth } from "@/app/helpers/isAuth";
+import { redirect } from "react-router";
 
-export const PublicRoute: LoaderFunction = () => {
+export default function PublicRoute() {
   if (isAuth()) {
     return redirect("/");
   }
-  return null;
-};
-
-export default PublicRoute;
+  return false;
+}

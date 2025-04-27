@@ -11,7 +11,7 @@ import {
   SidebarMenuItem,
 } from "./ui/sidebar";
 import { Link } from "react-router";
-import { decryptedProfile } from "@helpers/decryptedProfile";
+import { decryptedProfile } from "@/app/helpers/decryptedProfile";
 
 const itemsUser = [
   {
@@ -72,7 +72,7 @@ export function AppSideBar() {
         </SidebarGroup>
 
         {/* Изначально хотел использовать ReactContext, потом понял, что вроде как бессмысленно */}
-        {decryptedProfile()?.role.roleName !== "Admin" ? (
+        {decryptedProfile()?.role.roleName !== "admin" ? (
           <></>
         ) : (
           <>

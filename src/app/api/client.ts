@@ -1,6 +1,7 @@
 // Написано с божъей помощью и примером от kubb.dev
 
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
+import { decryptedToken } from "../helpers/decryptedToken";
 
 export interface RequestConfig<TData = unknown> {
   url?: string;
@@ -30,7 +31,10 @@ export const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use((config) => {
-  const token = "gdsgsdg"; /* Получать токен из сторадж*/
+  const cryptedToken = localStorage.getItem("profileStorage");
+
+  const token = decryptedToken(cryptedToken);
+
   config.headers.Authorization = `Bearer ${token}`;
   return config;
 });

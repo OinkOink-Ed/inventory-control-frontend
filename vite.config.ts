@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
+// import tailwindcss from "@tailwindcss/vite";
 import { getApiSwagger } from "./getApiSwagger";
 import path from "path";
 
@@ -14,17 +15,11 @@ export default defineConfig({
       },
     },
     react(),
+    // tailwindcss(),
   ],
   resolve: {
     alias: {
-      "@/*": path.resolve(__dirname, "./shudcn/*"),
-      "@api": path.resolve(__dirname, "./app/api"),
-      "@Layouts": path.resolve(__dirname, "./app/Layouts"),
-      "@pages": path.resolve(__dirname, "./app/pages"),
-      "@loaders": path.resolve(__dirname, "./app/routes/loaders"),
-      "@helpers": path.resolve(__dirname, "./app/helpers"),
-      "@lazyImports": path.resolve(__dirname, "./app/lazyImports.ts"),
-      "@stores": path.resolve(__dirname, "./app/stores"),
+      "@": path.resolve(__dirname, "./src"),
     },
   },
 });

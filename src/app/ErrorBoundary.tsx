@@ -23,6 +23,8 @@ export function ErrorBoundary() {
     );
   }
 
+  console.log(error);
+
   return (
     <div className="flex justify-start align-middle">Произошла ошибка!</div>
   );
