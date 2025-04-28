@@ -40,7 +40,6 @@ export function Login() {
 
     try {
       const res = (await authControllerSignIn(data)).data.access_token;
-
       setProfile(res);
       setAuth();
 

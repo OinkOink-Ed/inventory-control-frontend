@@ -12,8 +12,6 @@ import {
 export function UsersTable() {
   const { isSuccess, data } = useIndexReactQuery().userGetAll;
 
-  console.log("UsersTable");
-
   return isSuccess ? (
     <Table>
       <TableCaption>Список пользователей</TableCaption>

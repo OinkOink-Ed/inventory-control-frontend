@@ -26,7 +26,7 @@ export function SupplementTable() {
         {data.data.map((item) => (
           <TableRow key={item.id}>
             <TableCell className="w-[300px]">{item.name}</TableCell>
-            {/* <TableCell className="w-[300px]">{item.createdAt}</TableCell> */}
+            {/* <TableCell className="w-[300px]">{item.id}</TableCell> */}
           </TableRow>
         ))}
       </TableBody>

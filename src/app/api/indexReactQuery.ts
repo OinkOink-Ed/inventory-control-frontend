@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   cartridgeModelControllerCreate,
   cartridgeModelControllerGetAll,
+  divisionControllerGetAll,
   roleControllerGetAll,
   userControllerCreateAdmin,
   userControllerCreateUser,
@@ -11,14 +12,14 @@ import {
 export function useIndexReactQuery() {
   const queryClient = useQueryClient();
 
-  //Получить модели картриджей
+  // Получить модели картриджей
   const cartridgeModelGetAll = useQuery({
     queryKey: ["modelsCartridges"],
     queryFn: cartridgeModelControllerGetAll,
     staleTime: 5 * 60 * 1000,
   });
 
-  //Создание модели картриджа
+  // Создание модели картриджа
   const cartridgeModelCreate = useMutation({
     mutationFn: cartridgeModelControllerCreate,
     onSuccess: async () => {
@@ -38,7 +39,6 @@ export function useIndexReactQuery() {
   //Создать пользователя
   const userCreateUser = useMutation({
     mutationFn: userControllerCreateUser,
-    //Пытался комментировать это - не помогло
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: ["users"],
@@ -46,7 +46,7 @@ export function useIndexReactQuery() {
     },
   });
 
-  //Создать Администратор
+  // Создать Администратор
   const userCreateAdmin = useMutation({
     mutationFn: userControllerCreateAdmin,
     onSuccess: async () => {
@@ -61,6 +61,14 @@ export function useIndexReactQuery() {
     queryKey: ["roles"],
     queryFn: roleControllerGetAll,
     staleTime: 5 * 60 * 1000,
+    // refetchOnWindowFocus: false,
+  });
+
+  //Получить подразделения для выбора
+  const divisionGetAll = useQuery({
+    queryKey: ["divisions"],
+    queryFn: divisionControllerGetAll,
+    staleTime: 60 * 60 * 1000,
   });
 
   return {
@@ -70,5 +78,6 @@ export function useIndexReactQuery() {
     userCreateUser,
     userGetAll,
     cartridgeModelGetAll,
+    divisionGetAll,
   };
 }

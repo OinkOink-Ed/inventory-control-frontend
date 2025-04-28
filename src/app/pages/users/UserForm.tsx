@@ -14,22 +14,30 @@ import { toast } from "sonner";
 import {
   Select,
   SelectContent,
+  SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { RoleList } from "./RoleList";
 import { createUserDtoSchemaZOD } from "./shema";
 import { useIndexReactQuery } from "@/app/api/indexReactQuery";
 import { PostCreateUserDto } from "@/app/api/generated";
+import { decryptedProfile } from "@/app/helpers/decryptedProfile";
+import { useMaskito } from "@maskito/react";
+import options from "./mask";
 
 export function UserForm() {
-  // Множественные рендеры из-за использования - пока не могу выяснить почему
-  // Причем они идут ещё до вызова - проверял - родитель рендерится 1 раз
   const { mutateAsync } = useIndexReactQuery().userCreateUser;
+  const { data: roleData, isSuccess: RoleSuccess } =
+    useIndexReactQuery().roleGetAll;
+  const { data: divisionData, isSuccess: divisionSuccess } =
+    useIndexReactQuery().divisionGetAll;
 
-  console.log("UserForm");
+  const maskedInputRef = useMaskito({ options });
+
+  console.log("Рендер");
 
   const form = useForm<PostCreateUserDto>({
+    // Нужно понять, почему кубб генерит схему, в которой в полях, которые объекты - внутренние свойства являются опциональными
     resolver: zodResolver(createUserDtoSchemaZOD),
     defaultValues: {
       name: "",
@@ -39,7 +47,7 @@ export function UserForm() {
       role: {},
       lastname: "",
       division: {},
-      creator: {},
+      creator: { id: decryptedProfile().id },
       state: "active",
       telephone: "",
     },
@@ -47,10 +55,9 @@ export function UserForm() {
 
   async function onSubmit(data: PostCreateUserDto): Promise<void> {
     try {
-      //нужно подмешивать creator
       const res = await mutateAsync(data);
       toast.success(`${res.data.message}`, {
-        // position: "top-center",
+        position: "top-center",
       });
     } catch (error) {
       console.log(error);
@@ -164,9 +171,81 @@ export function UserForm() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <RoleList />
+                    {RoleSuccess ? (
+                      roleData.data.map((item) => (
+                        <SelectItem
+                          key={item.roleName}
+                          value={item.id.toString()}
+                        >
+                          {item.roleName}
+                        </SelectItem>
+                      ))
+                    ) : (
+                      <SelectItem value="Идет загрузка данных">
+                        Идет загрузка данных
+                      </SelectItem>
+                    )}
                   </SelectContent>
                 </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="division.id"
+            render={({ field }) => (
+              <FormItem className="h-24 w-[400px]">
+                <FormLabel>Подразделение</FormLabel>
+                <Select onValueChange={field.onChange}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Выберите подразделение пользователя" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {divisionSuccess ? (
+                      divisionData.data.map((item) => (
+                        <SelectItem key={item.name} value={item.id.toString()}>
+                          {item.name}
+                        </SelectItem>
+                      ))
+                    ) : (
+                      <SelectItem value="Идет загрузка данных">
+                        Идет загрузка данных
+                      </SelectItem>
+                    )}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="telephone"
+            render={({ field }) => (
+              <FormItem className="w-[400px]">
+                <FormLabel>Номер телефона</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="+7"
+                    type="text"
+                    {...field}
+                    ref={maskedInputRef}
+                    onInput={(e) => {
+                      // Ну в таком случае с опцией shouldValidate я отображаю сообщения о том, успешна ли вадиция - но это вызывает каждый раз рендер
+                      //Т.е преимущества react-hook-form отлетают
+                      form.setValue("telephone", e.currentTarget.value);
+                    }}
+                    //А тут срабатывает только уход фокуса
+                    onBlur={() => {
+                      void form.trigger("telephone");
+                    }}
+                    //Событие onChange вообще никак не влияет
+                  />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}

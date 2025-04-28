@@ -1,5 +1,4 @@
 import { jwtDecode, JwtPayload } from "jwt-decode";
-import { decryptedToken } from "./decryptedToken";
 
 interface UserDto {
   id: number;
@@ -14,10 +13,8 @@ interface UserDto {
 export function decryptedProfile(): UserDto {
   const storedCryptProfile = localStorage.getItem("profileStorage");
 
-  const decryptProfile = decryptedToken(storedCryptProfile);
-
-  if (decryptProfile) {
-    return jwtDecode<JwtPayload>(decryptProfile).sub as unknown as UserDto;
+  if (storedCryptProfile) {
+    return jwtDecode<JwtPayload>(storedCryptProfile).sub as unknown as UserDto;
   }
 
   return {

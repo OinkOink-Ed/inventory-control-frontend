@@ -17,6 +17,12 @@ importers:
       '@kubb/plugin-react-query':
         specifier: ^3.0.14
         version: 3.0.14(@kubb/react@3.0.14)
+      '@maskito/core':
+        specifier: ^3.7.2
+        version: 3.7.2
+      '@maskito/react':
+        specifier: ^3.7.2
+        version: 3.7.2(@maskito/core@3.7.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-avatar':
         specifier: ^1.1.1
         version: 1.1.1(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -773,6 +779,16 @@ packages:
   '@kubb/types@3.0.14':
     resolution: {integrity: sha512-pVq/B7q2ua5rdFVgaBOyTnMyO/KKGx7dqGETSpdGN78QLZKWVsLWBbbo7oGTsObYryEtizXMP2My7akq+lWwbA==}
     engines: {node: '>=20'}
+
+  '@maskito/core@3.7.2':
+    resolution: {integrity: sha512-jnX1u2HAZFy0K8Ll6AoeMpe502aVzrqgPKG7rk/qtbivW+71U3vutP3kqmjZtgsPoNzQ2wzKVWMgi7JEXDK11g==}
+
+  '@maskito/react@3.7.2':
+    resolution: {integrity: sha512-vX2j3PPLi/tzZ+1UnE5O8ZDrzIOEVY9MFa51BTrg2i5Vnzj1iEEUUcTOl0x+dB9MoZ+XODToIlNhf6r2fiDabg==}
+    peerDependencies:
+      '@maskito/core': ^3.7.2
+      react: '>=16.8'
+      react-dom: '>=16.8'
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -4222,6 +4238,14 @@ snapshots:
       - utf-8-validate
 
   '@kubb/types@3.0.14': {}
+
+  '@maskito/core@3.7.2': {}
+
+  '@maskito/react@3.7.2(@maskito/core@3.7.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      '@maskito/core': 3.7.2
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
