@@ -23,7 +23,7 @@ export function SupplementForm() {
     resolver: zodResolver(createModelCartridgeDtoSchemaZOD),
     defaultValues: {
       creator: {
-        id: 0,
+        id: decryptedProfile().id,
       },
       name: "",
     },
@@ -31,10 +31,9 @@ export function SupplementForm() {
 
   async function onSubmit(data: PostCreateCartridgeModelDto): Promise<void> {
     try {
-      data.creator.id = decryptedProfile().id;
       const res = await mutateAsync(data);
       toast.success(`${res.data.message}`, {
-        // position: "top-center",
+        position: "top-center",
       });
     } catch (error) {
       console.log(error);

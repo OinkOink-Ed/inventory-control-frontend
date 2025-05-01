@@ -5,7 +5,7 @@ export const createModelCartridgeDtoSchemaZOD =
   postCreateCartridgeModelDtoSchema.extend({
     name: z.string().min(1, { message: "Поле обязательно для заполнения" }),
     creator: z.object(
-      { id: z.number().optional() },
+      { id: z.number() },
       { message: "Поле обязательно для заполнения" },
     ),
   });

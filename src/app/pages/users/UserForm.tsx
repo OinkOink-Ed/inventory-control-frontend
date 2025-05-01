@@ -19,25 +19,24 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { createUserDtoSchemaZOD } from "./shema";
-import { useIndexReactQuery } from "@/app/api/indexReactQuery";
 import { PostCreateUserDto } from "@/app/api/generated";
 import { decryptedProfile } from "@/app/helpers/decryptedProfile";
-import { useMaskito } from "@maskito/react";
-import options from "./mask";
+import { InputPhone } from "@/components/InputPhone";
+import { useApiUsersForm } from "./hooks/useApiUsersForm";
 
+//Первая загрузка - 4 рендеров
+//Повторные переходы - 1 рендер
 export function UserForm() {
-  const { mutateAsync } = useIndexReactQuery().userCreateUser;
-  const { data: roleData, isSuccess: RoleSuccess } =
-    useIndexReactQuery().roleGetAll;
-  const { data: divisionData, isSuccess: divisionSuccess } =
-    useIndexReactQuery().divisionGetAll;
-
-  const maskedInputRef = useMaskito({ options });
+  //Если так - то уходят два рендера при первоначальной загрузке
+  //Дальше будет интересно, отработают ли invalidate при изменении данных
+  //Но с таким подходом, почему-то, данные Data теперь оказывается могут быть undefined
+  //Возможно, действительно при invalidate у меня не обновятся данные или ещё что-то произойдёт, нужно тестировать
+  const { divisionData, divisionSuccess, mutateAsync, RoleSuccess, roleData } =
+    useApiUsersForm();
 
   console.log("Рендер");
 
   const form = useForm<PostCreateUserDto>({
-    // Нужно понять, почему кубб генерит схему, в которой в полях, которые объекты - внутренние свойства являются опциональными
     resolver: zodResolver(createUserDtoSchemaZOD),
     defaultValues: {
       name: "",
@@ -171,7 +170,7 @@ export function UserForm() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {RoleSuccess ? (
+                    {RoleSuccess && roleData ? (
                       roleData.data.map((item) => (
                         <SelectItem
                           key={item.roleName}
@@ -205,7 +204,7 @@ export function UserForm() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {divisionSuccess ? (
+                    {divisionSuccess && divisionData ? (
                       divisionData.data.map((item) => (
                         <SelectItem key={item.name} value={item.id.toString()}>
                           {item.name}
@@ -229,11 +228,10 @@ export function UserForm() {
               <FormItem className="w-[400px]">
                 <FormLabel>Номер телефона</FormLabel>
                 <FormControl>
-                  <Input
+                  <InputPhone
                     placeholder="+7"
                     type="text"
                     {...field}
-                    ref={maskedInputRef}
                     onInput={(e) => {
                       // Ну в таком случае с опцией shouldValidate я отображаю сообщения о том, успешна ли вадиция - но это вызывает каждый раз рендер
                       //Т.е преимущества react-hook-form отлетают

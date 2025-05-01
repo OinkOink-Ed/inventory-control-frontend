@@ -2,6 +2,12 @@
 
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
+interface Token {
+  state: {
+    token: string;
+  };
+}
+
 export interface RequestConfig<TData = unknown> {
   url?: string;
   method: "GET" | "PUT" | "PATCH" | "POST" | "DELETE";
@@ -30,9 +36,12 @@ export const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use((config) => {
-  const token = localStorage.getItem("profileStorage");
+  const profileStorage = localStorage.getItem("profileStorage");
+  if (profileStorage) {
+    const token = (JSON.parse(profileStorage) as Token).state.token;
+    config.headers.Authorization = `Bearer ${token}`;
+  }
 
-  config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
 

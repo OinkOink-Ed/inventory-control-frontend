@@ -11,7 +11,7 @@ export const createUserDtoSchemaZOD = postCreateUserDtoSchema.extend({
     .string()
     .regex(/^\+7 \d{3} \d{3}-\d{2}-\d{2}$/, "Поле обязательно к заполнению")
     .transform((val) => val.replace(/[\s()\\-]/g, "")),
-  password: z.string().min(8, { message: "Требуется не менее 4 символов" }),
+  password: z.string().min(8, { message: "Требуется не менее 8 символов" }),
   role: z.object({
     id: z.coerce.number({ message: "Поле обязательно к заполнению" }),
   }),

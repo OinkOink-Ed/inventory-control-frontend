@@ -9,6 +9,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+//Первая загрузка - 4 рендера
+//Повторные переходы - 1 рендер
 export function UsersTable() {
   const { isSuccess, data } = useIndexReactQuery().userGetAll;
 
