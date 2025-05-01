@@ -27,14 +27,8 @@ import { useApiUsersForm } from "./hooks/useApiUsersForm";
 //Первая загрузка - 4 рендеров
 //Повторные переходы - 1 рендер
 export function UserForm() {
-  //Если так - то уходят два рендера при первоначальной загрузке
-  //Дальше будет интересно, отработают ли invalidate при изменении данных
-  //Но с таким подходом, почему-то, данные Data теперь оказывается могут быть undefined
-  //Возможно, действительно при invalidate у меня не обновятся данные или ещё что-то произойдёт, нужно тестировать
   const { divisionData, divisionSuccess, mutateAsync, RoleSuccess, roleData } =
     useApiUsersForm();
-
-  console.log("Рендер");
 
   const form = useForm<PostCreateUserDto>({
     resolver: zodResolver(createUserDtoSchemaZOD),

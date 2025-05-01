@@ -1,4 +1,4 @@
-import { AppSideBar } from "@/components/AppSideBar";
+import { AppSideBar } from "@/components/AppSidebar/AppSideBar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Outlet } from "react-router";
 import { Toaster } from "sonner";

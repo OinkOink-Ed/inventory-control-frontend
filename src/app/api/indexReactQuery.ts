@@ -7,6 +7,7 @@ import {
   userControllerCreateAdmin,
   userControllerCreateUser,
   userControllerGetAll,
+  warehouseControllerGetAll,
 } from "./generated";
 
 export function useIndexReactQuery() {
@@ -46,7 +47,7 @@ export function useIndexReactQuery() {
     },
   });
 
-  // Создать Администратор
+  // Создать Администратора
   const userCreateAdmin = useMutation({
     mutationFn: userControllerCreateAdmin,
     onSuccess: async () => {
@@ -71,6 +72,13 @@ export function useIndexReactQuery() {
     staleTime: 60 * 60 * 1000,
   });
 
+  //Получить склады для выбора
+  const warehouseGetAll = useQuery({
+    queryKey: ["warehouses"],
+    queryFn: warehouseControllerGetAll,
+    staleTime: 60 * 60 * 1000,
+  });
+
   return {
     roleGetAll,
     cartridgeModelCreate,
@@ -79,5 +87,6 @@ export function useIndexReactQuery() {
     userGetAll,
     cartridgeModelGetAll,
     divisionGetAll,
+    warehouseGetAll,
   };
 }

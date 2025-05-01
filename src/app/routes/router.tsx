@@ -63,7 +63,7 @@ export const router = createBrowserRouter([
           {
             path: "management",
 
-            // TODO приём картриджей поставленых в учреждение
+            // TODO список складов + операции
             element: (
               <Suspense fallback={<SpinnerLoad />}>
                 <Warehouse />
@@ -73,7 +73,7 @@ export const router = createBrowserRouter([
           {
             path: "users",
 
-            // TODO список пользователей + создание
+            // TODO список пользователей + операции
 
             element: (
               <Suspense fallback={<SpinnerLoad />}>
@@ -84,11 +84,33 @@ export const router = createBrowserRouter([
           {
             path: "supplement",
 
-            // TODO Добавление новых моделей картриджей
+            // TODO список моделей картриджей + операции
 
             element: (
               <Suspense fallback={<SpinnerLoad />}>
                 <SupplementLayout />
+              </Suspense>
+            ),
+          },
+          {
+            path: "kabinets",
+
+            // TODO список кабинетов + операции
+
+            element: (
+              <Suspense fallback={<SpinnerLoad />}>
+                {/* <SupplementLayout /> */}
+              </Suspense>
+            ),
+          },
+          {
+            path: "divisions",
+
+            // TODO список подразделений + операции
+
+            element: (
+              <Suspense fallback={<SpinnerLoad />}>
+                {/* <SupplementLayout /> */}
               </Suspense>
             ),
           },
