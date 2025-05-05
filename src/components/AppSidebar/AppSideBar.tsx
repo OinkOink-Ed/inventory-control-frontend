@@ -22,13 +22,13 @@ import {
 import { itemsAdmin, itemsUser } from "./itemsForSidebar";
 import { useIndexReactQuery } from "@/app/api/indexReactQuery";
 import { authControllerLogout } from "@/app/api/generated";
-import { Auth } from "@/app/helpers/interfaces";
 import { handlerError } from "@/app/helpers/handlerError";
 import { toast } from "sonner";
 import { useProfileStore } from "@/app/stores/profile/useProfileStore";
 
 export function AppSideBar() {
   const exitProfileStore = useProfileStore.persist.clearStorage;
+  const profile = useProfileStore.getState();
   const navigate = useNavigate();
 
   //На сервере как закончу обработку отдачи либо всех складов для админа, либо одного склада для пользователя
@@ -47,18 +47,7 @@ export function AppSideBar() {
 
   async function logout() {
     try {
-      const storedAuth = localStorage.getItem("profileStorage");
-
-      if (!storedAuth) {
-        return false;
-      }
-
-      const parsedAuth = JSON.parse(storedAuth) as Auth;
-      const refreshToken = parsedAuth.state.refresh_token;
-
-      if (!refreshToken) {
-        return false;
-      }
+      const refreshToken = profile.refresh_token;
 
       await authControllerLogout({ token: refreshToken });
       exitProfileStore();
