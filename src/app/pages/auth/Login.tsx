@@ -9,18 +9,15 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/Button/Button";
-import { AxiosError } from "axios";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
 import { Input } from "@/components/ui/input";
-import { useAuthStore } from "./store/useAuthStore";
 import { authRequestDtoSchemaZOD } from "./shema";
 import { useProfileStore } from "@/app/stores/profile/useProfileStore";
 import { authControllerSignIn, PostAuthDto } from "@/app/api/generated";
+import { handlerError } from "@/app/helpers/handlerError";
 
 export function Login() {
-  //Просто хочу несколько сторов
-  const setAuth = useAuthStore((state) => state.setAuth);
   const setProfile = useProfileStore((state) => state.setProfile);
 
   const navigate = useNavigate();
@@ -39,24 +36,22 @@ export function Login() {
     //Это механика рефреш аксесс, + на сервере я так ещё не умею делать.
 
     try {
-      const res = (await authControllerSignIn(data)).data.access_token;
+      const res = (await authControllerSignIn(data)).data;
+
       setProfile(res);
-      setAuth();
 
-      //ESLint подсвечивает что navigate теперь async (по-моему в react-router-dom v6 не была async)
       await navigate("/");
-    } catch (error) {
-      //В целом можно разобраться как на сервере типизировать ошибки и работать с ними, чтобы потом через kubb из swagger тянуть типизацию этих ошибок
-      //И свободно их использовать здесь (наверное). Пока что буду как-то так через axios и понимание того, что мне приходит message
+    } catch (error: unknown) {
+      const message = handlerError(error);
 
-      const typedError: AxiosError = error as AxiosError;
-      if (typedError.status === 401) {
-        const text = typedError.response?.data as { message: string };
-
-        form.setError("username", { message: `${text.message}` });
-        form.setError("password", { message: `${text.message}` });
+      if (message) {
+        toast.error(message, {
+          position: "top-center",
+        });
+        form.setError("username", { message: `Не верный логин или пароль` });
+        form.setError("password", { message: `Не верный логин или пароль` });
       } else {
-        toast.error("Неизвестная ошибка сервера!", {
+        toast.error("Неизвестная ошибка!", {
           position: "top-center",
         });
       }

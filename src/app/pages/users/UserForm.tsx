@@ -23,6 +23,7 @@ import { PostCreateUserDto } from "@/app/api/generated";
 import { decryptedProfile } from "@/app/helpers/decryptedProfile";
 import { InputPhone } from "@/components/InputPhone";
 import { useApiUsersForm } from "./hooks/useApiUsersForm";
+import { handlerError } from "@/app/helpers/handlerError";
 
 //Первая загрузка - 4 рендеров
 //Повторные переходы - 1 рендер
@@ -52,8 +53,19 @@ export function UserForm() {
       toast.success(`${res.data.message}`, {
         position: "top-center",
       });
-    } catch (error) {
-      console.log(error);
+    } catch (error: unknown) {
+      const message = handlerError(error);
+
+      if (message) {
+        toast.error(message, {
+          position: "top-center",
+        });
+        form.reset();
+      } else {
+        toast.error("Неизвестная ошибка!", {
+          position: "top-center",
+        });
+      }
     }
   }
 

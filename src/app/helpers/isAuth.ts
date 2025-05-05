@@ -1,27 +1,37 @@
-import { AES, enc } from "crypto-ts";
+import { jwtDecode, JwtPayload } from "jwt-decode";
 
 interface Auth {
   state: {
-    isAuth: string;
+    refresh_token: string;
   };
 }
 
-const key = "X7pL9qW3zT2rY8mB5nK4vJ6hF1cD0aE2";
-
 export function isAuth() {
-  let result;
   try {
-    const storedAuth = localStorage.getItem("authStorage");
-    let isAuth = "";
-    if (storedAuth) {
-      isAuth = (JSON.parse(storedAuth) as Auth).state.isAuth;
+    const storedAuth = localStorage.getItem("profileStorage");
+
+    if (!storedAuth) {
+      return false;
     }
-    result = AES.decrypt(isAuth, key).toString(enc.Utf8);
+
+    const parsedAuth = JSON.parse(storedAuth) as Auth;
+    const refreshToken = parsedAuth.state.refresh_token;
+
+    if (!refreshToken) {
+      return false;
+    }
+
+    const decoded = jwtDecode<JwtPayload>(refreshToken);
+
+    if (!decoded.exp) {
+      return false;
+    }
+
+    const expirationDate = new Date(decoded.exp * 1000);
+    const now = new Date();
+
+    return expirationDate < now;
   } catch (error) {
     return false;
-  }
-
-  if (result === "true") {
-    return true;
   }
 }

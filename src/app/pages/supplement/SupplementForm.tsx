@@ -15,6 +15,7 @@ import { createModelCartridgeDtoSchemaZOD } from "./shema";
 import { useIndexReactQuery } from "@/app/api/indexReactQuery";
 import { decryptedProfile } from "@/app/helpers/decryptedProfile";
 import { PostCreateCartridgeModelDto } from "@/app/api/generated";
+import { handlerError } from "@/app/helpers/handlerError";
 
 export function SupplementForm() {
   const { mutateAsync } = useIndexReactQuery().cartridgeModelCreate;
@@ -35,8 +36,19 @@ export function SupplementForm() {
       toast.success(`${res.data.message}`, {
         position: "top-center",
       });
-    } catch (error) {
-      console.log(error);
+    } catch (error: unknown) {
+      const message = handlerError(error);
+
+      if (message) {
+        toast.error(message, {
+          position: "top-center",
+        });
+        form.reset();
+      } else {
+        toast.error("Неизвестная ошибка!", {
+          position: "top-center",
+        });
+      }
     }
   }
 
