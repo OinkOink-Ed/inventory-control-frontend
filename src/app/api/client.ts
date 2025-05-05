@@ -1,19 +1,9 @@
-//Спасибо нейронке, я сам бы с типами не разобрался бы ни в коем случае
-
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { authControllerRefreshToken } from "./generated";
-
-// Типы
-interface Token {
-  state: {
-    access_token: string;
-    refresh_token?: string;
-  };
-}
+import { useProfileStore } from "../stores/profile/useProfileStore";
 
 interface RefreshTokenResponse {
-  access_token: string;
-  refresh_token?: string;
+  token: string;
 }
 
 export interface RequestConfig<TData = unknown> {
@@ -46,51 +36,42 @@ export const axiosInstance = axios.create({
 
 // Функция для обновления токена
 export const refreshAccessToken = async (): Promise<RefreshTokenResponse> => {
+  const profile = useProfileStore.getState();
+  const clearProfile = useProfileStore.persist.clearStorage;
+
   try {
-    const profileStorage = localStorage.getItem("profileStorage");
-    if (!profileStorage) {
-      throw new Error("No profile storage found");
-    }
+    const refreshToken = profile.refresh_token;
 
-    const {
-      state: { refresh_token },
-    } = JSON.parse(profileStorage) as Token;
-    if (!refresh_token) {
-      throw new Error("No refresh token found");
-    }
+    const response = await authControllerRefreshToken({
+      token: refreshToken,
+    });
 
-    const response = await authControllerRefreshToken(refresh_token);
+    const accessToken = response.data.token;
 
-    const newProfile = {
-      state: {
-        access_token: response.data.access_token,
-        refresh_token: response.data.refresh_token ?? refresh_token,
-      },
-    };
-    localStorage.setItem("profileStorage", JSON.stringify(newProfile));
+    profile.setProfile({
+      access_token: accessToken,
+      refresh_token: refreshToken,
+    });
 
     return response.data;
   } catch (error) {
-    localStorage.removeItem("profileStorage");
+    console.log(error);
+    clearProfile();
     throw error instanceof Error ? error : new Error("Failed to refresh token");
   }
 };
 
 // Перехватчик запросов
 axiosInstance.interceptors.request.use((config) => {
+  const profile = useProfileStore.getState();
+
   if (config.url == "/api/auth") {
     return config;
   }
 
-  const profileStorage = localStorage.getItem("profileStorage");
-  if (profileStorage) {
-    const {
-      state: { access_token },
-    } = JSON.parse(profileStorage) as Token;
-    if (access_token) {
-      config.headers.Authorization = `Bearer ${access_token}`;
-    }
-  }
+  const accessToken = profile.access_token;
+
+  config.headers.Authorization = `Bearer ${accessToken}`;
   return config;
 });
 
@@ -117,11 +98,20 @@ const processQueue = (error: Error | null, token: string | null = null) => {
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
+    if (error.code === "ERR_CANCELED" || error.message === "canceled") {
+      return Promise.reject(error);
+    }
+
+    const clearStorage = useProfileStore.persist.clearStorage;
+
     const originalRequest = error.config as AxiosRequestConfig & {
       _retry?: boolean;
     };
 
-    if (error.config?.url == "/api/auth") {
+    if (
+      error.config?.url == "/api/auth" ||
+      error.config?.url == "/api/auth/logout"
+    ) {
       return Promise.reject(error);
     }
 
@@ -142,9 +132,9 @@ axiosInstance.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const { access_token } = await refreshAccessToken();
-        processQueue(null, access_token);
-        originalRequest.headers!.Authorization = `Bearer ${access_token}`;
+        const { token } = await refreshAccessToken();
+        processQueue(null, token);
+        originalRequest.headers!.Authorization = `Bearer ${token}`;
         return axiosInstance(originalRequest);
       } catch (refreshError) {
         const errorToReject =
@@ -152,7 +142,7 @@ axiosInstance.interceptors.response.use(
             ? refreshError
             : new Error("Failed to refresh token");
         processQueue(errorToReject, null);
-        localStorage.removeItem("profileStorage");
+        clearStorage();
         return Promise.reject(errorToReject);
       } finally {
         isRefreshing = false;

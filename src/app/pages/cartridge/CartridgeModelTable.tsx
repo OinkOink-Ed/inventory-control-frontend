@@ -7,10 +7,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import SupplementSkeleton from "./SupplementSkeleton";
 import { useIndexReactQuery } from "@/app/api/indexReactQuery";
+import CartrideModelSkeleton from "./CartrideModelSkeleton";
 
-export function SupplementTable() {
+export function CartridgeModelTable() {
   const { data, isSuccess } = useIndexReactQuery().cartridgeModelGetAll;
 
   return isSuccess ? (
@@ -32,6 +32,6 @@ export function SupplementTable() {
       </TableBody>
     </Table>
   ) : (
-    <SupplementSkeleton />
+    <CartrideModelSkeleton />
   );
 }

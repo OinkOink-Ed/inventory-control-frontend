@@ -3,14 +3,15 @@ import { ErrorBoundary } from "../ErrorBoundary";
 import { Suspense } from "react";
 import {
   AppLayout,
-  Delivery,
+  CartridgeModelLayout,
+  DeliveryLayout,
+  DivisionLayout,
+  KabinetLayout,
   LoginLayout,
-  ManagementLayout,
-  Profile,
-  Reports,
-  SupplementLayout,
+  ProfileLayout,
+  ReportsLayout,
   UsersLayout,
-  Warehouse,
+  WarehouseLayout,
 } from "../lazyImports";
 import { SpinnerLoad } from "@/components/SpinnerLoad";
 import PublicRoute from "./loaders/Public";
@@ -47,26 +48,30 @@ export const router = createBrowserRouter([
 
         element: (
           <Suspense fallback={<SpinnerLoad />}>
-            <Delivery />
+            <DeliveryLayout />
           </Suspense>
         ),
       },
       {
         loader: AdminRoute,
-
-        element: (
-          <Suspense fallback={<SpinnerLoad />}>
-            <ManagementLayout />
-          </Suspense>
-        ),
         children: [
           {
-            path: "management",
+            path: "warehouse",
 
             // TODO список складов + операции
             element: (
               <Suspense fallback={<SpinnerLoad />}>
-                <Warehouse />
+                <WarehouseLayout />
+              </Suspense>
+            ),
+          },
+          {
+            path: "kabinets",
+
+            // TODO список складов + операции
+            element: (
+              <Suspense fallback={<SpinnerLoad />}>
+                <KabinetLayout />
               </Suspense>
             ),
           },
@@ -82,13 +87,13 @@ export const router = createBrowserRouter([
             ),
           },
           {
-            path: "supplement",
+            path: "cartrideModel",
 
             // TODO список моделей картриджей + операции
 
             element: (
               <Suspense fallback={<SpinnerLoad />}>
-                <SupplementLayout />
+                <CartridgeModelLayout />
               </Suspense>
             ),
           },
@@ -99,7 +104,7 @@ export const router = createBrowserRouter([
 
             element: (
               <Suspense fallback={<SpinnerLoad />}>
-                {/* <SupplementLayout /> */}
+                <KabinetLayout />
               </Suspense>
             ),
           },
@@ -110,7 +115,7 @@ export const router = createBrowserRouter([
 
             element: (
               <Suspense fallback={<SpinnerLoad />}>
-                {/* <SupplementLayout /> */}
+                <DivisionLayout />
               </Suspense>
             ),
           },
@@ -123,7 +128,7 @@ export const router = createBrowserRouter([
 
         element: (
           <Suspense fallback={<SpinnerLoad />}>
-            <Profile />
+            <ProfileLayout />
           </Suspense>
         ),
       },
@@ -133,7 +138,7 @@ export const router = createBrowserRouter([
 
         element: (
           <Suspense fallback={<SpinnerLoad />}>
-            <Reports />
+            <ReportsLayout />
           </Suspense>
         ),
       },

@@ -17,7 +17,7 @@ import { decryptedProfile } from "@/app/helpers/decryptedProfile";
 import { PostCreateCartridgeModelDto } from "@/app/api/generated";
 import { handlerError } from "@/app/helpers/handlerError";
 
-export function SupplementForm() {
+export function CartridgeModelForm() {
   const { mutateAsync } = useIndexReactQuery().cartridgeModelCreate;
 
   const form = useForm<PostCreateCartridgeModelDto>({

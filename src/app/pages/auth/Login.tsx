@@ -40,7 +40,7 @@ export function Login() {
 
       setProfile(res);
 
-      await navigate("/");
+      void navigate("/");
     } catch (error: unknown) {
       const message = handlerError(error);
 

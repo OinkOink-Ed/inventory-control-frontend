@@ -12,7 +12,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubItem,
 } from "../ui/sidebar";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { decryptedProfile } from "@/app/helpers/decryptedProfile";
 import { Collapsible } from "../ui/collapsible";
 import {
@@ -21,10 +21,15 @@ import {
 } from "@radix-ui/react-collapsible";
 import { itemsAdmin, itemsUser } from "./itemsForSidebar";
 import { useIndexReactQuery } from "@/app/api/indexReactQuery";
-import { useExit } from "@/app/stores/useExit";
+import { authControllerLogout } from "@/app/api/generated";
+import { Auth } from "@/app/helpers/interfaces";
+import { handlerError } from "@/app/helpers/handlerError";
+import { toast } from "sonner";
+import { useProfileStore } from "@/app/stores/profile/useProfileStore";
 
 export function AppSideBar() {
-  const exit = useExit();
+  const exitProfileStore = useProfileStore.persist.clearStorage;
+  const navigate = useNavigate();
 
   //На сервере как закончу обработку отдачи либо всех складов для админа, либо одного склада для пользователя
   //Нужно будет добавить такой элемент в sidebar по условной отрисовке
@@ -38,6 +43,43 @@ export function AppSideBar() {
       url: `/warehouse-${index + 1}`,
       icon: PackageCheck,
     }));
+  }
+
+  async function logout() {
+    try {
+      const storedAuth = localStorage.getItem("profileStorage");
+
+      if (!storedAuth) {
+        return false;
+      }
+
+      const parsedAuth = JSON.parse(storedAuth) as Auth;
+      const refreshToken = parsedAuth.state.refresh_token;
+
+      if (!refreshToken) {
+        return false;
+      }
+
+      await authControllerLogout({ token: refreshToken });
+      exitProfileStore();
+      await navigate("/");
+    } catch (error) {
+      const message = handlerError(error);
+
+      if (message) {
+        toast.error(message, {
+          position: "top-center",
+        });
+        setTimeout(() => {
+          exitProfileStore();
+          void navigate("/");
+        }, 1000);
+      } else {
+        toast.error("Неизвестная ошибка!", {
+          position: "top-center",
+        });
+      }
+    }
   }
 
   return (
@@ -153,8 +195,7 @@ export function AppSideBar() {
           <SidebarMenuItem>
             <SidebarMenuButton
               onClick={() => {
-                exit.exitAuthStore();
-                exit.exitProfileStore();
+                void logout();
               }}
             >
               <LogOut />

@@ -21,12 +21,12 @@ export const itemsAdmin = [
   },
   {
     title: "Модели картриджей",
-    url: "/supplement",
+    url: "/cartrideModel",
     icon: Book,
   },
   {
     title: "Кабинеты",
-    url: "/supplement",
+    url: "/kabinets",
     icon: Book,
   },
 ];

@@ -1,5 +1,11 @@
+import { Toaster } from "sonner";
 import { Login } from "../pages/auth/Login";
 
 export default function LoginLayout() {
-  return <Login />;
+  return (
+    <>
+      <Toaster richColors />
+      <Login />
+    </>
+  );
 }

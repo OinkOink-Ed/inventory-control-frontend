@@ -3,6 +3,7 @@ import {
   cartridgeModelControllerCreate,
   cartridgeModelControllerGetAll,
   divisionControllerGetAll,
+  kabinetControllerGetAll,
   roleControllerGetAll,
   userControllerCreateAdmin,
   userControllerCreateUser,
@@ -72,6 +73,13 @@ export function useIndexReactQuery() {
     staleTime: 60 * 60 * 1000,
   });
 
+  //Получить кабинеты
+  const kabinetsGetAll = useQuery({
+    queryKey: ["kabinets"],
+    queryFn: kabinetControllerGetAll,
+    staleTime: 60 * 60 * 1000,
+  });
+
   //Получить склады для выбора
   const warehouseGetAll = useQuery({
     queryKey: ["warehouses"],
@@ -88,5 +96,6 @@ export function useIndexReactQuery() {
     cartridgeModelGetAll,
     divisionGetAll,
     warehouseGetAll,
+    kabinetsGetAll,
   };
 }

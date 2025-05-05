@@ -1,6 +1,6 @@
 import { Outlet } from "react-router";
 
-export default function ManagementLayout() {
+export default function WarehouseLayout() {
   // TODO Базовые стили Админ панели
   return (
     <main className="flex h-svh w-full">

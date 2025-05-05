@@ -3,8 +3,6 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { Outlet } from "react-router";
 import { Toaster } from "sonner";
 
-// Нужно реализовать роли через Context Provider
-
 export default function AppLayout() {
   // Это пример из доки shdcn - не ясно работает ли он
   // const cookieStore = await cookies();

@@ -1,25 +1,10 @@
 import { jwtDecode, JwtPayload } from "jwt-decode";
-
-interface Auth {
-  state: {
-    refresh_token: string;
-  };
-}
+import { useProfileStore } from "../stores/profile/useProfileStore";
 
 export function isAuth() {
+  const profile = useProfileStore.getState();
   try {
-    const storedAuth = localStorage.getItem("profileStorage");
-
-    if (!storedAuth) {
-      return false;
-    }
-
-    const parsedAuth = JSON.parse(storedAuth) as Auth;
-    const refreshToken = parsedAuth.state.refresh_token;
-
-    if (!refreshToken) {
-      return false;
-    }
+    const refreshToken = profile.refresh_token;
 
     const decoded = jwtDecode<JwtPayload>(refreshToken);
 
@@ -30,7 +15,7 @@ export function isAuth() {
     const expirationDate = new Date(decoded.exp * 1000);
     const now = new Date();
 
-    return expirationDate < now;
+    return now < expirationDate;
   } catch (error) {
     return false;
   }
