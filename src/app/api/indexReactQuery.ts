@@ -1,9 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  cartridgeControllerGetCartridgesById,
   cartridgeModelControllerCreate,
   cartridgeModelControllerGetAll,
   divisionControllerGetAll,
-  kabinetControllerGetAll,
+  kabinetControllerGetKAbinetsByDivisionId,
   roleControllerGetAll,
   userControllerCreateAdmin,
   userControllerCreateUser,
@@ -11,14 +12,13 @@ import {
   warehouseControllerGetAll,
 } from "./generated";
 
-export function useIndexReactQuery() {
+export function useIndexReactQuery(id?: number) {
   const queryClient = useQueryClient();
 
   // Получить модели картриджей
   const cartridgeModelGetAll = useQuery({
     queryKey: ["modelsCartridges"],
     queryFn: cartridgeModelControllerGetAll,
-    staleTime: 5 * 60 * 1000,
   });
 
   // Создание модели картриджа
@@ -35,7 +35,6 @@ export function useIndexReactQuery() {
   const userGetAll = useQuery({
     queryKey: ["users"],
     queryFn: userControllerGetAll,
-    staleTime: 5 * 60 * 1000,
   });
 
   //Создать пользователя
@@ -62,29 +61,32 @@ export function useIndexReactQuery() {
   const roleGetAll = useQuery({
     queryKey: ["roles"],
     queryFn: roleControllerGetAll,
-    staleTime: 5 * 60 * 1000,
-    // refetchOnWindowFocus: false,
   });
 
   //Получить подразделения для выбора
   const divisionGetAll = useQuery({
-    queryKey: ["divisions"],
+    queryKey: ["division"],
     queryFn: divisionControllerGetAll,
-    staleTime: 60 * 60 * 1000,
   });
 
-  //Получить кабинеты
-  const kabinetsGetAll = useQuery({
-    queryKey: ["kabinets"],
-    queryFn: kabinetControllerGetAll,
-    staleTime: 60 * 60 * 1000,
+  //Получить кабинеты по подразделению
+  const kabinetsGetByDivisionId = useQuery({
+    queryKey: [`kabinets${id}`],
+    queryFn: () => kabinetControllerGetKAbinetsByDivisionId(id!),
+    enabled: !!id,
   });
 
   //Получить склады для выбора
   const warehouseGetAll = useQuery({
     queryKey: ["warehouses"],
     queryFn: warehouseControllerGetAll,
-    staleTime: 60 * 60 * 1000,
+  });
+
+  //Получить картриджи по складу
+  const cartridgesGetByWarehouseId = useQuery({
+    queryKey: [`cartridges${id}`],
+    queryFn: () => cartridgeControllerGetCartridgesById(id!),
+    enabled: !!id,
   });
 
   return {
@@ -96,6 +98,7 @@ export function useIndexReactQuery() {
     cartridgeModelGetAll,
     divisionGetAll,
     warehouseGetAll,
-    kabinetsGetAll,
+    kabinetsGetByDivisionId,
+    cartridgesGetByWarehouseId,
   };
 }

@@ -1,4 +1,4 @@
-import { ChevronRight, LogOut, PackageCheck, User } from "lucide-react";
+import { Book, ChevronRight, LogOut, PackageCheck, User } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -31,17 +31,25 @@ export function AppSideBar() {
   const profile = useProfileStore.getState();
   const navigate = useNavigate();
 
-  //На сервере как закончу обработку отдачи либо всех складов для админа, либо одного склада для пользователя
-  //Нужно будет добавить такой элемент в sidebar по условной отрисовке
-  const { data } = useIndexReactQuery().warehouseGetAll;
+  const { data: dataWarehouse } = useIndexReactQuery().warehouseGetAll;
+  const { data: dataDivision } = useIndexReactQuery().divisionGetAll;
 
   let itemsWarehouses;
+  let itemsDivision;
 
-  if (data) {
-    itemsWarehouses = data.data.map((item, index) => ({
+  if (dataWarehouse) {
+    itemsWarehouses = dataWarehouse.data.map((item, index) => ({
       title: `Склад №${index + 1}`,
-      url: `/warehouse-${index + 1}`,
+      url: `/warehouse/${item.id}`,
       icon: PackageCheck,
+    }));
+  }
+
+  if (dataDivision) {
+    itemsDivision = dataDivision.data.map((item) => ({
+      title: `${item.name}`,
+      url: `division/${item.id}`,
+      icon: Book,
     }));
   }
 
@@ -72,7 +80,7 @@ export function AppSideBar() {
   }
 
   return (
-    <Sidebar collapsible="none">
+    <Sidebar collapsible="none" className="w-[322px]">
       <SidebarContent>
         <SidebarGroupLabel>Profile</SidebarGroupLabel>
         <SidebarGroup>
@@ -141,6 +149,38 @@ export function AppSideBar() {
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                   ))}
+                  <SidebarMenu>
+                    <Collapsible className="group/collapsible">
+                      <SidebarMenuItem>
+                        <CollapsibleTrigger asChild>
+                          <SidebarMenuButton>
+                            <PackageCheck />
+                            <span>Подразделения</span>
+                            <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
+                          </SidebarMenuButton>
+                        </CollapsibleTrigger>
+                      </SidebarMenuItem>
+
+                      <CollapsibleContent>
+                        <SidebarMenuSub>
+                          {itemsDivision ? (
+                            itemsDivision.map((item) => (
+                              <SidebarMenuSubItem key={item.title}>
+                                <SidebarMenuButton asChild>
+                                  <Link to={item.url}>
+                                    <item.icon />
+                                    <span>{item.title}</span>
+                                  </Link>
+                                </SidebarMenuButton>
+                              </SidebarMenuSubItem>
+                            ))
+                          ) : (
+                            <div>Идёт загрузка</div>
+                          )}
+                        </SidebarMenuSub>
+                      </CollapsibleContent>
+                    </Collapsible>
+                  </SidebarMenu>
                   <SidebarMenu>
                     <Collapsible className="group/collapsible">
                       <SidebarMenuItem>

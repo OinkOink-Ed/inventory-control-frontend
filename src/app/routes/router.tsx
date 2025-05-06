@@ -6,7 +6,6 @@ import {
   CartridgeModelLayout,
   DeliveryLayout,
   DivisionLayout,
-  KabinetLayout,
   LoginLayout,
   ProfileLayout,
   ReportsLayout,
@@ -56,22 +55,12 @@ export const router = createBrowserRouter([
         loader: AdminRoute,
         children: [
           {
-            path: "warehouse",
+            path: "warehouse/:id",
 
             // TODO список складов + операции
             element: (
               <Suspense fallback={<SpinnerLoad />}>
                 <WarehouseLayout />
-              </Suspense>
-            ),
-          },
-          {
-            path: "kabinets",
-
-            // TODO список складов + операции
-            element: (
-              <Suspense fallback={<SpinnerLoad />}>
-                <KabinetLayout />
               </Suspense>
             ),
           },
@@ -98,18 +87,7 @@ export const router = createBrowserRouter([
             ),
           },
           {
-            path: "kabinets",
-
-            // TODO список кабинетов + операции
-
-            element: (
-              <Suspense fallback={<SpinnerLoad />}>
-                <KabinetLayout />
-              </Suspense>
-            ),
-          },
-          {
-            path: "divisions",
+            path: "division/:id",
 
             // TODO список подразделений + операции
 

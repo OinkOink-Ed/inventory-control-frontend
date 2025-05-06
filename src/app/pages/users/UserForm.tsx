@@ -74,13 +74,13 @@ export function UserForm() {
       <Form {...form}>
         <form
           onSubmit={(event) => void form.handleSubmit(onSubmit)(event)}
-          className="flex flex-wrap gap-5 border-b-2 p-8"
+          className="flex flex-wrap justify-center gap-5"
         >
           <FormField
             control={form.control}
             name="username"
             render={({ field }) => (
-              <FormItem className="w-[400px]">
+              <FormItem className="h-24 w-[400px]">
                 <FormLabel>Логин</FormLabel>
                 <FormControl>
                   <Input
@@ -231,7 +231,7 @@ export function UserForm() {
             control={form.control}
             name="telephone"
             render={({ field }) => (
-              <FormItem className="w-[400px]">
+              <FormItem className="h-24 w-[400px]">
                 <FormLabel>Номер телефона</FormLabel>
                 <FormControl>
                   <InputPhone
@@ -255,7 +255,7 @@ export function UserForm() {
             )}
           />
           {/* {Нужно добавить дополнительные поля} */}
-          <Button type="submit" className="self-center">
+          <Button type="submit" className="w-[200px] self-center">
             Добавить
           </Button>
         </form>

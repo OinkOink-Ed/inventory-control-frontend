@@ -1,10 +1,9 @@
-import { Outlet } from "react-router";
+import { WarehouseTable } from "../pages/warehouse/WarehouseTable";
 
 export default function WarehouseLayout() {
-  // TODO Базовые стили Админ панели
   return (
     <main className="flex h-svh w-full">
-      <Outlet />
+      <WarehouseTable />
     </main>
   );
 }

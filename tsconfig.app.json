@@ -26,5 +26,11 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src", "kubb.config.ts", "getApiSwagger.ts", "kubb.ts"]
+  "include": [
+    "src",
+    "kubb.config.ts",
+    "getApiSwagger.ts",
+    "kubb.ts",
+    "src/app/api/generated/types/**/*"
+  ]
 }

@@ -8,30 +8,31 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useIndexReactQuery } from "@/app/api/indexReactQuery";
-import KabinetSkeleton from "./KabinetSkeleton";
+import { useParams } from "react-router";
+import { SpinnerLoad } from "@/components/SpinnerLoad";
 
-export function KabinetTable() {
-  const { data, isSuccess } = useIndexReactQuery().kabinetsGetAll;
+export function DivisionTable() {
+  const { id } = useParams<{ id: string }>();
+  const divisionId = parseInt(id!);
+  const { kabinetsGetByDivisionId } = useIndexReactQuery(divisionId);
 
-  return isSuccess ? (
+  return kabinetsGetByDivisionId.isSuccess ? (
     <Table>
       <TableCaption>Кабинеты</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead>Подразделение</TableHead>
           <TableHead>Номер кабинета</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data.data.map((item) => (
+        {kabinetsGetByDivisionId.data.data.map((item) => (
           <TableRow key={item.id}>
-            <TableCell className="w-[300px]">{item.division?.name}</TableCell>
             <TableCell className="w-[300px]">{item.number}</TableCell>
           </TableRow>
         ))}
       </TableBody>
     </Table>
   ) : (
-    <KabinetSkeleton />
+    <SpinnerLoad />
   );
 }

@@ -24,11 +24,6 @@ export const itemsAdmin = [
     url: "/cartrideModel",
     icon: Book,
   },
-  {
-    title: "Кабинеты",
-    url: "/kabinets",
-    icon: Book,
-  },
 ];
 
 export const itemsWarehouses = [
