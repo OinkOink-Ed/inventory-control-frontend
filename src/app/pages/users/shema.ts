@@ -21,8 +21,4 @@ export const createUserDtoSchemaZOD = postCreateUserDtoSchema.extend({
   state: z.enum(["active", "inactive"], {
     message: "Поле обязательно к заполнению",
   }),
-  creator: z.object(
-    { id: z.number() },
-    { message: "Поле обязательно к заполнению" },
-  ),
 });

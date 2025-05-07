@@ -58,10 +58,12 @@ export function AppSideBar() {
       const refreshToken = profile.refresh_token;
 
       await authControllerLogout({ token: refreshToken });
+
       exitProfileStore();
-      await navigate("/");
+      void navigate("/auth");
     } catch (error) {
       const message = handlerError(error);
+      console.log("1 ошибка");
 
       if (message) {
         toast.error(message, {
@@ -69,7 +71,7 @@ export function AppSideBar() {
         });
         setTimeout(() => {
           exitProfileStore();
-          void navigate("/");
+          void navigate("/auth");
         }, 1000);
       } else {
         toast.error("Неизвестная ошибка!", {
@@ -228,7 +230,7 @@ export function AppSideBar() {
               }}
             >
               <LogOut />
-              <Link to={"/auth"}>Выход</Link>
+              Выход
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

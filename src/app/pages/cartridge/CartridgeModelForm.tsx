@@ -13,7 +13,6 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { createModelCartridgeDtoSchemaZOD } from "./shema";
 import { useIndexReactQuery } from "@/app/api/indexReactQuery";
-import { decryptedProfile } from "@/app/helpers/decryptedProfile";
 import { PostCreateCartridgeModelDto } from "@/app/api/generated";
 import { handlerError } from "@/app/helpers/handlerError";
 
@@ -23,9 +22,6 @@ export function CartridgeModelForm() {
   const form = useForm<PostCreateCartridgeModelDto>({
     resolver: zodResolver(createModelCartridgeDtoSchemaZOD),
     defaultValues: {
-      creator: {
-        id: decryptedProfile().id,
-      },
       name: "",
     },
   });

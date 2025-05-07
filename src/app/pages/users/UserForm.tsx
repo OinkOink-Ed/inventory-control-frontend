@@ -20,7 +20,6 @@ import {
 } from "@/components/ui/select";
 import { createUserDtoSchemaZOD } from "./shema";
 import { PostCreateUserDto } from "@/app/api/generated";
-import { decryptedProfile } from "@/app/helpers/decryptedProfile";
 import { InputPhone } from "@/components/InputPhone";
 import { useApiUsersForm } from "./hooks/useApiUsersForm";
 import { handlerError } from "@/app/helpers/handlerError";
@@ -41,7 +40,6 @@ export function UserForm() {
       role: {},
       lastname: "",
       division: {},
-      creator: { id: decryptedProfile().id },
       state: "active",
       telephone: "",
     },

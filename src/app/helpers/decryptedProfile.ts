@@ -3,12 +3,7 @@ import { useProfileStore } from "../stores/profile/useProfileStore";
 
 interface UserDto {
   id: number;
-  name: string;
-  username: string;
-  password: string;
-  patronimyc: string;
   role: { roleName: string };
-  lastname: string;
 }
 
 export function decryptedProfile(): UserDto {
@@ -19,12 +14,7 @@ export function decryptedProfile(): UserDto {
   } catch (error) {
     return {
       id: 0,
-      name: "",
-      username: "",
-      password: "",
-      patronimyc: "",
       role: { roleName: "" },
-      lastname: "",
     };
   }
 }
