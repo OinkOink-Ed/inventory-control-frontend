@@ -5,4 +5,5 @@ export interface ProfileStore {
 
 export interface ProfileActions {
   setProfile: (value: { access_token: string; refresh_token: string }) => void;
+  clearProfile: () => void;
 }

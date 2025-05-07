@@ -27,8 +27,7 @@ import { toast } from "sonner";
 import { useProfileStore } from "@/app/stores/profile/useProfileStore";
 
 export function AppSideBar() {
-  const exitProfileStore = useProfileStore.persist.clearStorage;
-  const profile = useProfileStore.getState();
+  const profile = useProfileStore;
   const navigate = useNavigate();
 
   const { data: dataWarehouse } = useIndexReactQuery().warehouseGetAll;
@@ -55,11 +54,12 @@ export function AppSideBar() {
 
   async function logout() {
     try {
-      const refreshToken = profile.refresh_token;
+      const refreshToken = profile.getState().refresh_token;
 
       await authControllerLogout({ token: refreshToken });
 
-      exitProfileStore();
+      profile.getState().clearProfile();
+      profile.persist.clearStorage();
       void navigate("/auth");
     } catch (error) {
       const message = handlerError(error);
@@ -70,7 +70,8 @@ export function AppSideBar() {
           position: "top-center",
         });
         setTimeout(() => {
-          exitProfileStore();
+          profile.getState().clearProfile();
+          profile.persist.clearStorage();
           void navigate("/auth");
         }, 1000);
       } else {

@@ -13,6 +13,7 @@ export const useProfileStore = create<ProfileStore & ProfileActions>()(
           refresh_token: res.refresh_token,
         });
       },
+      clearProfile: () => set({ access_token: "", refresh_token: "" }),
     }),
     {
       name: "profileStorage",
