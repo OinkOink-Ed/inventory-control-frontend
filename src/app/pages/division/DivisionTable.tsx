@@ -1,15 +1,9 @@
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { useIndexReactQuery } from "@/app/api/indexReactQuery";
 import { useParams } from "react-router";
 import { SpinnerLoad } from "@/components/SpinnerLoad";
+import { DataTable } from "@/components/DataTable/DataTable";
+import DialogForm from "@/components/DialogForm";
+import { columns } from "./columns";
 
 export function DivisionTable() {
   const { id } = useParams<{ id: string }>();
@@ -17,21 +11,19 @@ export function DivisionTable() {
   const { kabinetsGetByDivisionId } = useIndexReactQuery(divisionId);
 
   return kabinetsGetByDivisionId.isSuccess ? (
-    <Table>
-      <TableCaption>Кабинеты</TableCaption>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Номер кабинета</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {kabinetsGetByDivisionId.data.data.map((item) => (
-          <TableRow key={item.id}>
-            <TableCell className="w-[300px]">{item.number}</TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <DataTable
+      data={kabinetsGetByDivisionId.data.data}
+      columns={columns}
+      titleTable="Список кабинетов"
+      defaultSort="Номер"
+      dialog={
+        <DialogForm
+          title="Добавление кабинета?"
+          buttonName="Добавить кабинет?"
+          form={<div />}
+        />
+      }
+    />
   ) : (
     <SpinnerLoad />
   );
