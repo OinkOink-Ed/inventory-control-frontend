@@ -68,6 +68,11 @@ export function DataTable<TData, TValue>({
       columnFilters,
       rowSelection,
     },
+    initialState: {
+      pagination: {
+        pageSize: 12, // Устанавливаем 20 строк на странице по умолчанию
+      },
+    },
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
@@ -89,9 +94,9 @@ export function DataTable<TData, TValue>({
       </div>
       <DataTableToolbar facetedOptions={facetedOptions} table={table} />
       <Table className="border">
-        <TableHeader className="sticky top-0">
+        <TableHeader className="sticky -top-1 border bg-neutral-950">
           {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow className="border bg-neutral-950" key={headerGroup.id}>
+            <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
                   <TableHead key={header.id}>
@@ -122,6 +127,7 @@ export function DataTable<TData, TValue>({
           ))}
         </TableBody>
       </Table>
+
       <DataTableFooter table={table} dialog={dialog} />
     </div>
   );

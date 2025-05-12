@@ -6,7 +6,7 @@ import { CartridgeModelForm } from "./CartridgeModelForm";
 import { SpinnerLoad } from "@/components/SpinnerLoad";
 
 export function CartridgeModelTable() {
-  const { data, isSuccess } = useIndexReactQuery().cartridgeModelGetAll;
+  const { data, isSuccess } = useIndexReactQuery().cartridgeModelGetAllDetailed;
 
   return isSuccess ? (
     <DataTable

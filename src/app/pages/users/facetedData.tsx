@@ -16,4 +16,44 @@ export const facetedUsersData = [
       },
     ],
   },
+  {
+    columnName: "Статус",
+    options: [
+      {
+        value: "active",
+        label: "Active",
+        icon: Atom,
+      },
+      {
+        value: "inactive",
+        label: "Inactive",
+        icon: Atom,
+      },
+    ],
+  },
+  {
+    columnName: "Подразделение",
+    options: [
+      {
+        value: "Подразделение № 1",
+        label: "Подразделение № 1",
+        icon: Atom,
+      },
+      {
+        value: "Подразделение № 2",
+        label: "Подразделение № 2",
+        icon: Atom,
+      },
+      {
+        value: "Подразделение № 3",
+        label: "Подразделение № 3",
+        icon: Atom,
+      },
+      {
+        value: "Подразделение № 4",
+        label: "Подразделение № 4",
+        icon: Atom,
+      },
+    ],
+  },
 ];

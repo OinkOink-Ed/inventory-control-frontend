@@ -3,6 +3,7 @@ import {
   cartridgeControllerGetCartridgesById,
   cartridgeModelControllerCreate,
   cartridgeModelControllerGetAll,
+  cartridgeModelControllerGetAllDetailed,
   divisionControllerGetAll,
   kabinetControllerGetKAbinetsByDivisionId,
   roleControllerGetAll,
@@ -19,6 +20,11 @@ export function useIndexReactQuery(id?: number) {
   const cartridgeModelGetAll = useQuery({
     queryKey: ["modelsCartridges"],
     queryFn: cartridgeModelControllerGetAll,
+  });
+
+  const cartridgeModelGetAllDetailed = useQuery({
+    queryKey: ["modelsCartridgesDetailed"],
+    queryFn: cartridgeModelControllerGetAllDetailed,
   });
 
   // Создание модели картриджа
@@ -100,5 +106,6 @@ export function useIndexReactQuery(id?: number) {
     warehouseGetAll,
     kabinetsGetByDivisionId,
     cartridgesGetByWarehouseId,
+    cartridgeModelGetAllDetailed,
   };
 }

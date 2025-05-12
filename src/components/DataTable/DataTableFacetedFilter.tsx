@@ -80,7 +80,7 @@ export default function DataTableFacetedFilter<TData, TValue>({
           )}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-[200px]">
+      <DropdownMenuContent>
         <Command>
           <CommandInput placeholder={title} className="h-9"></CommandInput>
           <CommandList>

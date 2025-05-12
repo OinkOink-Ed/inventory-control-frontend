@@ -34,6 +34,28 @@ export const columns: ColumnDef<GetResponseAllUserDtoSchema>[] = [
     },
   },
   {
+    id: "Статус",
+    accessorKey: "state",
+    header: ({ column }) => {
+      return <DataTableColumnHeader column={column} title="Статус" />;
+    },
+    sortingFn: "text",
+    filterFn: (row, id, value: string[]) => {
+      return value.includes(row.getValue(id));
+    },
+  },
+  {
+    id: "Подразделение",
+    accessorKey: "division.name",
+    header: ({ column }) => {
+      return <DataTableColumnHeader column={column} title="Подразделение" />;
+    },
+    sortingFn: "text",
+    filterFn: (row, id, value: string[]) => {
+      return value.includes(row.getValue(id));
+    },
+  },
+  {
     id: "Действия",
     //Позже буду в компонент передать row
     cell: () => {

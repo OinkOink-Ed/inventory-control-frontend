@@ -101,6 +101,7 @@ export function AppSideBar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
+        {/* Временно тут для понимания того, что видит пользователь я тестирую под админом */}
         <SidebarGroupLabel>Inventory</SidebarGroupLabel>
         <SidebarGroup>
           <SidebarGroupContent>
@@ -135,7 +136,40 @@ export function AppSideBar() {
         </SidebarGroup>
 
         {decryptedProfile()?.role.roleName !== "admin" ? (
-          <></>
+          <>
+            <SidebarGroupLabel>Inventory</SidebarGroupLabel>
+            <SidebarGroup>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {decryptedProfile().role.roleName !== "user" ? (
+                    <></>
+                  ) : itemsWarehouses ? (
+                    itemsWarehouses.map((item) => (
+                      <SidebarMenuItem>
+                        <SidebarMenuButton asChild>
+                          <Link to={item.url}></Link>
+                          <item.icon />
+                          <span>{item.title}</span>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    ))
+                  ) : (
+                    <div>Идёт загрузка</div>
+                  )}
+                  {itemsUser.map((item) => (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton asChild>
+                        <Link to={item.url}>
+                          <item.icon />
+                          <span>{item.title}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          </>
         ) : (
           <>
             <SidebarGroupLabel>Admin Panel</SidebarGroupLabel>

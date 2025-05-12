@@ -20,8 +20,8 @@ export function WarehouseTable() {
       facetedOptions={facetedCartridgeData}
       dialog={
         <DialogForm
-          title="Выдача картриджей?"
-          buttonName="Выдать картриджи?"
+          title="Выдача картриджей"
+          buttonName="Выдать картриджи"
           form={<div />}
         />
       }
