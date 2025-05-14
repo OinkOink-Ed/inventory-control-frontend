@@ -29,7 +29,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
   titleTable: string;
   defaultSort: string;
-  dialog?: ReactNode;
+  dialog?: ReactNode[];
   facetedOptions?: {
     columnName: string;
     options: {
@@ -128,7 +128,7 @@ export function DataTable<TData, TValue>({
         </TableBody>
       </Table>
 
-      <DataTableFooter table={table} dialog={dialog} />
+      <DataTableFooter table={table} dialog={[dialog]} />
     </div>
   );
 }

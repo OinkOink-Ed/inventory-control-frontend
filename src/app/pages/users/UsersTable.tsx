@@ -16,13 +16,14 @@ export function UsersTable() {
       titleTable="Список пользователей"
       defaultSort="ФИО"
       facetedOptions={facetedUsersData}
-      dialog={
+      dialog={[
         <DialogForm
+          key={"Создание пользователя"}
           title="Создание пользователя"
           buttonName="Создать пользователя"
           form={<UserForm />}
-        />
-      }
+        />,
+      ]}
     />
   ) : (
     <SpinnerLoad />

@@ -27,8 +27,6 @@ import { handlerError } from "@/app/helpers/handlerError";
 //Первая загрузка - 4 рендеров
 //Повторные переходы - 1 рендер
 export function UserForm() {
-  console.log("Рендер UserForm");
-
   const { divisionData, divisionSuccess, mutateAsync, RoleSuccess, roleData } =
     useApiUsersForm();
 
@@ -38,7 +36,6 @@ export function UserForm() {
       name: "",
       username: "",
       password: "",
-      patronimyc: "",
       role: {},
       lastname: "",
       division: {},

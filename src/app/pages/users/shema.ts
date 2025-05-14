@@ -5,7 +5,7 @@ export const createUserDtoSchemaZOD = postCreateUserDtoSchema.extend({
   username: z.string().min(4, { message: "Требуется не менее 4 символов" }),
   lastname: z.string().min(4, { message: "Требуется не менее 4 символов" }),
   name: z.string().min(4, { message: "Требуется не менее 4 символов" }),
-  patronimyc: z.string(),
+  patronimyc: z.string().optional(),
   // Здесь нужен паттерн для номера телефона
   telephone: z
     .string()

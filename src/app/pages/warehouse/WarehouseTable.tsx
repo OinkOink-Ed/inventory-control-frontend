@@ -18,13 +18,32 @@ export function WarehouseTable() {
       titleTable="Список картриджей"
       defaultSort="Модель"
       facetedOptions={facetedCartridgeData}
-      dialog={
+      dialog={[
         <DialogForm
+          key={"Выдача картриджей"}
           title="Выдача картриджей"
           buttonName="Выдать картриджи"
           form={<div />}
-        />
-      }
+        />,
+        <DialogForm
+          key={"Списание картриджей"}
+          title="Списание картриджей"
+          buttonName="Списать картриджи"
+          form={<div />}
+        />,
+        <DialogForm
+          key={"Приём картриджей"}
+          title="Приём картриджей"
+          buttonName="Принять картриджи"
+          form={<div />}
+        />,
+        <DialogForm
+          key={"Перемещение картриджей"}
+          title="Перемещение картриджей"
+          buttonName="Переместить картриджи"
+          form={<div />}
+        />,
+      ]}
     />
   ) : (
     <SpinnerLoad />

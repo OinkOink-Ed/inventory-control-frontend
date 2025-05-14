@@ -16,13 +16,14 @@ export function DivisionTable() {
       columns={columns}
       titleTable="Список кабинетов"
       defaultSort="Номер"
-      dialog={
+      dialog={[
         <DialogForm
-          title="Добавление кабинета?"
-          buttonName="Добавить кабинет?"
+          key={"Добавление кабинета"}
+          title="Добавление кабинета"
+          buttonName="Добавить кабинет"
           form={<div />}
-        />
-      }
+        />,
+      ]}
     />
   ) : (
     <SpinnerLoad />

@@ -32,6 +32,9 @@ export function useIndexReactQuery(id?: number) {
     mutationFn: cartridgeModelControllerCreate,
     onSuccess: async () => {
       await queryClient.invalidateQueries({
+        queryKey: ["modelsCartridgesDetailed"],
+      });
+      await queryClient.invalidateQueries({
         queryKey: ["modelsCartridges"],
       });
     },

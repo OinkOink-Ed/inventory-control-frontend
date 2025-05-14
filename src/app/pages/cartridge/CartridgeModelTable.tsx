@@ -14,13 +14,14 @@ export function CartridgeModelTable() {
       columns={columns}
       titleTable="Список моделей картриджей"
       defaultSort="Модель"
-      dialog={
+      dialog={[
         <DialogForm
+          key={"Создание модели картриджа"}
           title="Создание модели картриджа"
           buttonName="Добавить модель картриджа"
           form={<CartridgeModelForm />}
-        />
-      }
+        />,
+      ]}
     />
   ) : (
     <SpinnerLoad />
