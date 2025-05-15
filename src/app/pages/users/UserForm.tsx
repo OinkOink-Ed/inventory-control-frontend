@@ -36,9 +36,9 @@ export function UserForm() {
       name: "",
       username: "",
       password: "",
-      role: {},
+      role: { id: undefined },
       lastname: "",
-      division: {},
+      division: { id: undefined },
       state: "active",
       telephone: "",
     },
@@ -166,7 +166,12 @@ export function UserForm() {
             render={({ field }) => (
               <FormItem className="h-24 w-[400px]">
                 <FormLabel>Роль</FormLabel>
-                <Select onValueChange={field.onChange}>
+                <Select
+                  onValueChange={(value) =>
+                    field.onChange(value ? Number(value) : undefined)
+                  }
+                  value={field.value?.toString() ?? ""}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Выберите роль пользователя" />
@@ -200,7 +205,12 @@ export function UserForm() {
             render={({ field }) => (
               <FormItem className="h-24 w-[400px]">
                 <FormLabel>Подразделение</FormLabel>
-                <Select onValueChange={field.onChange}>
+                <Select
+                  onValueChange={(value) =>
+                    field.onChange(value ? Number(value) : undefined)
+                  }
+                  value={field.value?.toString() ?? ""}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Выберите подразделение пользователя" />

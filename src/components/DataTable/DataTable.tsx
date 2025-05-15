@@ -30,6 +30,7 @@ interface DataTableProps<TData, TValue> {
   titleTable: string;
   defaultSort: string;
   dialog?: ReactNode[];
+  column?: string;
   facetedOptions?: {
     columnName: string;
     options: {
@@ -44,6 +45,7 @@ export function DataTable<TData, TValue>({
   data,
   titleTable,
   defaultSort,
+  column,
   dialog,
   facetedOptions,
 }: DataTableProps<TData, TValue>) {
@@ -92,7 +94,11 @@ export function DataTable<TData, TValue>({
       <div className="mb-6 flex justify-center">
         <h1 className="">{titleTable}</h1>
       </div>
-      <DataTableToolbar facetedOptions={facetedOptions} table={table} />
+      <DataTableToolbar
+        column={column}
+        facetedOptions={facetedOptions}
+        table={table}
+      />
       <Table className="border">
         <TableHeader className="sticky -top-1 border bg-neutral-950">
           {table.getHeaderGroups().map((headerGroup) => (

@@ -36,7 +36,6 @@ export const columns: ColumnDef<GetResponseAllCartridgeInWarehouseDtoSchema>[] =
         return <DataTableColumnHeaderMultiSort column={column} title="Склад" />;
       },
       sortingFn: "text",
-      enableMultiSort: true,
     },
     {
       id: "Поступление",
