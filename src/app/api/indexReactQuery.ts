@@ -7,6 +7,7 @@ import {
   decommissioningControllerCreate,
   deliveryControllerCreate,
   divisionControllerGetAll,
+  kabinetControllerCreate,
   kabinetControllerGetKAbinetsByDivisionId,
   movementControllerCreate,
   receivingControllerCreate,
@@ -90,23 +91,36 @@ export function useIndexReactQuery(id?: number) {
     },
   });
 
+  // Создать Кабинет
+  const kabinetCreate = useMutation({
+    mutationFn: kabinetControllerCreate,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["kabinets", id],
+      });
+      await queryClient.invalidateQueries({
+        queryKey: ["warehousewithDivisionWithKabinets"],
+      });
+    },
+  });
+
   //Получить кабинеты по подразделению
   const kabinetsGetByDivisionId = useQuery({
-    queryKey: [`kabinets${id}`],
+    queryKey: ["kabinets", id],
     queryFn: () => kabinetControllerGetKAbinetsByDivisionId(id!),
     enabled: !!id,
   });
 
   //Получить картриджи по складу
   const cartridgesGetByWarehouseId = useQuery({
-    queryKey: [`cartridges${id}`],
+    queryKey: ["cartridges", id],
     queryFn: () => cartridgeControllerGetCartridgesById(id!),
     enabled: !!id,
   });
 
   //Получить склад по id + подразделение в нем + кабинеты в нем
   const warehouseDetaildeByIdWithDivisionWithKabinets = useQuery({
-    queryKey: [`warehouse${id}withDivisionWithKabinets`],
+    queryKey: ["warehousewithDivisionWithKabinets", id],
     queryFn: () => warehouseControllerGetDetailedByWarehouseId(id!),
     enabled: !!id,
   });
@@ -116,7 +130,7 @@ export function useIndexReactQuery(id?: number) {
     mutationFn: receivingControllerCreate,
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: [`cartridges${id}`],
+        queryKey: ["cartridges"],
       });
     },
   });
@@ -126,7 +140,7 @@ export function useIndexReactQuery(id?: number) {
     mutationFn: decommissioningControllerCreate,
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: [`cartridges${id}`],
+        queryKey: ["cartridges"],
       });
     },
   });
@@ -136,7 +150,7 @@ export function useIndexReactQuery(id?: number) {
     mutationFn: movementControllerCreate,
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: [`cartridges${id}`],
+        queryKey: ["cartridges"],
       });
     },
   });
@@ -146,7 +160,7 @@ export function useIndexReactQuery(id?: number) {
     mutationFn: deliveryControllerCreate,
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: [`cartridges${id}`],
+        queryKey: ["cartridges"],
       });
     },
   });
@@ -168,5 +182,6 @@ export function useIndexReactQuery(id?: number) {
     cartrdgesCreateMovement,
     cartrdgesCreateDelivery,
     warehouseDetaildeByIdWithDivisionWithKabinets,
+    kabinetCreate,
   };
 }

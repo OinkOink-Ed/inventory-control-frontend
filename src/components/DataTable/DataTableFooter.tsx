@@ -43,7 +43,7 @@ export default function DataTableFooter<TData>({
                 />
               </SelectTrigger>
               <SelectContent side="top">
-                {[12, 24, 36, 48, 60].map((pageSize) => (
+                {[12].map((pageSize) => (
                   <SelectItem key={pageSize} value={`${pageSize}`}>
                     {pageSize}
                   </SelectItem>

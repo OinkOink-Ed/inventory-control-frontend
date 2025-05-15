@@ -23,7 +23,9 @@ export default function DialogForm({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="mb-4 mt-4">{buttonName}</Button>
+        <Button variant="outline" className="mb-4 mt-4">
+          {buttonName}
+        </Button>
       </DialogTrigger>
       <DialogContent className="flex h-4/6 min-w-[900px] flex-col">
         <DialogHeader>

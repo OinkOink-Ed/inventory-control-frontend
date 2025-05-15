@@ -4,6 +4,13 @@ import { Input } from "../ui/input";
 import { Table } from "@tanstack/react-table";
 import DataTableFacetedFilter from "./DataTableFacetedFilter";
 import DataTableView from "./DataTableView";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
 
 interface CountValues {
   name: string;
@@ -79,11 +86,32 @@ export default function DataTableToolbar<TData>({
         )}
       </div>
       <div className="flex flex-1 justify-end gap-4">
-        {result.map((item) => (
-          <div key={`${item.name}`} className="self-center">
-            {item.name} : {item.value} шт
-          </div>
-        ))}
+        {column ? (
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="outline" className="self-center">
+                Наличие по моделям
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="flex h-4/6 min-w-[900px] flex-col">
+              <DialogHeader>
+                <DialogTitle className="flex justify-center">
+                  Количество картриджей по моделям
+                </DialogTitle>
+              </DialogHeader>
+              <div className="flex gap-4">
+                {result.map((item) => (
+                  <div
+                    key={`${item.name}`}
+                    className="self-center border-2 p-2"
+                  >
+                    {item.name} : {item.value} шт
+                  </div>
+                ))}
+              </div>
+            </DialogContent>
+          </Dialog>
+        ) : null}
       </div>
       <div>
         <DataTableView table={table} />
