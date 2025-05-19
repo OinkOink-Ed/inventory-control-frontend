@@ -12,6 +12,8 @@ import {
   movementControllerCreate,
   receivingControllerCreate,
   roleControllerGetAll,
+  staffControllerCreateStaff,
+  staffControllerGetAll,
   userControllerCreateAdmin,
   userControllerCreateUser,
   userControllerGetAll,
@@ -26,6 +28,12 @@ export function useIndexReactQuery(id?: number) {
   const userGetAll = useQuery({
     queryKey: ["users"],
     queryFn: userControllerGetAll,
+  });
+
+  //Получить сотрудников
+  const staffGetAll = useQuery({
+    queryKey: ["staff"],
+    queryFn: staffControllerGetAll,
   });
 
   // Получить склады для выбора
@@ -100,6 +108,16 @@ export function useIndexReactQuery(id?: number) {
       });
       await queryClient.invalidateQueries({
         queryKey: ["warehousewithDivisionWithKabinets"],
+      });
+    },
+  });
+
+  // Создать сотрудника
+  const staffCreate = useMutation({
+    mutationFn: staffControllerCreateStaff,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["staff"],
       });
     },
   });
@@ -183,5 +201,7 @@ export function useIndexReactQuery(id?: number) {
     cartrdgesCreateDelivery,
     warehouseDetaildeByIdWithDivisionWithKabinets,
     kabinetCreate,
+    staffGetAll,
+    staffCreate,
   };
 }

@@ -22,6 +22,8 @@ import { PostCreateMovementDtoSchema } from "@/app/api/generated";
 import { handlerError } from "@/app/helpers/handlerError";
 import { createMovementDtoShema } from "./shema";
 import { useApiCartridgeMovementForm } from "./hooks/useApiCartridgeMovementForm";
+import { useNavigate } from "react-router";
+import { Answer } from "@/app/Errors/Answer";
 
 interface MovementCartridgeFormProps {
   warehouseId: number;
@@ -30,6 +32,7 @@ interface MovementCartridgeFormProps {
 export function MovementCartridgeForm({
   warehouseId,
 }: MovementCartridgeFormProps) {
+  const navigate = useNavigate();
   const {
     cartrdgesCreateMovement,
     cartridgeModelData,
@@ -56,19 +59,9 @@ export function MovementCartridgeForm({
         position: "top-center",
       });
     } catch (error: unknown) {
-      const message = handlerError(error);
-
-      if (message) {
-        toast.error(message, {
-          position: "top-center",
-        });
-        form.reset();
-      } else {
-        toast.error("Неизвестная ошибка!", {
-          position: "top-center",
-        });
-        form.reset();
-      }
+      const res = handlerError(error);
+      if (res == Answer.LOGOUT) void navigate("/auth", { replace: true });
+      if (res == Answer.RESET) form.reset();
     }
   }
 

@@ -22,6 +22,8 @@ import { PostCreateReceivingDto } from "@/app/api/generated";
 import { handlerError } from "@/app/helpers/handlerError";
 import { createReceivingDtoSchema } from "./shema";
 import { useApiCartidgeReceivingForm } from "./hooks/useApiCarrtidgeReceivingForm";
+import { Answer } from "@/app/Errors/Answer";
+import { useNavigate } from "react-router";
 
 interface ReceivingCartridgeFormProps {
   warehouseId: number;
@@ -30,6 +32,7 @@ interface ReceivingCartridgeFormProps {
 export function ReceivingCartridgeForm({
   warehouseId,
 }: ReceivingCartridgeFormProps) {
+  const navigate = useNavigate();
   const {
     cartrdgesCreateReceiving,
     cartridgeModelData,
@@ -52,19 +55,9 @@ export function ReceivingCartridgeForm({
         position: "top-center",
       });
     } catch (error: unknown) {
-      const message = handlerError(error);
-
-      if (message) {
-        toast.error(message, {
-          position: "top-center",
-        });
-        form.reset();
-      } else {
-        toast.error("Неизвестная ошибка!", {
-          position: "top-center",
-        });
-        form.reset();
-      }
+      const res = handlerError(error);
+      if (res == Answer.LOGOUT) void navigate("/auth", { replace: true });
+      if (res == Answer.RESET) form.reset();
     }
   }
 

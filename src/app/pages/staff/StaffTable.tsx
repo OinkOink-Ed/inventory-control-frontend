@@ -1,18 +1,17 @@
+import { DataTable } from "../../../components/DataTable/DataTable";
 import { useIndexReactQuery } from "@/app/api/indexReactQuery";
-import { DataTable } from "@/components/DataTable/DataTable";
 import DialogForm from "@/components/DialogForm";
-import { columns } from "./columns";
-import { CartridgeModelForm } from "./CartridgeModelForm";
 import { SpinnerLoad } from "@/components/SpinnerLoad";
+import { StaffForm } from "./StaffForm";
+import { columns } from "./columns";
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
 import { handlerError } from "@/app/helpers/handlerError";
 import { Answer } from "@/app/Errors/Answer";
-import { useNavigate } from "react-router";
-import { useEffect } from "react";
 
-export function CartridgeModelTable() {
+export function StaffTable() {
   const navigate = useNavigate();
-  const { data, isSuccess, error } =
-    useIndexReactQuery().cartridgeModelGetAllDetailed;
+  const { data, isSuccess, error } = useIndexReactQuery().staffGetAll;
 
   useEffect(() => {
     if (error) {
@@ -27,14 +26,14 @@ export function CartridgeModelTable() {
     <DataTable
       data={data.data}
       columns={columns}
-      titleTable="Список моделей картриджей"
-      defaultSort="Модель"
+      titleTable="Список сотрудников"
+      defaultSort="ФИО"
       dialog={[
         <DialogForm
-          key={"Создание модели картриджа"}
-          title="Создание модели картриджа"
-          buttonName="Добавить модель картриджа"
-          form={<CartridgeModelForm />}
+          key={"Создание сотрудника"}
+          title="Создание сотрудника"
+          buttonName="Создать сотрудника"
+          form={<StaffForm />}
         />,
       ]}
     />

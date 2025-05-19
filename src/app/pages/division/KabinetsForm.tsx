@@ -12,24 +12,20 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   PostCreateKabinetDto,
   postCreateKabinetDtoSchema,
 } from "@/app/api/generated";
 import { handlerError } from "@/app/helpers/handlerError";
 import { useApiKabinetsForm } from "./hooks/useApiKabinetsForm";
+import { Answer } from "@/app/Errors/Answer";
+import { useNavigate } from "react-router";
 
 interface KabinetsFormProps {
   divisionId: number;
 }
 
 export function KabinetsForm({ divisionId }: KabinetsFormProps) {
+  const navigate = useNavigate();
   const { kabinetCreate } = useApiKabinetsForm(divisionId);
 
   const form = useForm<PostCreateKabinetDto>({
@@ -47,19 +43,9 @@ export function KabinetsForm({ divisionId }: KabinetsFormProps) {
         position: "top-center",
       });
     } catch (error: unknown) {
-      const message = handlerError(error);
-
-      if (message) {
-        toast.error(message, {
-          position: "top-center",
-        });
-        form.reset();
-      } else {
-        toast.error("Неизвестная ошибка!", {
-          position: "top-center",
-        });
-        form.reset();
-      }
+      const res = handlerError(error);
+      if (res == Answer.LOGOUT) void navigate("/auth", { replace: true });
+      if (res == Answer.RESET) form.reset();
     }
   }
 
@@ -72,52 +58,17 @@ export function KabinetsForm({ divisionId }: KabinetsFormProps) {
         >
           <FormField
             control={form.control}
-            name="count"
+            name="number"
             render={({ field }) => (
               <FormItem className="h-24 w-[400px]">
-                <FormLabel>Количество</FormLabel>
+                <FormLabel>Номер кабинета</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Введите количество картридежй одной модели"
+                    placeholder="Введите номер кабинета"
                     {...field}
                     className="w-full"
                   />
                 </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="model.id"
-            render={({ field }) => (
-              <FormItem className="h-24 w-[400px]">
-                <FormLabel>Модель</FormLabel>
-                <Select
-                  onValueChange={(value) =>
-                    field.onChange(value ? Number(value) : undefined)
-                  }
-                  value={field.value?.toString() ?? ""}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Выберите модель картриджей" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {cartridgeModelSuccess && cartridgeModelData ? (
-                      cartridgeModelData.data.map((item) => (
-                        <SelectItem key={item.id} value={item.id.toString()}>
-                          {item.name}
-                        </SelectItem>
-                      ))
-                    ) : (
-                      <SelectItem value="Идет загрузка данных">
-                        Идет загрузка данных
-                      </SelectItem>
-                    )}
-                  </SelectContent>
-                </Select>
                 <FormMessage />
               </FormItem>
             )}

@@ -17,6 +17,7 @@ import PublicRoute from "./loaders/Public";
 import LoginSkeleton from "../pages/auth/LoginSkeleton";
 import PrivateRoute from "./loaders/Private";
 import AdminRoute from "./loaders/AdminRoute";
+import StaffLayout from "../Layouts/StaffLayout";
 
 // SpinnerLoad можно будет заменить на Skeleton различный в дальнейшем
 
@@ -72,6 +73,17 @@ export const router = createBrowserRouter([
             element: (
               <Suspense fallback={<SpinnerLoad />}>
                 <UsersLayout />
+              </Suspense>
+            ),
+          },
+          {
+            path: "staff",
+
+            // TODO список сотрудников + операции
+
+            element: (
+              <Suspense fallback={<SpinnerLoad />}>
+                <StaffLayout />
               </Suspense>
             ),
           },

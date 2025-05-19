@@ -22,6 +22,8 @@ import { PostCreateDeliveryDtoSchema } from "@/app/api/generated";
 import { handlerError } from "@/app/helpers/handlerError";
 import { createDeliveryDtoShema } from "./shema";
 import { useApiCartridgeDeliveryFrom } from "./hooks/useApiCartridgeDeliveryFrom";
+import { useNavigate } from "react-router";
+import { Answer } from "@/app/Errors/Answer";
 
 interface ReceivingCartridgeFormProps {
   warehouseId: number;
@@ -30,6 +32,7 @@ interface ReceivingCartridgeFormProps {
 export function DeliveryCartridgeForm({
   warehouseId,
 }: ReceivingCartridgeFormProps) {
+  const navigate = useNavigate();
   const {
     cartrdgesCreateDelivery,
     cartridgeModelData,
@@ -51,6 +54,8 @@ export function DeliveryCartridgeForm({
     },
   });
 
+  console.log(cartrdgesCreateDelivery.error);
+
   async function onSubmit(data: PostCreateDeliveryDtoSchema): Promise<void> {
     try {
       const res = await cartrdgesCreateDelivery.mutateAsync(data);
@@ -58,19 +63,9 @@ export function DeliveryCartridgeForm({
         position: "top-center",
       });
     } catch (error: unknown) {
-      const message = handlerError(error);
-
-      if (message) {
-        toast.error(message, {
-          position: "top-center",
-        });
-        form.reset();
-      } else {
-        toast.error("Неизвестная ошибка!", {
-          position: "top-center",
-        });
-        form.reset();
-      }
+      const res = handlerError(error);
+      if (res == Answer.LOGOUT) void navigate("/auth", { replace: true });
+      if (res == Answer.RESET) form.reset();
     }
   }
 

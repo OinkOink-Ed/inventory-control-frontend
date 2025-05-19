@@ -23,8 +23,8 @@ import { itemsAdmin, itemsUser } from "./itemsForSidebar";
 import { useIndexReactQuery } from "@/app/api/indexReactQuery";
 import { authControllerLogout } from "@/app/api/generated";
 import { handlerError } from "@/app/helpers/handlerError";
-import { toast } from "sonner";
 import { useProfileStore } from "@/app/stores/profile/useProfileStore";
+import { Answer } from "@/app/Errors/Answer";
 
 export function AppSideBar() {
   const profile = useProfileStore;
@@ -62,30 +62,15 @@ export function AppSideBar() {
       profile.persist.clearStorage();
       void navigate("/auth");
     } catch (error) {
-      const message = handlerError(error);
-      console.log("1 ошибка");
-
-      if (message) {
-        toast.error(message, {
-          position: "top-center",
-        });
-        setTimeout(() => {
-          profile.getState().clearProfile();
-          profile.persist.clearStorage();
-          void navigate("/auth");
-        }, 1000);
-      } else {
-        toast.error("Неизвестная ошибка!", {
-          position: "top-center",
-        });
-      }
+      const res = handlerError(error);
+      if (res == Answer.LOGOUT) void navigate("/auth", { replace: true });
     }
   }
 
   return (
     <Sidebar collapsible="none" className="w-[322px]">
       <SidebarContent>
-        <SidebarGroupLabel>Profile</SidebarGroupLabel>
+        <SidebarGroupLabel>Профиль</SidebarGroupLabel>
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -172,7 +157,7 @@ export function AppSideBar() {
           </>
         ) : (
           <>
-            <SidebarGroupLabel>Admin Panel</SidebarGroupLabel>
+            <SidebarGroupLabel>Панель Администратора</SidebarGroupLabel>
             <SidebarGroup>
               <SidebarGroupContent>
                 <SidebarMenu>

@@ -36,11 +36,10 @@ export const axiosInstance = axios.create({
 
 // Функция для обновления токена
 export const refreshAccessToken = async (): Promise<RefreshTokenResponse> => {
-  const profile = useProfileStore.getState();
-  const clearProfile = useProfileStore.persist.clearStorage;
+  const profile = useProfileStore;
 
   try {
-    const refreshToken = profile.refresh_token;
+    const refreshToken = profile.getState().refresh_token;
 
     const response = await authControllerRefreshToken({
       token: refreshToken,
@@ -48,15 +47,16 @@ export const refreshAccessToken = async (): Promise<RefreshTokenResponse> => {
 
     const accessToken = response.data.token;
 
-    profile.setProfile({
+    profile.getState().setProfile({
       access_token: accessToken,
       refresh_token: refreshToken,
     });
 
     return response.data;
   } catch (error) {
-    console.log(error);
-    clearProfile();
+    profile.getState().clearProfile();
+    profile.persist.clearStorage();
+
     throw error instanceof Error ? error : new Error("Failed to refresh token");
   }
 };
@@ -75,7 +75,6 @@ axiosInstance.interceptors.request.use((config) => {
   return config;
 });
 
-// Перехватчик ответов
 let isRefreshing = false;
 let failedQueue: {
   resolve: (value: string) => void;
@@ -95,6 +94,7 @@ const processQueue = (error: Error | null, token: string | null = null) => {
   failedQueue = [];
 };
 
+// Перехватчик ответов
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
@@ -102,7 +102,7 @@ axiosInstance.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    const clearStorage = useProfileStore.persist.clearStorage;
+    const profile = useProfileStore;
 
     const originalRequest = error.config as AxiosRequestConfig & {
       _retry?: boolean;
@@ -110,8 +110,10 @@ axiosInstance.interceptors.response.use(
 
     if (
       error.config?.url == "/api/auth" ||
-      error.config?.url == "/api/auth/logout"
+      error.config?.url == "/api/auth/logout" ||
+      error.config?.url == "/api/auth/refresh"
     ) {
+      processQueue(error, null);
       return Promise.reject(error);
     }
 
@@ -133,7 +135,9 @@ axiosInstance.interceptors.response.use(
 
       try {
         const { token } = await refreshAccessToken();
+
         processQueue(null, token);
+
         originalRequest.headers!.Authorization = `Bearer ${token}`;
         return axiosInstance(originalRequest);
       } catch (refreshError) {
@@ -142,7 +146,10 @@ axiosInstance.interceptors.response.use(
             ? refreshError
             : new Error("Failed to refresh token");
         processQueue(errorToReject, null);
-        clearStorage();
+
+        profile.getState().clearProfile();
+        profile.persist.clearStorage();
+
         return Promise.reject(errorToReject);
       } finally {
         isRefreshing = false;

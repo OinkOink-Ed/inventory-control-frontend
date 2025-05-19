@@ -100,7 +100,7 @@ export function DataTable<TData, TValue>({
         table={table}
       />
       <Table className="border">
-        <TableHeader className="sticky -top-1 border bg-neutral-950">
+        <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
@@ -121,6 +121,7 @@ export function DataTable<TData, TValue>({
         <TableBody>
           {table.getRowModel().rows.map((row) => (
             <TableRow
+              className="odd:bg-gray-200"
               key={row.id}
               data-state={row.getIsSelected() && "selected"}
             >

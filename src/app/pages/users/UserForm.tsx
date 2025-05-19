@@ -23,10 +23,13 @@ import { PostCreateUserDto } from "@/app/api/generated";
 import { InputPhone } from "@/components/InputPhone";
 import { useApiUsersForm } from "./hooks/useApiUsersForm";
 import { handlerError } from "@/app/helpers/handlerError";
+import { useNavigate } from "react-router";
+import { Answer } from "@/app/Errors/Answer";
 
 //Первая загрузка - 4 рендеров
 //Повторные переходы - 1 рендер
 export function UserForm() {
+  const navigate = useNavigate();
   const { divisionData, divisionSuccess, mutateAsync, RoleSuccess, roleData } =
     useApiUsersForm();
 
@@ -51,18 +54,9 @@ export function UserForm() {
         position: "top-center",
       });
     } catch (error: unknown) {
-      const message = handlerError(error);
-
-      if (message) {
-        toast.error(message, {
-          position: "top-center",
-        });
-        form.reset();
-      } else {
-        toast.error("Неизвестная ошибка!", {
-          position: "top-center",
-        });
-      }
+      const res = handlerError(error);
+      if (res == Answer.LOGOUT) void navigate("/auth", { replace: true });
+      if (res == Answer.RESET) form.reset();
     }
   }
 

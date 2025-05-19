@@ -14,16 +14,16 @@ export const facetedCartridgeData = [
         label: "Moved",
         icon: Atom,
       },
-      {
-        value: "issued",
-        label: "Issued",
-        icon: Atom,
-      },
-      {
-        value: "decommissioned",
-        label: "Decommissioned",
-        icon: Atom,
-      },
+      // {
+      //   value: "issued",
+      //   label: "Issued",
+      //   icon: Atom,
+      // },
+      // {
+      //   value: "decommissioned",
+      //   label: "Decommissioned",
+      //   icon: Atom,
+      // },
     ],
   },
 ];

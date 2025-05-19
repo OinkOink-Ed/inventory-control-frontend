@@ -22,6 +22,8 @@ import { PostCreateDecommissioningDto } from "@/app/api/generated";
 import { handlerError } from "@/app/helpers/handlerError";
 import { createDecommissioningDtoShema } from "./shema";
 import { useApiCartridgeDecommissioningForm } from "./hooks/useApiCartridgeDecommissioningForm";
+import { Answer } from "@/app/Errors/Answer";
+import { useNavigate } from "react-router";
 
 interface DecommissioningCartrdigeFormProps {
   warehouseId: number;
@@ -30,6 +32,7 @@ interface DecommissioningCartrdigeFormProps {
 export function DecommissioningCartrdigeForm({
   warehouseId,
 }: DecommissioningCartrdigeFormProps) {
+  const navigate = useNavigate();
   const {
     cartrdgesCreateDecommissioning,
     cartridgeModelData,
@@ -54,19 +57,9 @@ export function DecommissioningCartrdigeForm({
         position: "top-center",
       });
     } catch (error: unknown) {
-      const message = handlerError(error);
-
-      if (message) {
-        toast.error(message, {
-          position: "top-center",
-        });
-        form.reset();
-      } else {
-        toast.error("Неизвестная ошибка!", {
-          position: "top-center",
-        });
-        form.reset();
-      }
+      const res = handlerError(error);
+      if (res == Answer.LOGOUT) void navigate("/auth", { replace: true });
+      if (res == Answer.RESET) form.reset();
     }
   }
 

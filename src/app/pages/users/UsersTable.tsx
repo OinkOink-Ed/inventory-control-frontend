@@ -5,9 +5,18 @@ import DialogForm from "@/components/DialogForm";
 import { UserForm } from "./UserForm";
 import { facetedUsersData } from "./facetedData";
 import { SpinnerLoad } from "@/components/SpinnerLoad";
+import { handlerError } from "@/app/helpers/handlerError";
+import { Answer } from "@/app/Errors/Answer";
+import { useNavigate } from "react-router";
 
 export function UsersTable() {
-  const { data, isSuccess } = useIndexReactQuery().userGetAll;
+  const { data, isSuccess, error } = useIndexReactQuery().userGetAll;
+  const navigate = useNavigate();
+
+  if (error) {
+    const res = handlerError(error);
+    if (res == Answer.LOGOUT) void navigate("/auth", { replace: true });
+  }
 
   return isSuccess ? (
     <DataTable

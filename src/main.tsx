@@ -8,9 +8,8 @@ import { queryClientInstans } from "./app/queryClientInstans";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    {/* Для того, чтобы режимы хорошо работали нужно разобраться как на это влияет css, пока что просто не задаю backgdround */}
     <QueryClientProvider client={queryClientInstans}>
-      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
         <RouterProvider router={router} />
       </ThemeProvider>
     </QueryClientProvider>

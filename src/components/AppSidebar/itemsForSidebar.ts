@@ -1,4 +1,4 @@
-import { Archive, Book, Home, PackageCheck, User2 } from "lucide-react";
+import { Archive, Book, Home, PackageCheck, User, User2 } from "lucide-react";
 
 export const itemsUser = [
   {
@@ -15,10 +15,11 @@ export const itemsUser = [
 
 export const itemsAdmin = [
   {
-    title: "Пользователи",
-    url: "/users",
-    icon: User2,
+    title: "Сотрудники",
+    url: "/staff",
+    icon: User,
   },
+  { title: "Пользователи", url: "/users", icon: User2 },
   {
     title: "Модели картриджей",
     url: "/cartrideModel",

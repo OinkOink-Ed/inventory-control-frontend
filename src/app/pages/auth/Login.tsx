@@ -9,13 +9,13 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/Button/Button";
-import { toast } from "sonner";
 import { useNavigate } from "react-router";
 import { Input } from "@/components/ui/input";
 import { authRequestDtoSchemaZOD } from "./shema";
 import { useProfileStore } from "@/app/stores/profile/useProfileStore";
 import { authControllerSignIn, PostAuthDto } from "@/app/api/generated";
 import { handlerError } from "@/app/helpers/handlerError";
+import { Answer } from "@/app/Errors/Answer";
 
 export function Login() {
   const setProfile = useProfileStore((state) => state.setProfile);
@@ -42,19 +42,8 @@ export function Login() {
 
       void navigate("/");
     } catch (error: unknown) {
-      const message = handlerError(error);
-
-      if (message) {
-        toast.error(message, {
-          position: "top-center",
-        });
-        form.setError("username", { message: `Не верный логин или пароль` });
-        form.setError("password", { message: `Не верный логин или пароль` });
-      } else {
-        toast.error("Неизвестная ошибка!", {
-          position: "top-center",
-        });
-      }
+      const res = handlerError(error);
+      if (res == Answer.RESET) form.reset();
     }
   }
 
