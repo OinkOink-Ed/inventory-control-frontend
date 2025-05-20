@@ -7,6 +7,7 @@ import DataTableView from "./DataTableView";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -97,6 +98,7 @@ export default function DataTableToolbar<TData>({
               <DialogHeader>
                 <DialogTitle className="flex justify-center">
                   Количество картриджей по моделям
+                  <DialogDescription className="flex justify-center"></DialogDescription>
                 </DialogTitle>
               </DialogHeader>
               <div className="flex gap-4">

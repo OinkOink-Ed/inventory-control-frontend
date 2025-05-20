@@ -54,8 +54,6 @@ export function DeliveryCartridgeForm({
     },
   });
 
-  console.log(cartrdgesCreateDelivery.error);
-
   async function onSubmit(data: PostCreateDeliveryDtoSchema): Promise<void> {
     try {
       const res = await cartrdgesCreateDelivery.mutateAsync(data);
