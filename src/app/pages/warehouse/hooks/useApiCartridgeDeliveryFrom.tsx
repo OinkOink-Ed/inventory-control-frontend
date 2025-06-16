@@ -9,11 +9,16 @@ export function useApiCartridgeDeliveryFrom(id: number) {
   const { data: warehouseData, isSuccess: warehouseSuccess } =
     useIndexReactQuery(id).warehouseDetaildeByIdWithDivisionWithKabinets;
 
+  const { data: staffData, isSuccess: staffSuccess } =
+    useIndexReactQuery().staffGetAll;
+
   return {
     cartrdgesCreateDelivery,
     cartridgeModelData,
     cartridgeModelSuccess,
     warehouseData,
     warehouseSuccess,
+    staffData,
+    staffSuccess,
   };
 }

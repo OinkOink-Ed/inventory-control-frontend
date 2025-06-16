@@ -18,6 +18,8 @@ import LoginSkeleton from "../pages/auth/LoginSkeleton";
 import PrivateRoute from "./loaders/Private";
 import AdminRoute from "./loaders/AdminRoute";
 import StaffLayout from "../Layouts/StaffLayout";
+import { StaffTable } from "../pages/staff/StaffTable";
+import { StaffCard } from "../pages/staff/StaffCardTable/StaffCard";
 
 // SpinnerLoad можно будет заменить на Skeleton различный в дальнейшем
 
@@ -86,6 +88,16 @@ export const router = createBrowserRouter([
                 <StaffLayout />
               </Suspense>
             ),
+            children: [
+              {
+                index: true,
+                element: <StaffTable />,
+              },
+              {
+                path: ":id",
+                element: <StaffCard />,
+              },
+            ],
           },
           {
             path: "cartrideModel",

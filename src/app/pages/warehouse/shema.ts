@@ -44,6 +44,9 @@ export const createMovementDtoShema = postCreateMovementDtoSchema.extend({
   warehouseFrom: z.object({
     id: z.coerce.number({ message: "Поле обязательно к заполнению" }),
   }),
+  whoAccepted: z.object({
+    id: z.coerce.number({ message: "Поле обязательно к заполнению" }),
+  }),
   warehouseWhere: z.object({
     id: z.coerce.number({ message: "Поле обязательно к заполнению" }),
   }),
@@ -63,6 +66,9 @@ export const createDeliveryDtoShema = postCreateDeliveryDtoSchema.extend({
     id: z.coerce.number({ message: "Поле обязательно к заполнению" }),
   }),
   warehouse: z.object({
+    id: z.coerce.number({ message: "Поле обязательно к заполнению" }),
+  }),
+  accepting: z.object({
     id: z.coerce.number({ message: "Поле обязательно к заполнению" }),
   }),
   count: z.coerce

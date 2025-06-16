@@ -8,11 +8,16 @@ export function useApiCartridgeMovementForm(id: number) {
   const { data: warehouseData, isSuccess: warehouseSuccess } =
     useIndexReactQuery().warehouseGetAll;
 
+  const { data: staffData, isSuccess: staffSuccess } =
+    useIndexReactQuery().staffGetAll;
+
   return {
     cartrdgesCreateMovement,
     cartridgeModelData,
     cartridgeModelSuccess,
     warehouseData,
     warehouseSuccess,
+    staffData,
+    staffSuccess,
   };
 }

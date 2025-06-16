@@ -8,9 +8,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { ReactNode } from "react";
+
+interface DataTableRowActionsProps {
+  linkToCard: ReactNode;
+}
 
 //Улучшить для выбора действия и их работы
-export default function DataTableRowActions() {
+export default function DataTableRowActions({
+  linkToCard,
+}: DataTableRowActionsProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -20,7 +27,7 @@ export default function DataTableRowActions() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>Действия</DropdownMenuLabel>
-        <DropdownMenuItem>Дейсвтие 1</DropdownMenuItem>
+        {linkToCard}
         <DropdownMenuSeparator />
         <DropdownMenuItem>Дейсвтие 2</DropdownMenuItem>
         <DropdownMenuItem>Дейсвтие 3</DropdownMenuItem>

@@ -14,6 +14,7 @@ import {
   roleControllerGetAll,
   staffControllerCreateStaff,
   staffControllerGetAll,
+  staffControllerGetDeteiledById,
   userControllerCreateAdmin,
   userControllerCreateUser,
   userControllerGetAll,
@@ -143,6 +144,13 @@ export function useIndexReactQuery(id?: number) {
     enabled: !!id,
   });
 
+  //Получить полученные сотрудником и/или принятые кладовщиком картриджи
+  const cartridgeAcceptedByStaffId = useQuery({
+    queryKey: ["cartridgeAcceptedByStaffId", id],
+    queryFn: () => staffControllerGetDeteiledById(id!),
+    enabled: !!id,
+  });
+
   //Создать акт приема поставки картриджей
   const cartrdgesCreateReceiving = useMutation({
     mutationFn: receivingControllerCreate,
@@ -180,6 +188,9 @@ export function useIndexReactQuery(id?: number) {
       await queryClient.invalidateQueries({
         queryKey: ["cartridges"],
       });
+      await queryClient.invalidateQueries({
+        queryKey: ["cartridgeAcceptedByStaffId"],
+      });
     },
   });
 
@@ -203,5 +214,6 @@ export function useIndexReactQuery(id?: number) {
     kabinetCreate,
     staffGetAll,
     staffCreate,
+    cartridgeAcceptedByStaffId,
   };
 }

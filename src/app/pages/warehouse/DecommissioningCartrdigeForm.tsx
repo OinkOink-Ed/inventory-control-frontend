@@ -52,10 +52,10 @@ export function DecommissioningCartrdigeForm({
   async function onSubmit(data: PostCreateDecommissioningDto): Promise<void> {
     try {
       const res = await cartrdgesCreateDecommissioning.mutateAsync(data);
-      form.reset();
       toast.success(`${res.data.message}`, {
         position: "top-center",
       });
+      form.reset();
     } catch (error: unknown) {
       const res = handlerError(error);
       if (res == Answer.LOGOUT) void navigate("/auth", { replace: true });

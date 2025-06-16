@@ -29,6 +29,8 @@ export function WarehouseTable() {
     }
   }, [navigate, cartridgesGetByWarehouseId.error]);
 
+  console.log(cartridgesGetByWarehouseId.data?.data);
+
   return cartridgesGetByWarehouseId.isSuccess ? (
     <DataTable<
       GetResponseAllCartridgeInWarehouseDtoSchema,

@@ -39,6 +39,8 @@ export function MovementCartridgeForm({
     cartridgeModelSuccess,
     warehouseData,
     warehouseSuccess,
+    staffData,
+    staffSuccess,
   } = useApiCartridgeMovementForm(warehouseId);
 
   const form = useForm<PostCreateMovementDtoSchema>({
@@ -49,6 +51,7 @@ export function MovementCartridgeForm({
       warehouseWhere: { id: undefined },
       model: { id: undefined },
       warehouse: { id: warehouseId },
+      whoAccepted: { id: undefined },
     },
   });
 
@@ -58,6 +61,7 @@ export function MovementCartridgeForm({
       toast.success(`${res.data.message}`, {
         position: "top-center",
       });
+      form.reset();
     } catch (error: unknown) {
       const res = handlerError(error);
       if (res == Answer.LOGOUT) void navigate("/auth", { replace: true });
@@ -113,6 +117,48 @@ export function MovementCartridgeForm({
                           {item.name}
                         </SelectItem>
                       ))
+                    ) : (
+                      <SelectItem value="Идет загрузка данных">
+                        Идет загрузка данных
+                      </SelectItem>
+                    )}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="whoAccepted.id"
+            render={({ field }) => (
+              <FormItem className="h-24 w-[400px]">
+                <FormLabel>Принимающий</FormLabel>
+                <Select
+                  onValueChange={(value) =>
+                    field.onChange(value ? Number(value) : undefined)
+                  }
+                  value={field.value?.toString() ?? ""}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Выберите кому выдать" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {staffSuccess && staffData ? (
+                      staffData.data.map((item) => {
+                        if (item.financiallyResponsiblePerson) {
+                          return (
+                            <SelectItem
+                              key={item.id}
+                              value={item.id.toString()}
+                            >
+                              {item.lastname} {item.name} {item.patronimyc}
+                            </SelectItem>
+                          );
+                        }
+                      })
                     ) : (
                       <SelectItem value="Идет загрузка данных">
                         Идет загрузка данных

@@ -72,7 +72,7 @@ export function DataTable<TData, TValue>({
     },
     initialState: {
       pagination: {
-        pageSize: 12, // Устанавливаем 20 строк на странице по умолчанию
+        pageSize: 12, // Устанавливаем 12 строк на странице по умолчанию
       },
     },
     enableRowSelection: true,
