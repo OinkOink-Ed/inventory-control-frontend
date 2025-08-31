@@ -26,8 +26,6 @@ import { handlerError } from "@/app/helpers/handlerError";
 import { useNavigate } from "react-router";
 import { Answer } from "@/app/Errors/Answer";
 
-//Первая загрузка - 4 рендеров
-//Повторные переходы - 1 рендер
 export function UserForm() {
   const navigate = useNavigate();
   const { divisionData, divisionSuccess, mutateAsync, RoleSuccess, roleData } =

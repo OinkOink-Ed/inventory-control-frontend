@@ -10,6 +10,7 @@ import {
 import { useProfileStore } from "../stores/profile/useProfileStore";
 import { toast } from "sonner";
 import { Answer } from "../Errors/Answer";
+import { queryClientInstans } from "../queryClientInstans";
 
 export function handlerError(dataError: unknown): Answer {
   const profile = useProfileStore;
@@ -21,6 +22,8 @@ export function handlerError(dataError: unknown): Answer {
       !("isAxiosError" in dataError) ||
       !dataError.isAxiosError)
   ) {
+    profile.getState().clearProfile();
+    void queryClientInstans.invalidateQueries();
     return Answer.LOGOUT;
   }
 
@@ -38,7 +41,7 @@ export function handlerError(dataError: unknown): Answer {
       position: "top-center",
     });
     profile.getState().clearProfile();
-    profile.persist.clearStorage();
+    void queryClientInstans.invalidateQueries();
     return Answer.LOGOUT;
   }
 

@@ -7,7 +7,6 @@ export default function AppLayout() {
   // Это пример из доки shdcn - не ясно работает ли он
   // const cookieStore = await cookies();
   // const defaultOpen = cookieStore.get("sidebar:state")?.value === "true";
-
   // TODO Базовые стили приложения
   return (
     <SidebarProvider /*defaultOpen={defaultOpen}*/>

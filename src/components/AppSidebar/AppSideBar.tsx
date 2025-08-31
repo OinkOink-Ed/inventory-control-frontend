@@ -1,4 +1,13 @@
-import { Book, ChevronRight, LogOut, PackageCheck, User } from "lucide-react";
+import {
+  Archive,
+  Book,
+  ChevronRight,
+  LogOut,
+  LucideProps,
+  PackageCheck,
+  User,
+  User2,
+} from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -13,59 +22,114 @@ import {
   SidebarMenuSubItem,
 } from "../ui/sidebar";
 import { Link, useNavigate } from "react-router";
-import { decryptedProfile } from "@/app/helpers/decryptedProfile";
-import { Collapsible } from "../ui/collapsible";
-import {
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@radix-ui/react-collapsible";
-import { itemsAdmin, itemsUser } from "./itemsForSidebar";
 import { useIndexReactQuery } from "@/app/api/indexReactQuery";
 import { authControllerLogout } from "@/app/api/generated";
 import { handlerError } from "@/app/helpers/handlerError";
 import { useProfileStore } from "@/app/stores/profile/useProfileStore";
 import { Answer } from "@/app/Errors/Answer";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "../ui/collapsible";
+import { decryptedProfile } from "@/app/helpers/decryptedProfile";
+import { useEffect } from "react";
+import { queryClientInstans } from "@/app/queryClientInstans";
+
+interface MenuItem {
+  title: string;
+  url: string;
+  icon: React.ForwardRefExoticComponent<
+    Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
+  >;
+}
 
 export function AppSideBar() {
-  const profile = useProfileStore;
+  const refreshToken = useProfileStore((state) => state.refresh_token);
+  const clearProfile = useProfileStore((state) => state.clearProfile);
   const navigate = useNavigate();
 
-  const { data: dataWarehouse } = useIndexReactQuery().warehouseGetAll;
-  const { data: dataDivision } = useIndexReactQuery().divisionGetAll;
+  const { data: dataDivision, error: errorDivivosn } =
+    useIndexReactQuery().divisionGetAll;
+  const { data: dataWarehouses, error: errorWarehouses } =
+    useIndexReactQuery().warehouseGetAll;
 
-  let itemsWarehouses;
-  let itemsDivision;
+  useEffect(() => {
+    if (errorDivivosn || errorWarehouses) {
+      const res = handlerError(errorDivivosn ?? errorWarehouses);
+      setTimeout(() => {
+        if (res == Answer.LOGOUT) void navigate("/auth", { replace: true });
+      }, 1000);
+    }
+  }, [navigate, errorWarehouses, errorDivivosn]);
 
-  if (dataWarehouse) {
-    itemsWarehouses = dataWarehouse.data.map((item, index) => ({
-      title: `Склад №${index + 1}`,
-      url: `/warehouse/${item.id}`,
-      icon: PackageCheck,
-    }));
-  }
-
-  if (dataDivision) {
-    itemsDivision = dataDivision.data.map((item) => ({
+  const itemsDivision =
+    dataDivision?.data.map((item) => ({
       title: `${item.name}`,
       url: `division/${item.id}`,
       icon: Book,
-    }));
-  }
+    })) ?? [];
+
+  const itemsWarehouses =
+    dataWarehouses?.data.map((item, index) => ({
+      title: `Склад №${index + 1}`,
+      url: `/warehouse/${item.id}`,
+      icon: PackageCheck,
+    })) ?? [];
 
   async function logout() {
     try {
-      const refreshToken = profile.getState().refresh_token;
-
       await authControllerLogout({ token: refreshToken });
 
-      profile.getState().clearProfile();
-      profile.persist.clearStorage();
+      clearProfile();
+      void queryClientInstans.removeQueries();
       void navigate("/auth");
     } catch (error) {
       const res = handlerError(error);
       if (res == Answer.LOGOUT) void navigate("/auth", { replace: true });
     }
   }
+
+  const profile = decryptedProfile();
+  const isAdmin = profile?.role?.roleName === "admin";
+  const isUser = profile?.role?.roleName === "user";
+  const hasAccess = isAdmin || isUser;
+
+  const renderCollapsibleMenu = (
+    title: string,
+    items: MenuItem[],
+    icon: React.ReactNode,
+  ) => (
+    <Collapsible className="group/collapsible">
+      <SidebarMenuItem>
+        <CollapsibleTrigger asChild>
+          <SidebarMenuButton>
+            {icon}
+            <span>{title}</span>
+            <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
+          </SidebarMenuButton>
+        </CollapsibleTrigger>
+      </SidebarMenuItem>
+      <CollapsibleContent>
+        <SidebarMenuSub>
+          {items.length > 0 ? (
+            items.map((item) => (
+              <SidebarMenuSubItem key={item.title}>
+                <SidebarMenuButton asChild>
+                  <Link to={item.url}>
+                    <item.icon />
+                    <span>{item.title}</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuSubItem>
+            ))
+          ) : (
+            <div>Идёт загрузка</div>
+          )}
+        </SidebarMenuSub>
+      </CollapsibleContent>
+    </Collapsible>
+  );
 
   return (
     <Sidebar collapsible="none" className="w-[322px]">
@@ -86,169 +150,62 @@ export function AppSideBar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        {/* Временно тут для понимания того, что видит пользователь я тестирую под админом */}
-        <SidebarGroupLabel>Inventory</SidebarGroupLabel>
+        <SidebarGroupLabel>Панель управления</SidebarGroupLabel>
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {decryptedProfile().role.roleName !== "user" ? (
-                <></>
-              ) : itemsWarehouses ? (
-                itemsWarehouses.map((item) => (
+              {/* Меню для админа и пользователя */}
+              {hasAccess && (
+                <>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
-                      <Link to={item.url}></Link>
-                      <item.icon />
-                      <span>{item.title}</span>
+                      <Link to={"users"}>
+                        <User2 />
+                        Пользователи
+                      </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
-                ))
-              ) : (
-                <div>Идёт загрузка</div>
+                  {renderCollapsibleMenu(
+                    "Склады",
+                    itemsWarehouses,
+                    <PackageCheck />,
+                  )}
+
+                  {renderCollapsibleMenu(
+                    "Подразделения",
+                    itemsDivision,
+                    <PackageCheck />,
+                  )}
+                </>
               )}
-              {itemsUser.map((item) => (
-                <SidebarMenuItem key={item.title}>
+              {/* Меню для админа */}
+              {isAdmin && (
+                <SidebarMenuItem>
                   <SidebarMenuButton asChild>
-                    <Link to={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
+                    <Link to={"cartrideModel"}>
+                      <Book />
+                      Модели картриджей
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
-              ))}
+              )}
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to={"reports"}>
+                    <Archive />
+                    Отчёты
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-
-        {decryptedProfile()?.role.roleName !== "admin" ? (
-          <>
-            <SidebarGroupLabel>Inventory</SidebarGroupLabel>
-            <SidebarGroup>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {decryptedProfile().role.roleName !== "user" ? (
-                    <></>
-                  ) : itemsWarehouses ? (
-                    itemsWarehouses.map((item) => (
-                      <SidebarMenuItem>
-                        <SidebarMenuButton asChild>
-                          <Link to={item.url}></Link>
-                          <item.icon />
-                          <span>{item.title}</span>
-                        </SidebarMenuButton>
-                      </SidebarMenuItem>
-                    ))
-                  ) : (
-                    <div>Идёт загрузка</div>
-                  )}
-                  {itemsUser.map((item) => (
-                    <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton asChild>
-                        <Link to={item.url}>
-                          <item.icon />
-                          <span>{item.title}</span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-          </>
-        ) : (
-          <>
-            <SidebarGroupLabel>Панель Администратора</SidebarGroupLabel>
-            <SidebarGroup>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {itemsAdmin.map((item) => (
-                    <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton asChild>
-                        <Link to={item.url}>
-                          <item.icon />
-                          <span>{item.title}</span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
-                  <SidebarMenu>
-                    <Collapsible className="group/collapsible">
-                      <SidebarMenuItem>
-                        <CollapsibleTrigger asChild>
-                          <SidebarMenuButton>
-                            <PackageCheck />
-                            <span>Подразделения</span>
-                            <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
-                          </SidebarMenuButton>
-                        </CollapsibleTrigger>
-                      </SidebarMenuItem>
-
-                      <CollapsibleContent>
-                        <SidebarMenuSub>
-                          {itemsDivision ? (
-                            itemsDivision.map((item) => (
-                              <SidebarMenuSubItem key={item.title}>
-                                <SidebarMenuButton asChild>
-                                  <Link to={item.url}>
-                                    <item.icon />
-                                    <span>{item.title}</span>
-                                  </Link>
-                                </SidebarMenuButton>
-                              </SidebarMenuSubItem>
-                            ))
-                          ) : (
-                            <div>Идёт загрузка</div>
-                          )}
-                        </SidebarMenuSub>
-                      </CollapsibleContent>
-                    </Collapsible>
-                  </SidebarMenu>
-                  <SidebarMenu>
-                    <Collapsible className="group/collapsible">
-                      <SidebarMenuItem>
-                        <CollapsibleTrigger asChild>
-                          <SidebarMenuButton>
-                            <PackageCheck />
-                            <span>Склады</span>
-                            <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
-                          </SidebarMenuButton>
-                        </CollapsibleTrigger>
-                      </SidebarMenuItem>
-
-                      <CollapsibleContent>
-                        <SidebarMenuSub>
-                          {itemsWarehouses ? (
-                            itemsWarehouses.map((item) => (
-                              <SidebarMenuSubItem key={item.title}>
-                                <SidebarMenuButton asChild>
-                                  <Link to={item.url}>
-                                    <item.icon />
-                                    <span>{item.title}</span>
-                                  </Link>
-                                </SidebarMenuButton>
-                              </SidebarMenuSubItem>
-                            ))
-                          ) : (
-                            <div>Идёт загрузка</div>
-                          )}
-                        </SidebarMenuSub>
-                      </CollapsibleContent>
-                    </Collapsible>
-                  </SidebarMenu>
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-          </>
-        )}
       </SidebarContent>
+
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton
-              onClick={() => {
-                void logout();
-              }}
-            >
+            <SidebarMenuButton onClick={() => void logout()}>
               <LogOut />
               Выход
             </SidebarMenuButton>

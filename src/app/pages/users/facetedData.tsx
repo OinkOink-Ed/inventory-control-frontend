@@ -14,6 +14,11 @@ export const facetedUsersData = [
         label: "User",
         icon: Atom,
       },
+      {
+        value: "staff",
+        label: "Staff",
+        icon: Atom,
+      },
     ],
   },
   {

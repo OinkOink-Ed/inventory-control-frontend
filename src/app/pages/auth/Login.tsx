@@ -16,11 +16,17 @@ import { useProfileStore } from "@/app/stores/profile/useProfileStore";
 import { authControllerSignIn, PostAuthDto } from "@/app/api/generated";
 import { handlerError } from "@/app/helpers/handlerError";
 import { Answer } from "@/app/Errors/Answer";
+import { useEffect } from "react";
+import { queryClientInstans } from "@/app/queryClientInstans";
 
 export function Login() {
   const setProfile = useProfileStore((state) => state.setProfile);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    void queryClientInstans.invalidateQueries();
+  }, []);
 
   const form = useForm<PostAuthDto>({
     resolver: zodResolver(authRequestDtoSchemaZOD),
@@ -43,7 +49,7 @@ export function Login() {
       void navigate("/");
     } catch (error: unknown) {
       const res = handlerError(error);
-      if (res == Answer.RESET) form.reset();
+      if (res == Answer.LOGOUT) form.reset();
     }
   }
 

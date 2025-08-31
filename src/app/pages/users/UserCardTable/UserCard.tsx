@@ -5,10 +5,10 @@ import { DataTable } from "@/components/DataTable/DataTable";
 import { SpinnerLoad } from "@/components/SpinnerLoad";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
-import { GetResponseDetailedStaffByIdSchema } from "@/app/api/generated";
 import { columns } from "./columns";
+import { GetResponseStaffDetailedShemaOfTable } from "./shema";
 
-export function StaffCard() {
+export function UserCard() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const staffId = parseInt(id!);
@@ -19,6 +19,7 @@ export function StaffCard() {
   useEffect(() => {
     if (error) {
       const res = handlerError(error);
+      console.log(res);
       setTimeout(() => {
         if (res == Answer.LOGOUT) void navigate("/auth", { replace: true });
       }, 1000);
@@ -26,14 +27,17 @@ export function StaffCard() {
     }
   }, [navigate, error]);
 
-  console.log(data?.data);
-
+  //Над таблицей нужны ещё данные уже из объекта
   return isSuccess ? (
     <DataTable<
-      GetResponseDetailedStaffByIdSchema,
-      GetResponseDetailedStaffByIdSchema
+      GetResponseStaffDetailedShemaOfTable,
+      GetResponseStaffDetailedShemaOfTable
     >
-      data={data?.data}
+      data={data?.data?.flatMap((row) =>
+        row.acceptedCartridge.flatMap((item) => ({
+          ...item,
+        })),
+      )}
       columns={columns}
       defaultSort="ФИО"
       titleTable="Список полученных картриджей"

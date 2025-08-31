@@ -4,11 +4,11 @@ import { Suspense } from "react";
 import {
   AppLayout,
   CartridgeModelLayout,
-  DeliveryLayout,
   DivisionLayout,
   LoginLayout,
   ProfileLayout,
   ReportsLayout,
+  // StaffLayout,
   UsersLayout,
   WarehouseLayout,
 } from "../lazyImports";
@@ -17,9 +17,11 @@ import PublicRoute from "./loaders/Public";
 import LoginSkeleton from "../pages/auth/LoginSkeleton";
 import PrivateRoute from "./loaders/Private";
 import AdminRoute from "./loaders/AdminRoute";
-import StaffLayout from "../Layouts/StaffLayout";
-import { StaffTable } from "../pages/staff/StaffTable";
-import { StaffCard } from "../pages/staff/StaffCardTable/StaffCard";
+import { UsersTable } from "../pages/users/UsersTable";
+import { UserCard } from "../pages/users/UserCardTable/UserCard";
+import UserAndAdminRoute from "./loaders/UserAndAdminRoute";
+// import { StaffTable } from "../pages/staff/StaffTable";
+// import { StaffCard } from "../pages/staff/StaffCardTable/StaffCard";
 
 // SpinnerLoad можно будет заменить на Skeleton различный в дальнейшем
 
@@ -28,7 +30,7 @@ export const router = createBrowserRouter([
     path: "auth",
     loader: PublicRoute,
     element: (
-      <Suspense fallback={<LoginSkeleton />}>
+      <Suspense key="auth" fallback={<LoginSkeleton />}>
         <LoginLayout />
       </Suspense>
     ),
@@ -36,88 +38,71 @@ export const router = createBrowserRouter([
   },
 
   {
+    path: "/",
+    loader: PrivateRoute,
     element: (
-      <Suspense fallback={<SpinnerLoad />}>
+      <Suspense key="app" fallback={<SpinnerLoad />}>
         <AppLayout />
       </Suspense>
     ),
 
     children: [
       {
-        path: "/",
-        // TODO Получается, что тут будет реализован выбор катриджа и его модели для выдачи + генерация пдф
-        loader: PrivateRoute,
+        loader: UserAndAdminRoute,
+        path: "warehouse/:id",
 
+        // TODO список складов + операции
         element: (
-          <Suspense fallback={<SpinnerLoad />}>
-            <DeliveryLayout />
+          <Suspense key="warehouse" fallback={<SpinnerLoad />}>
+            <WarehouseLayout />
           </Suspense>
         ),
       },
       {
-        loader: AdminRoute,
+        loader: UserAndAdminRoute,
+        path: "division/:id",
+
+        // TODO список подразделений + операции
+
+        element: (
+          <Suspense key="division" fallback={<SpinnerLoad />}>
+            <DivisionLayout />
+          </Suspense>
+        ),
+      },
+      {
         children: [
           {
-            path: "warehouse/:id",
-
-            // TODO список складов + операции
-            element: (
-              <Suspense fallback={<SpinnerLoad />}>
-                <WarehouseLayout />
-              </Suspense>
-            ),
-          },
-          {
+            loader: UserAndAdminRoute,
             path: "users",
 
             // TODO список пользователей + операции
 
             element: (
-              <Suspense fallback={<SpinnerLoad />}>
+              <Suspense key="users" fallback={<SpinnerLoad />}>
                 <UsersLayout />
-              </Suspense>
-            ),
-          },
-          {
-            path: "staff",
-
-            // TODO список сотрудников + операции
-
-            element: (
-              <Suspense fallback={<SpinnerLoad />}>
-                <StaffLayout />
               </Suspense>
             ),
             children: [
               {
                 index: true,
-                element: <StaffTable />,
+                element: <UsersTable />,
               },
               {
                 path: ":id",
-                element: <StaffCard />,
+                element: <UserCard />,
               },
             ],
           },
           {
+            loader: AdminRoute,
             path: "cartrideModel",
 
             // TODO список моделей картриджей + операции
 
             element: (
-              <Suspense fallback={<SpinnerLoad />}>
+              <Suspense key="cartrideModel" fallback={<SpinnerLoad />}>
                 <CartridgeModelLayout />
-              </Suspense>
-            ),
-          },
-          {
-            path: "division/:id",
-
-            // TODO список подразделений + операции
-
-            element: (
-              <Suspense fallback={<SpinnerLoad />}>
-                <DivisionLayout />
               </Suspense>
             ),
           },
@@ -129,7 +114,7 @@ export const router = createBrowserRouter([
         // TODO Компонент профиля
 
         element: (
-          <Suspense fallback={<SpinnerLoad />}>
+          <Suspense key="profile" fallback={<SpinnerLoad />}>
             <ProfileLayout />
           </Suspense>
         ),
@@ -139,7 +124,7 @@ export const router = createBrowserRouter([
         // TODO Подумать какие отчёты нужны
 
         element: (
-          <Suspense fallback={<SpinnerLoad />}>
+          <Suspense key="reports" fallback={<SpinnerLoad />}>
             <ReportsLayout />
           </Suspense>
         ),

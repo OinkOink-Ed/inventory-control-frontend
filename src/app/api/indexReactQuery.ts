@@ -1,26 +1,26 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
-  cartridgeControllerGetCartridgesById,
+  cartridgeControllerGetCartridgesByWarehouse,
   cartridgeModelControllerCreate,
-  cartridgeModelControllerGetAll,
-  cartridgeModelControllerGetAllDetailed,
+  cartridgeModelControllerGetModels,
+  cartridgeModelControllerGetModelsAndTheirCreator,
   decommissioningControllerCreate,
   deliveryControllerCreate,
-  divisionControllerGetAll,
+  divisionControllerGetDivisions,
   kabinetControllerCreate,
   kabinetControllerGetKAbinetsByDivisionId,
   movementControllerCreate,
   receivingControllerCreate,
-  roleControllerGetAll,
-  staffControllerCreateStaff,
-  staffControllerGetAll,
-  staffControllerGetDeteiledById,
+  roleControllerGetRoles,
   userControllerCreateAdmin,
+  userControllerCreateStaff,
   userControllerCreateUser,
   userControllerGetAll,
-  warehouseControllerGetAll,
-  warehouseControllerGetDetailedByWarehouseId,
+  userControllerGetCardUser,
+  warehouseControllerGetCabinetsByWarehouse,
+  warehouseControllerGetWarehouses,
 } from "./generated";
+import { useMatch } from "react-router";
 
 export function useIndexReactQuery(id?: number) {
   const queryClient = useQueryClient();
@@ -29,42 +29,47 @@ export function useIndexReactQuery(id?: number) {
   const userGetAll = useQuery({
     queryKey: ["users"],
     queryFn: userControllerGetAll,
+    enabled: !!useMatch({ path: "/users", end: true }),
   });
 
   //Получить сотрудников
   const staffGetAll = useQuery({
     queryKey: ["staff"],
-    queryFn: staffControllerGetAll,
+    queryFn: userControllerGetAll,
+    enabled: !!useMatch({ path: "/warehouse/*" }) && !!id,
   });
 
   // Получить склады для выбора
   const warehouseGetAll = useQuery({
     queryKey: ["warehouses"],
-    queryFn: warehouseControllerGetAll,
+    queryFn: warehouseControllerGetWarehouses,
   });
 
   // Получить модели картриджей
   const cartridgeModelGetAll = useQuery({
     queryKey: ["modelsCartridges"],
-    queryFn: cartridgeModelControllerGetAll,
+    queryFn: cartridgeModelControllerGetModels,
+    enabled: !!useMatch({ path: "/warehouse/:id", end: true }),
   });
 
   //Получить роли пользователей
   const roleGetAll = useQuery({
     queryKey: ["roles"],
-    queryFn: roleControllerGetAll,
+    queryFn: roleControllerGetRoles,
+    enabled: !!useMatch({ path: "/users", end: true }),
   });
 
   //Получить подразделения для выбора
   const divisionGetAll = useQuery({
     queryKey: ["division"],
-    queryFn: divisionControllerGetAll,
+    queryFn: divisionControllerGetDivisions,
   });
 
   //Получить модели картриджей более подробно
   const cartridgeModelGetAllDetailed = useQuery({
     queryKey: ["modelsCartridgesDetailed"],
-    queryFn: cartridgeModelControllerGetAllDetailed,
+    queryFn: cartridgeModelControllerGetModelsAndTheirCreator,
+    enabled: !!useMatch({ path: "/cartrideModel", end: true }),
   });
 
   // Создание модели картриджа
@@ -115,7 +120,7 @@ export function useIndexReactQuery(id?: number) {
 
   // Создать сотрудника
   const staffCreate = useMutation({
-    mutationFn: staffControllerCreateStaff,
+    mutationFn: userControllerCreateStaff,
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: ["staff"],
@@ -127,28 +132,28 @@ export function useIndexReactQuery(id?: number) {
   const kabinetsGetByDivisionId = useQuery({
     queryKey: ["kabinets", id],
     queryFn: () => kabinetControllerGetKAbinetsByDivisionId(id!),
-    enabled: !!id,
+    enabled: !!useMatch({ path: "/division/:id", end: true }) && !!id,
   });
 
   //Получить картриджи по складу
   const cartridgesGetByWarehouseId = useQuery({
     queryKey: ["cartridges", id],
-    queryFn: () => cartridgeControllerGetCartridgesById(id!),
-    enabled: !!id,
+    queryFn: () => cartridgeControllerGetCartridgesByWarehouse(id!),
+    enabled: !!useMatch({ path: "/warehouse/:id", end: true }) && !!id,
   });
 
   //Получить склад по id + подразделение в нем + кабинеты в нем
   const warehouseDetaildeByIdWithDivisionWithKabinets = useQuery({
     queryKey: ["warehousewithDivisionWithKabinets", id],
-    queryFn: () => warehouseControllerGetDetailedByWarehouseId(id!),
-    enabled: !!id,
+    queryFn: () => warehouseControllerGetCabinetsByWarehouse(id!),
+    enabled: !!useMatch({ path: "/warehouse/:id", end: true }) && !!id,
   });
 
-  //Получить полученные сотрудником и/или принятые кладовщиком картриджи
+  //Получить полученные сотрудником
   const cartridgeAcceptedByStaffId = useQuery({
     queryKey: ["cartridgeAcceptedByStaffId", id],
-    queryFn: () => staffControllerGetDeteiledById(id!),
-    enabled: !!id,
+    queryFn: () => userControllerGetCardUser(id!),
+    enabled: !!useMatch({ path: "/users/:id", end: true }) && !!id,
   });
 
   //Создать акт приема поставки картриджей
@@ -215,5 +220,6 @@ export function useIndexReactQuery(id?: number) {
     staffGetAll,
     staffCreate,
     cartridgeAcceptedByStaffId,
+    queryClient,
   };
 }

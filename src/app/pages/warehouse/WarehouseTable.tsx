@@ -13,6 +13,7 @@ import { GetResponseAllCartridgeInWarehouseDtoSchema } from "@/app/api/generated
 import { useEffect } from "react";
 import { Answer } from "@/app/Errors/Answer";
 import { handlerError } from "@/app/helpers/handlerError";
+import { decryptedProfile } from "@/app/helpers/decryptedProfile";
 
 export function WarehouseTable() {
   const navigate = useNavigate();
@@ -29,8 +30,6 @@ export function WarehouseTable() {
     }
   }, [navigate, cartridgesGetByWarehouseId.error]);
 
-  console.log(cartridgesGetByWarehouseId.data?.data);
-
   return cartridgesGetByWarehouseId.isSuccess ? (
     <DataTable<
       GetResponseAllCartridgeInWarehouseDtoSchema,
@@ -42,32 +41,53 @@ export function WarehouseTable() {
       defaultSort="Поступление"
       column="Модель"
       facetedOptions={facetedCartridgeData}
-      dialog={[
-        <DialogForm
-          key={"Выдача картриджей"}
-          title="Выдача картриджей"
-          buttonName="Выдать картриджи"
-          form={<DeliveryCartridgeForm warehouseId={warehouseId} />}
-        />,
-        <DialogForm
-          key={"Списание картриджей"}
-          title="Списание картриджей"
-          buttonName="Списать картриджи"
-          form={<DecommissioningCartrdigeForm warehouseId={warehouseId} />}
-        />,
-        <DialogForm
-          key={"Приём картриджей"}
-          title="Приём картриджей"
-          buttonName="Принять картриджи"
-          form={<ReceivingCartridgeForm warehouseId={warehouseId} />}
-        />,
-        <DialogForm
-          key={"Перемещение картриджей"}
-          title="Перемещение картриджей"
-          buttonName="Переместить картриджи"
-          form={<MovementCartridgeForm warehouseId={warehouseId} />}
-        />,
-      ]}
+      dialog={
+        decryptedProfile().role.roleName === "admin"
+          ? [
+              <DialogForm
+                key={"Выдача картриджей"}
+                title="Выдача картриджей"
+                buttonName="Выдать картриджи"
+                form={<DeliveryCartridgeForm warehouseId={warehouseId} />}
+              />,
+              <DialogForm
+                key={"Списание картриджей"}
+                title="Списание картриджей"
+                buttonName="Списать картриджи"
+                form={
+                  <DecommissioningCartrdigeForm warehouseId={warehouseId} />
+                }
+              />,
+              <DialogForm
+                key={"Приём картриджей"}
+                title="Приём картриджей"
+                buttonName="Принять картриджи"
+                form={<ReceivingCartridgeForm warehouseId={warehouseId} />}
+              />,
+              <DialogForm
+                key={"Перемещение картриджей"}
+                title="Перемещение картриджей"
+                buttonName="Переместить картриджи"
+                form={<MovementCartridgeForm warehouseId={warehouseId} />}
+              />,
+            ]
+          : [
+              <DialogForm
+                key={"Выдача картриджей"}
+                title="Выдача картриджей"
+                buttonName="Выдать картриджи"
+                form={<DeliveryCartridgeForm warehouseId={warehouseId} />}
+              />,
+              <DialogForm
+                key={"Списание картриджей"}
+                title="Списание картриджей"
+                buttonName="Списать картриджи"
+                form={
+                  <DecommissioningCartrdigeForm warehouseId={warehouseId} />
+                }
+              />,
+            ]
+      }
     />
   ) : (
     <SpinnerLoad />

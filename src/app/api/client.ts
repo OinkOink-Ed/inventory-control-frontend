@@ -54,9 +54,6 @@ export const refreshAccessToken = async (): Promise<RefreshTokenResponse> => {
 
     return response.data;
   } catch (error) {
-    profile.getState().clearProfile();
-    profile.persist.clearStorage();
-
     throw error instanceof Error ? error : new Error("Failed to refresh token");
   }
 };
@@ -102,8 +99,6 @@ axiosInstance.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    const profile = useProfileStore;
-
     const originalRequest = error.config as AxiosRequestConfig & {
       _retry?: boolean;
     };
@@ -146,9 +141,6 @@ axiosInstance.interceptors.response.use(
             ? refreshError
             : new Error("Failed to refresh token");
         processQueue(errorToReject, null);
-
-        profile.getState().clearProfile();
-        profile.persist.clearStorage();
 
         return Promise.reject(errorToReject);
       } finally {

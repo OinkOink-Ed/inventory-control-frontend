@@ -10,7 +10,7 @@ export function useApiCartridgeDeliveryFrom(id: number) {
     useIndexReactQuery(id).warehouseDetaildeByIdWithDivisionWithKabinets;
 
   const { data: staffData, isSuccess: staffSuccess } =
-    useIndexReactQuery().staffGetAll;
+    useIndexReactQuery(id).staffGetAll;
 
   return {
     cartrdgesCreateDelivery,

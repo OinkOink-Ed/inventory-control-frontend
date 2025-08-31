@@ -11,20 +11,18 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { PostCreateStaffDto } from "@/app/api/generated";
+import { PostCreateUserDto } from "@/app/api/generated";
 import { handlerError } from "@/app/helpers/handlerError";
 import { useApiStaffForm } from "./hooks/useApiStaffForm";
 import { createStaffDtoSchemaZOD } from "./shema";
 import { useNavigate } from "react-router";
 import { Answer } from "@/app/Errors/Answer";
 
-//Первая загрузка - 4 рендеров
-//Повторные переходы - 1 рендер
 export function StaffForm() {
   const navigate = useNavigate();
   const { mutateAsync } = useApiStaffForm();
 
-  const form = useForm<PostCreateStaffDto>({
+  const form = useForm<PostCreateUserDto>({
     resolver: zodResolver(createStaffDtoSchemaZOD),
     defaultValues: {
       name: "",
@@ -33,8 +31,9 @@ export function StaffForm() {
     },
   });
 
-  async function onSubmit(data: PostCreateStaffDto): Promise<void> {
+  async function onSubmit(data: PostCreateUserDto): Promise<void> {
     try {
+      console.log(data);
       const res = await mutateAsync(data);
       toast.success(`${res.data.message}`, {
         position: "top-center",

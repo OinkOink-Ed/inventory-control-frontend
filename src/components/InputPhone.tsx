@@ -6,7 +6,7 @@ import React from "react";
 const InputPhone = React.forwardRef<
   HTMLInputElement,
   React.ComponentProps<"input">
->((props: React.ComponentProps<"input">, ref) => {
+>((props: React.ComponentProps<"input">) => {
   const maskedInputRef = useMaskito({ options });
   return <Input {...props} ref={maskedInputRef} />;
 });

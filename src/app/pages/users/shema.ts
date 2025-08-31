@@ -1,6 +1,8 @@
 import { postCreateUserDtoSchema } from "@/app/api/generated";
 import { z } from "zod";
 
+type PostCreateUserShape = typeof postCreateUserDtoSchema.shape;
+
 export const createUserDtoSchemaZOD = postCreateUserDtoSchema.extend({
   username: z.string().min(4, { message: "Требуется не менее 4 символов" }),
   lastname: z.string().min(4, { message: "Требуется не менее 4 символов" }),
@@ -21,4 +23,4 @@ export const createUserDtoSchemaZOD = postCreateUserDtoSchema.extend({
   state: z.enum(["active", "inactive"], {
     message: "Поле обязательно к заполнению",
   }),
-});
+} satisfies Record<keyof PostCreateUserShape, z.ZodType>);
