@@ -11,6 +11,7 @@ export function decryptedProfile(): UserDto {
   const storedCryptProfile = profile.access_token;
   try {
     return jwtDecode<JwtPayload>(storedCryptProfile).sub as unknown as UserDto;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     return {
       id: 0,

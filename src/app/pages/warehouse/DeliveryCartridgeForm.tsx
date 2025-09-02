@@ -33,6 +33,7 @@ export function DeliveryCartridgeForm({
   warehouseId,
 }: DeliveryCartridgeFormProps) {
   const navigate = useNavigate();
+
   const {
     cartrdgesCreateDelivery,
     cartridgeModelData,
@@ -63,6 +64,7 @@ export function DeliveryCartridgeForm({
       toast.success(`${res.data.message}`, {
         position: "top-center",
       });
+
       form.reset();
     } catch (error: unknown) {
       const res = handlerError(error);

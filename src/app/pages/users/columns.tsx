@@ -48,13 +48,48 @@ export const columns: ColumnDef<GetResponseAllUserDtoSchema>[] = [
   },
   {
     id: "Подразделение",
-    accessorKey: "division.name",
+    accessorKey: "division",
     header: ({ column }) => {
       return <DataTableColumnHeader column={column} title="Подразделение" />;
     },
-    sortingFn: "text",
+    cell: ({ row }) => {
+      const divisions: GetResponseAllUserDtoSchema["division"] =
+        row.getValue("Подразделение");
+      return (
+        <div className="flex flex-col">
+          {Array.isArray(divisions) &&
+            divisions.map((division, index) => (
+              <span key={division.id}>
+                {division.name}
+                {index < divisions.length - 1 ? ", " : ""}
+              </span>
+            ))}
+        </div>
+      );
+    },
+    sortingFn: (rowA, rowB, columnId) => {
+      const divisionsA: GetResponseAllUserDtoSchema["division"] =
+        rowA.getValue(columnId);
+      const divisionsB: GetResponseAllUserDtoSchema["division"] =
+        rowB.getValue(columnId);
+
+      const namesA = Array.isArray(divisionsA)
+        ? divisionsA.map((d) => d.name).join(", ")
+        : "";
+      const namesB = Array.isArray(divisionsB)
+        ? divisionsB.map((d) => d.name).join(", ")
+        : "";
+
+      return namesA.localeCompare(namesB);
+    },
     filterFn: (row, id, value: string[]) => {
-      return value.includes(row.getValue(id));
+      const divisions: GetResponseAllUserDtoSchema["division"] =
+        row.getValue(id);
+      const divisionNames = Array.isArray(divisions)
+        ? divisions.map((d) => d.name)
+        : [];
+
+      return divisionNames.some((name) => value.includes(name));
     },
   },
   {

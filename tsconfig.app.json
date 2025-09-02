@@ -32,6 +32,7 @@
     "getApiSwagger.ts",
     "kubb.ts",
     "src/app/api/generated/types/**/*",
+    "src/app/api/generated/schema/**/*",
     "src/app/api/generated/index.ts"
   ]
 }

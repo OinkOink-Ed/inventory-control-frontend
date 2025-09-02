@@ -24,6 +24,8 @@ import { createMovementDtoShema } from "./shema";
 import { useApiCartridgeMovementForm } from "./hooks/useApiCartridgeMovementForm";
 import { useNavigate } from "react-router";
 import { Answer } from "@/app/Errors/Answer";
+import { useChoiceOfStaffStore } from "@/app/stores/choiceOfStaff/useChoiceOfStaffStore";
+import { useEffect } from "react";
 
 interface MovementCartridgeFormProps {
   warehouseId: number;
@@ -42,6 +44,9 @@ export function MovementCartridgeForm({
     staffData,
     staffSuccess,
   } = useApiCartridgeMovementForm(warehouseId);
+
+  const { setChoiceOfStaff, warehouseChoices, clearChoiceOfStaff } =
+    useChoiceOfStaffStore();
 
   const form = useForm<PostCreateMovementDtoSchema>({
     resolver: zodResolver(createMovementDtoShema),
@@ -62,12 +67,31 @@ export function MovementCartridgeForm({
         position: "top-center",
       });
       form.reset();
+      clearChoiceOfStaff();
     } catch (error: unknown) {
       const res = handlerError(error);
       if (res == Answer.LOGOUT) void navigate("/auth", { replace: true });
       if (res == Answer.RESET) form.reset();
     }
   }
+
+  useEffect(() => {
+    const subscription = form.watch((value, { name }) => {
+      if (name === "warehouseWhere.id") {
+        setChoiceOfStaff({ warehouseChoices: value.warehouseWhere?.id });
+        form.resetField("whoAccepted");
+      }
+    });
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [setChoiceOfStaff, form]);
+
+  useEffect(() => {
+    return () => {
+      clearChoiceOfStaff();
+    };
+  }, [clearChoiceOfStaff]);
 
   return (
     <>
@@ -128,12 +152,13 @@ export function MovementCartridgeForm({
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
-            name="whoAccepted.id"
+            name="warehouseWhere.id"
             render={({ field }) => (
               <FormItem className="h-24 w-[400px]">
-                <FormLabel>Принимающий</FormLabel>
+                <FormLabel>Склад</FormLabel>
                 <Select
                   onValueChange={(value) =>
                     field.onChange(value ? Number(value) : undefined)
@@ -142,19 +167,19 @@ export function MovementCartridgeForm({
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Выберите кому выдать" />
+                      <SelectValue placeholder="Выберите склад для поступления" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {staffSuccess && staffData ? (
-                      staffData.data.map((item) => {
-                        if (item.financiallyResponsiblePerson) {
+                    {warehouseSuccess && warehouseData ? (
+                      warehouseData.data.map((item) => {
+                        if (item.id !== warehouseId) {
                           return (
                             <SelectItem
                               key={item.id}
                               value={item.id.toString()}
                             >
-                              {item.lastname} {item.name} {item.patronimyc}
+                              {item.name}
                             </SelectItem>
                           );
                         }
@@ -173,11 +198,12 @@ export function MovementCartridgeForm({
           <div className="flex flex-col">
             <FormField
               control={form.control}
-              name="warehouseWhere.id"
+              name="whoAccepted.id"
               render={({ field }) => (
                 <FormItem className="h-24 w-[400px]">
-                  <FormLabel>Склад</FormLabel>
+                  <FormLabel>Принимающий</FormLabel>
                   <Select
+                    disabled={!warehouseChoices}
                     onValueChange={(value) =>
                       field.onChange(value ? Number(value) : undefined)
                     }
@@ -185,16 +211,23 @@ export function MovementCartridgeForm({
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Выберите склад для поступления" />
+                        <SelectValue placeholder="Выберите кому выдать" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {warehouseSuccess && warehouseData ? (
-                        warehouseData.data.map((item) => (
-                          <SelectItem key={item.id} value={item.id.toString()}>
-                            {item.name}
-                          </SelectItem>
-                        ))
+                      {staffSuccess && staffData ? (
+                        staffData.data.map((item) => {
+                          if (item.role?.roleName === "user") {
+                            return (
+                              <SelectItem
+                                key={item.id}
+                                value={item.id.toString()}
+                              >
+                                {item.lastname} {item.name} {item.patronimyc}
+                              </SelectItem>
+                            );
+                          }
+                        })
                       ) : (
                         <SelectItem value="Идет загрузка данных">
                           Идет загрузка данных

@@ -110,7 +110,7 @@ export const router = createBrowserRouter([
         errorElement: <ErrorBoundary />,
       },
       {
-        path: "profile",
+        index: true,
         // TODO Компонент профиля
 
         element: (

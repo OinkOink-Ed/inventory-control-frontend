@@ -25,6 +25,7 @@ import { useApiUsersForm } from "./hooks/useApiUsersForm";
 import { handlerError } from "@/app/helpers/handlerError";
 import { useNavigate } from "react-router";
 import { Answer } from "@/app/Errors/Answer";
+import { useEffect } from "react";
 
 export function UserForm() {
   const navigate = useNavigate();
@@ -32,6 +33,7 @@ export function UserForm() {
     useApiUsersForm();
 
   const form = useForm<PostCreateUserDto>({
+    mode: "onChange",
     resolver: zodResolver(createUserDtoSchemaZOD),
     defaultValues: {
       name: "",
@@ -42,6 +44,7 @@ export function UserForm() {
       division: { id: undefined },
       state: "active",
       telephone: "",
+      patronimyc: "",
     },
   });
 
@@ -58,6 +61,8 @@ export function UserForm() {
       if (res == Answer.RESET) form.reset();
     }
   }
+
+  useEffect(() => console.log("Render"));
 
   return (
     <>
@@ -239,15 +244,8 @@ export function UserForm() {
                     type="text"
                     {...field}
                     onInput={(e) => {
-                      // Ну в таком случае с опцией shouldValidate я отображаю сообщения о том, успешна ли вадиция - но это вызывает каждый раз рендер
-                      //Т.е преимущества react-hook-form отлетают
-                      form.setValue("telephone", e.currentTarget.value);
+                      field.onChange(e);
                     }}
-                    //А тут срабатывает только уход фокуса
-                    onBlur={() => {
-                      void form.trigger("telephone");
-                    }}
-                    //Событие onChange вообще никак не влияет
                   />
                 </FormControl>
                 <FormMessage />

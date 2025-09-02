@@ -92,7 +92,7 @@ export function DecommissioningCartrdigeForm({
             name="comment"
             render={({ field }) => (
               <FormItem className="h-24 w-[400px]">
-                <FormLabel>Количество</FormLabel>
+                <FormLabel>Причина</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="Введите причину списания картриджа"

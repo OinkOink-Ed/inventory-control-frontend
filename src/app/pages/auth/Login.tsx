@@ -50,6 +50,7 @@ export function Login() {
     } catch (error: unknown) {
       const res = handlerError(error);
       if (res == Answer.LOGOUT) form.reset();
+      if (res == Answer.RESET) form.reset();
     }
   }
 

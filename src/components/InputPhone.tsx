@@ -6,9 +6,25 @@ import React from "react";
 const InputPhone = React.forwardRef<
   HTMLInputElement,
   React.ComponentProps<"input">
->((props: React.ComponentProps<"input">) => {
+>((props, ref) => {
   const maskedInputRef = useMaskito({ options });
-  return <Input {...props} ref={maskedInputRef} />;
+
+  // Функция для объединения refs
+  const setRef = (el: HTMLInputElement | null) => {
+    // Для react-hook-form ref
+    if (typeof ref === "function") {
+      ref(el);
+    } else if (ref) {
+      ref.current = el;
+    }
+
+    // Для Maskito
+    maskedInputRef(el);
+  };
+
+  return <Input {...props} ref={setRef} />;
 });
+
+InputPhone.displayName = "InputPhone";
 
 export { InputPhone };

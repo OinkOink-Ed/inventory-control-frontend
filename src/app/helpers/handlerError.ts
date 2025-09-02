@@ -36,6 +36,13 @@ export function handlerError(dataError: unknown): Answer {
     | ErrorResponseDto500
   >;
 
+  if (data.code === "ERR_NETWORK") {
+    toast.error("Сервер недоступен", {
+      position: "top-center",
+    });
+    return Answer.RESET;
+  }
+
   if (data.response?.status == 401) {
     toast.error(data.response?.data.message, {
       position: "top-center",

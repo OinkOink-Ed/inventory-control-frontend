@@ -9,7 +9,7 @@ export function useApiCartridgeMovementForm(id: number) {
     useIndexReactQuery().warehouseGetAll;
 
   const { data: staffData, isSuccess: staffSuccess } =
-    useIndexReactQuery().staffGetAll;
+    useIndexReactQuery().staffGetAllByDivisions;
 
   return {
     cartrdgesCreateMovement,

@@ -16,14 +16,21 @@ import {
   userControllerCreateStaff,
   userControllerCreateUser,
   userControllerGetAll,
+  userControllerGetAllByDivisions,
   userControllerGetCardUser,
   warehouseControllerGetCabinetsByWarehouse,
   warehouseControllerGetWarehouses,
 } from "./generated";
 import { useMatch } from "react-router";
+import { decryptedProfile } from "../helpers/decryptedProfile";
+import { useChoiceOfStaffStore } from "../stores/choiceOfStaff/useChoiceOfStaffStore";
 
 export function useIndexReactQuery(id?: number) {
+  const profile = decryptedProfile();
   const queryClient = useQueryClient();
+  const choiseWarehouse = useChoiceOfStaffStore(
+    (state) => state.warehouseChoices,
+  );
 
   //Получить пользователей
   const userGetAll = useQuery({
@@ -32,17 +39,24 @@ export function useIndexReactQuery(id?: number) {
     enabled: !!useMatch({ path: "/users", end: true }),
   });
 
-  //Получить сотрудников
-  const staffGetAll = useQuery({
-    queryKey: ["staff"],
-    queryFn: userControllerGetAll,
-    enabled: !!useMatch({ path: "/warehouse/*" }) && !!id,
+  //Получить пользователей по складу
+  const staffGetAllByDivisions = useQuery({
+    queryKey: ["usersByWarehouse", choiseWarehouse, id],
+    queryFn: () => {
+      if (id) {
+        return userControllerGetAllByDivisions(id);
+      }
+      return userControllerGetAllByDivisions(choiseWarehouse!);
+    },
+    enabled:
+      !!useMatch({ path: "/warehouse/*" }) && (!!choiseWarehouse || !!id),
   });
 
   // Получить склады для выбора
   const warehouseGetAll = useQuery({
     queryKey: ["warehouses"],
     queryFn: warehouseControllerGetWarehouses,
+    enabled: profile.role.roleName !== "staff",
   });
 
   // Получить модели картриджей
@@ -63,6 +77,7 @@ export function useIndexReactQuery(id?: number) {
   const divisionGetAll = useQuery({
     queryKey: ["division"],
     queryFn: divisionControllerGetDivisions,
+    enabled: profile.role.roleName !== "staff",
   });
 
   //Получить модели картриджей более подробно
@@ -217,7 +232,7 @@ export function useIndexReactQuery(id?: number) {
     cartrdgesCreateDelivery,
     warehouseDetaildeByIdWithDivisionWithKabinets,
     kabinetCreate,
-    staffGetAll,
+    staffGetAllByDivisions,
     staffCreate,
     cartridgeAcceptedByStaffId,
     queryClient,
