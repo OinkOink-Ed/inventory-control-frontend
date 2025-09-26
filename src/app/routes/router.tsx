@@ -8,7 +8,6 @@ import {
   LoginLayout,
   ProfileLayout,
   ReportsLayout,
-  // StaffLayout,
   UsersLayout,
   WarehouseLayout,
 } from "../lazyImports";
@@ -18,10 +17,9 @@ import LoginSkeleton from "../pages/auth/LoginSkeleton";
 import PrivateRoute from "./loaders/Private";
 import AdminRoute from "./loaders/AdminRoute";
 import { UsersTable } from "../pages/users/UsersTable";
-import { UserCard } from "../pages/users/UserCardTable/UserCard";
 import UserAndAdminRoute from "./loaders/UserAndAdminRoute";
-// import { StaffTable } from "../pages/staff/StaffTable";
-// import { StaffCard } from "../pages/staff/StaffCardTable/StaffCard";
+import { UserCard } from "../pages/users/UserCard/UserCard";
+import { PreRequestWrapperForAccess } from "@/components/PreRequestWrapperForAccess/PreRequestWrapperForAccess";
 
 // SpinnerLoad можно будет заменить на Skeleton различный в дальнейшем
 
@@ -90,7 +88,11 @@ export const router = createBrowserRouter([
               },
               {
                 path: ":id",
-                element: <UserCard />,
+                element: (
+                  <PreRequestWrapperForAccess>
+                    <UserCard />
+                  </PreRequestWrapperForAccess>
+                ),
               },
             ],
           },
@@ -110,7 +112,7 @@ export const router = createBrowserRouter([
         errorElement: <ErrorBoundary />,
       },
       {
-        index: true,
+        path: "profile",
         // TODO Компонент профиля
 
         element: (

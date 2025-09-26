@@ -12,14 +12,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { createModelCartridgeDtoSchemaZOD } from "./shema";
-import { useIndexReactQuery } from "@/app/api/indexReactQuery";
 import { PostCreateCartridgeModelDto } from "@/app/api/generated";
 import { handlerError } from "@/app/helpers/handlerError";
 import { Answer } from "@/app/Errors/Answer";
 import { useNavigate } from "react-router";
+import { useCartridgeModelFormApi } from "./api/useCartridgeModelFormApi";
 
 export function CartridgeModelForm() {
-  const { mutateAsync } = useIndexReactQuery().cartridgeModelCreate;
+  const { mutateAsync } = useCartridgeModelFormApi();
   const navigate = useNavigate();
 
   const form = useForm<PostCreateCartridgeModelDto>({

@@ -1,7 +1,6 @@
 import { GetResponseKabinetsDtoSchema } from "@/app/api/generated";
 import { formateDate } from "@/app/helpers/formateDate";
 import DataTableColumnHeader from "@/components/DataTable/DataTableColumnHeader";
-import DataTableRowActions from "@/components/DataTable/DataTableRowActions";
 import { ColumnDef } from "@tanstack/react-table";
 
 export const columns: ColumnDef<GetResponseKabinetsDtoSchema>[] = [
@@ -17,7 +16,7 @@ export const columns: ColumnDef<GetResponseKabinetsDtoSchema>[] = [
     id: "Подразделение",
     accessorKey: "division.name",
     header: ({ column }) => {
-      return <DataTableColumnHeader column={column} title="Состояние" />;
+      return <DataTableColumnHeader column={column} title="Подразделение" />;
     },
     sortingFn: "text",
   },
@@ -38,7 +37,7 @@ export const columns: ColumnDef<GetResponseKabinetsDtoSchema>[] = [
     id: "Действия",
     //Позже буду в компонент передать row
     cell: () => {
-      return <DataTableRowActions />;
+      return <></>;
     },
   },
 ];

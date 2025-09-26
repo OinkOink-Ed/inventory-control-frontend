@@ -21,11 +21,16 @@ import {
 import { PostCreateMovementDtoSchema } from "@/app/api/generated";
 import { handlerError } from "@/app/helpers/handlerError";
 import { createMovementDtoShema } from "./shema";
-import { useApiCartridgeMovementForm } from "./hooks/useApiCartridgeMovementForm";
 import { useNavigate } from "react-router";
 import { Answer } from "@/app/Errors/Answer";
 import { useChoiceOfStaffStore } from "@/app/stores/choiceOfStaff/useChoiceOfStaffStore";
 import { useEffect } from "react";
+import {
+  useMovementCartridgeFormApiCartrdgesCreateMovement,
+  useMovementCartridgeFormApiCartridgeModelGetAll,
+  useMovementCartridgeFormApiStaffGetAllByDivisions,
+  useMovementCartridgeFormApiWarehouseGetAll,
+} from "./api/useMovementCartridgeFormApi";
 
 interface MovementCartridgeFormProps {
   warehouseId: number;
@@ -35,15 +40,15 @@ export function MovementCartridgeForm({
   warehouseId,
 }: MovementCartridgeFormProps) {
   const navigate = useNavigate();
-  const {
-    cartrdgesCreateMovement,
-    cartridgeModelData,
-    cartridgeModelSuccess,
-    warehouseData,
-    warehouseSuccess,
-    staffData,
-    staffSuccess,
-  } = useApiCartridgeMovementForm(warehouseId);
+  const { mutateAsync } = useMovementCartridgeFormApiCartrdgesCreateMovement();
+  const { data: cartridgeModelData, isSuccess: cartridgeModelSuccess } =
+    useMovementCartridgeFormApiCartridgeModelGetAll();
+
+  const { data: warehouseData, isSuccess: warehouseSuccess } =
+    useMovementCartridgeFormApiWarehouseGetAll();
+
+  const { data: staffData, isSuccess: staffSuccess } =
+    useMovementCartridgeFormApiStaffGetAllByDivisions(warehouseId);
 
   const { setChoiceOfStaff, warehouseChoices, clearChoiceOfStaff } =
     useChoiceOfStaffStore();
@@ -62,7 +67,7 @@ export function MovementCartridgeForm({
 
   async function onSubmit(data: PostCreateMovementDtoSchema): Promise<void> {
     try {
-      const res = await cartrdgesCreateMovement.mutateAsync(data);
+      const res = await mutateAsync(data);
       toast.success(`${res.data.message}`, {
         position: "top-center",
       });

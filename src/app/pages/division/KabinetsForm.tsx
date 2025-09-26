@@ -16,7 +16,7 @@ import {
   postCreateKabinetDtoSchema,
 } from "@/app/api/generated";
 import { handlerError } from "@/app/helpers/handlerError";
-import { useApiKabinetsForm } from "./hooks/useApiKabinetsForm";
+import { useKabinetsFormApi } from "./api/useKabinetsFormApi";
 import { Answer } from "@/app/Errors/Answer";
 import { useNavigate } from "react-router";
 
@@ -26,7 +26,7 @@ interface KabinetsFormProps {
 
 export function KabinetsForm({ divisionId }: KabinetsFormProps) {
   const navigate = useNavigate();
-  const { kabinetCreate } = useApiKabinetsForm(divisionId);
+  const { mutateAsync } = useKabinetsFormApi(divisionId);
 
   const form = useForm<PostCreateKabinetDto>({
     resolver: zodResolver(postCreateKabinetDtoSchema),
@@ -38,7 +38,7 @@ export function KabinetsForm({ divisionId }: KabinetsFormProps) {
 
   async function onSubmit(data: PostCreateKabinetDto): Promise<void> {
     try {
-      const res = await kabinetCreate.mutateAsync(data);
+      const res = await mutateAsync(data);
       toast.success(`${res.data.message}`, {
         position: "top-center",
       });

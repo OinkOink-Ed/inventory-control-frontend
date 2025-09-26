@@ -1,7 +1,6 @@
 import { GetResponseAllDetailedCartridgeModelDtoSchema } from "@/app/api/generated";
 import { formateDate } from "@/app/helpers/formateDate";
 import DataTableColumnHeader from "@/components/DataTable/DataTableColumnHeader";
-import DataTableRowActions from "@/components/DataTable/DataTableRowActions";
 import { ColumnDef } from "@tanstack/react-table";
 
 export const columns: ColumnDef<GetResponseAllDetailedCartridgeModelDtoSchema>[] =
@@ -30,7 +29,7 @@ export const columns: ColumnDef<GetResponseAllDetailedCartridgeModelDtoSchema>[]
     {
       id: "Создатель",
       accessorFn: (row) =>
-        `${row.creator.lastname} ${row.creator.name} ${row.creator.patronimyc}`,
+        `${row.creator?.lastname} ${row.creator?.name} ${row.creator?.patronimyc}`,
       header: ({ column }) => {
         return <DataTableColumnHeader column={column} title="Создатель" />;
       },
@@ -40,7 +39,7 @@ export const columns: ColumnDef<GetResponseAllDetailedCartridgeModelDtoSchema>[]
       id: "Действия",
       //Позже буду в компонент передать row
       cell: () => {
-        return <DataTableRowActions />;
+        return <></>;
       },
     },
   ];

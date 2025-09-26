@@ -17,9 +17,20 @@ export const createUserDtoSchemaZOD = postCreateUserDtoSchema.extend({
   role: z.object({
     id: z.coerce.number({ message: "Поле обязательно к заполнению" }),
   }),
-  division: z.object({
-    id: z.coerce.number({ message: "Поле обязательно к заполнению" }),
-  }),
+  division: z
+    .array(
+      z.object({
+        id: z.coerce.number({ message: "Поле обязательно к заполнению" }),
+      }),
+    )
+    .min(1, { message: "Выберите хотя бы одно подразделение" }),
+  kabinets: z
+    .array(
+      z.object({
+        id: z.coerce.number({ message: "Поле обязательно к заполнению" }),
+      }),
+    )
+    .min(1, { message: "Выберите хотя бы один кабинет" }),
   state: z.enum(["active", "inactive"], {
     message: "Поле обязательно к заполнению",
   }),

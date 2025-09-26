@@ -21,16 +21,36 @@ import {
 import { createUserDtoSchemaZOD } from "./shema";
 import { PostCreateUserDto } from "@/app/api/generated";
 import { InputPhone } from "@/components/InputPhone";
-import { useApiUsersForm } from "./hooks/useApiUsersForm";
 import { handlerError } from "@/app/helpers/handlerError";
 import { useNavigate } from "react-router";
 import { Answer } from "@/app/Errors/Answer";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useEffect } from "react";
+import { useChoiseOfKabinetsForCreateUser } from "@/app/stores/choiseOfKabinetsForCreateUser/useChoiseOfKabinetsStore";
+import {
+  useUsersFormApiCreateUser,
+  useUsersFormApiGetDivision,
+  useUsersFormApiGetKabinetsByUserIdForCreateUser,
+  useUsersFormApiGetRole,
+} from "./api/useUsersFormApi";
 
 export function UserForm() {
   const navigate = useNavigate();
-  const { divisionData, divisionSuccess, mutateAsync, RoleSuccess, roleData } =
-    useApiUsersForm();
+
+  const { mutateAsync } = useUsersFormApiCreateUser();
+  const { data: roleData, isSuccess: roleSuccess } = useUsersFormApiGetRole();
+  const { data: divisionData, isSuccess: divisionSuccess } =
+    useUsersFormApiGetDivision();
+  const { data: kabinetsData, isSuccess: kabinetsSuccess } =
+    useUsersFormApiGetKabinetsByUserIdForCreateUser();
+
+  const { clearChoiceOfKabinets, userChoices, setChoiceOfKabinets } =
+    useChoiseOfKabinetsForCreateUser();
 
   const form = useForm<PostCreateUserDto>({
     mode: "onChange",
@@ -41,12 +61,35 @@ export function UserForm() {
       password: "",
       role: { id: undefined },
       lastname: "",
-      division: { id: undefined },
+      division: [{ id: undefined }],
+      kabinets: [{ id: undefined }],
       state: "active",
       telephone: "",
       patronimyc: "",
     },
   });
+
+  useEffect(() => {
+    console.log("Render");
+  });
+
+  useEffect(() => {
+    const subscription = form.watch((value, { name }) => {
+      if (name === "division") {
+        setChoiceOfKabinets({ userChoices: value.division });
+        form.resetField("kabinets");
+      }
+    });
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [setChoiceOfKabinets, form]);
+
+  useEffect(() => {
+    return () => {
+      clearChoiceOfKabinets();
+    };
+  }, [clearChoiceOfKabinets]);
 
   async function onSubmit(data: PostCreateUserDto): Promise<void> {
     try {
@@ -61,8 +104,6 @@ export function UserForm() {
       if (res == Answer.RESET) form.reset();
     }
   }
-
-  useEffect(() => console.log("Render"));
 
   return (
     <>
@@ -176,7 +217,7 @@ export function UserForm() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {RoleSuccess && roleData ? (
+                    {roleSuccess && roleData ? (
                       roleData.data.map((item) => (
                         <SelectItem
                           key={item.roleName}
@@ -199,63 +240,164 @@ export function UserForm() {
 
           <FormField
             control={form.control}
-            name="division.id"
-            render={({ field }) => (
-              <FormItem className="h-24 w-[400px]">
-                <FormLabel>Подразделение</FormLabel>
-                <Select
-                  onValueChange={(value) =>
-                    field.onChange(value ? Number(value) : undefined)
-                  }
-                  value={field.value?.toString() ?? ""}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Выберите подразделение пользователя" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {divisionSuccess && divisionData ? (
-                      divisionData.data.map((item) => (
-                        <SelectItem key={item.name} value={item.id.toString()}>
-                          {item.name}
-                        </SelectItem>
-                      ))
-                    ) : (
-                      <SelectItem value="Идет загрузка данных">
-                        Идет загрузка данных
-                      </SelectItem>
-                    )}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
+            name="division"
+            render={({ field }) => {
+              const currentValues = Array.isArray(field.value)
+                ? field.value.filter(
+                    (item) => item !== null && typeof item.id === "number",
+                  )
+                : [];
+
+              return (
+                <FormItem className="h-24 w-[400px]">
+                  <FormLabel>Подразделения</FormLabel>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start"
+                      >
+                        {currentValues.length > 0
+                          ? `Выбрано: ${currentValues.length}`
+                          : "Выберите подразделения"}
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-[400px] p-0">
+                      <div className="max-h-60 overflow-y-auto p-2">
+                        {divisionSuccess && divisionData ? (
+                          divisionData.data.map((item) => (
+                            <div
+                              key={item.id}
+                              className="flex items-center space-x-2 p-2"
+                            >
+                              <Checkbox
+                                checked={currentValues.some(
+                                  (div) => div.id === item.id,
+                                )}
+                                onCheckedChange={(checked) => {
+                                  if (checked) {
+                                    field.onChange([
+                                      ...currentValues,
+                                      { id: item.id },
+                                    ]);
+                                  } else {
+                                    field.onChange(
+                                      currentValues.filter(
+                                        (div) => div.id !== item.id,
+                                      ),
+                                    );
+                                  }
+                                }}
+                              />
+                              <FormLabel className="text-sm">
+                                {item.name}
+                              </FormLabel>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="p-2">Идет загрузка данных...</div>
+                        )}
+                      </div>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
           />
+
           <FormField
             control={form.control}
-            name="telephone"
-            render={({ field }) => (
-              <FormItem className="h-24 w-[400px]">
-                <FormLabel>Номер телефона</FormLabel>
-                <FormControl>
-                  <InputPhone
-                    placeholder="+7"
-                    type="text"
-                    {...field}
-                    onInput={(e) => {
-                      field.onChange(e);
-                    }}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            name="kabinets"
+            render={({ field }) => {
+              const currentValues = Array.isArray(field.value)
+                ? field.value.filter(
+                    (item) => item !== null && typeof item.id === "number",
+                  )
+                : [];
+
+              return (
+                <FormItem className="h-24 w-[400px]">
+                  <FormLabel>Кабинеты</FormLabel>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild disabled={!userChoices}>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start"
+                      >
+                        {currentValues.length > 0
+                          ? `Выбрано: ${currentValues.length}`
+                          : "Выберите Кабинеты"}
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-[400px] p-0">
+                      <div className="max-h-60 overflow-y-auto p-2">
+                        {kabinetsSuccess && kabinetsData ? (
+                          kabinetsData.data.map((item) => (
+                            <div
+                              key={item.id}
+                              className="flex items-center space-x-2 p-2"
+                            >
+                              <Checkbox
+                                checked={currentValues.some(
+                                  (div) => div.id === item.id,
+                                )}
+                                onCheckedChange={(checked) => {
+                                  if (checked) {
+                                    field.onChange([
+                                      ...currentValues,
+                                      { id: item.id },
+                                    ]);
+                                  } else {
+                                    field.onChange(
+                                      currentValues.filter(
+                                        (div) => div.id !== item.id,
+                                      ),
+                                    );
+                                  }
+                                }}
+                              />
+                              <FormLabel className="text-sm">{`${item.number} ${item.division?.name}`}</FormLabel>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="p-2">Идет загрузка данных...</div>
+                        )}
+                      </div>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
           />
-          {/* {Нужно добавить дополнительные поля} */}
-          <Button type="submit" className="w-[200px] self-center">
-            Добавить
-          </Button>
+          <div className="mx-4 flex w-full justify-between">
+            <FormField
+              control={form.control}
+              name="telephone"
+              render={({ field }) => (
+                <FormItem className="h-24 w-[400px]">
+                  <FormLabel>Номер телефона</FormLabel>
+                  <FormControl>
+                    <InputPhone
+                      placeholder="+7"
+                      type="text"
+                      {...field}
+                      onInput={(e) => {
+                        field.onChange(e);
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="flex w-[400px] justify-center self-center">
+              <Button type="submit" className="w-[200px]">
+                Создать
+              </Button>
+            </div>
+          </div>
         </form>
       </Form>
     </>

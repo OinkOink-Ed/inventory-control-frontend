@@ -8,7 +8,7 @@ interface RefreshTokenResponse {
 
 export interface RequestConfig<TData = unknown> {
   url?: string;
-  method: "GET" | "PUT" | "PATCH" | "POST" | "DELETE";
+  method: "GET" | "PUT" | "PATCH" | "POST" | "DELETE" | "OPTIONS";
   params?: object;
   data?: TData | FormData;
   responseType?:
@@ -54,7 +54,9 @@ export const refreshAccessToken = async (): Promise<RefreshTokenResponse> => {
 
     return response.data;
   } catch (error) {
-    throw error instanceof Error ? error : new Error("Failed to refresh token");
+    throw error instanceof Error
+      ? error
+      : new Error("Ошибка обновления токена авторизации");
   }
 };
 
@@ -139,7 +141,7 @@ axiosInstance.interceptors.response.use(
         const errorToReject =
           refreshError instanceof Error
             ? refreshError
-            : new Error("Failed to refresh token");
+            : new Error("Ошибка обновления токена авторизации");
         processQueue(errorToReject, null);
 
         return Promise.reject(errorToReject);

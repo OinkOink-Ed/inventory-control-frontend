@@ -6,7 +6,6 @@ import {
   ChevronsLeft,
   ChevronsRight,
 } from "lucide-react";
-import { ReactNode } from "react";
 import {
   Select,
   SelectContent,
@@ -17,16 +16,14 @@ import {
 
 export interface DataTableFooterProps<TData> {
   table: Table<TData>;
-  dialog: ReactNode[];
 }
 
 export default function DataTableFooter<TData>({
   table,
-  dialog,
 }: DataTableFooterProps<TData>) {
+  const pageSizeArray = table.getState().pagination.pageSize;
   return (
-    <div className="flex items-center justify-between space-x-2 py-4">
-      {dialog.map((node) => node)}
+    <div className="mb-2 flex items-center justify-between space-x-2 self-center">
       <div className="flex gap-3">
         <div className="flex items-center space-x-6 lg:space-x-8">
           <div className="flex items-center space-x-2">
@@ -43,17 +40,22 @@ export default function DataTableFooter<TData>({
                 />
               </SelectTrigger>
               <SelectContent side="top">
-                {[12].map((pageSize) => (
-                  <SelectItem key={pageSize} value={`${pageSize}`}>
-                    {pageSize}
-                  </SelectItem>
-                ))}
+                {/* {pageSizeArray.map((pageSize) => {
+                  return ( */}
+                <SelectItem key={pageSizeArray} value={`${pageSizeArray}`}>
+                  {pageSizeArray}
+                </SelectItem>
+                {/* ); */}
+                {/* })} */}
               </SelectContent>
             </Select>
           </div>
           <div className="flex w-[120px] items-center justify-center text-sm font-medium">
-            Страница {table.getState().pagination.pageIndex + 1} из{" "}
-            {table.getPageCount()}
+            Страница{" "}
+            {table.getPageCount() == 0
+              ? table.getState().pagination.pageIndex
+              : table.getState().pagination.pageIndex + 1}{" "}
+            из {table.getPageCount()}
           </div>
           <div className="flex items-center space-x-2">
             <Button

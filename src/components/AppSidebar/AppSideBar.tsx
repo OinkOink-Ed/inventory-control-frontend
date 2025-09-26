@@ -22,7 +22,6 @@ import {
   SidebarMenuSubItem,
 } from "../ui/sidebar";
 import { Link, useNavigate } from "react-router";
-import { useIndexReactQuery } from "@/app/api/indexReactQuery";
 import { authControllerLogout } from "@/app/api/generated";
 import { handlerError } from "@/app/helpers/handlerError";
 import { useProfileStore } from "@/app/stores/profile/useProfileStore";
@@ -35,6 +34,10 @@ import {
 import { decryptedProfile } from "@/app/helpers/decryptedProfile";
 import { useEffect } from "react";
 import { queryClientInstans } from "@/app/queryClientInstans";
+import {
+  useAppSideBarApiDivisionGetAll,
+  useAppSideBarApiWarehouseGetAll,
+} from "./api/useAppSideBarApi";
 
 interface MenuItem {
   title: string;
@@ -50,16 +53,14 @@ export function AppSideBar() {
   const navigate = useNavigate();
 
   const { data: dataDivision, error: errorDivivosn } =
-    useIndexReactQuery().divisionGetAll;
+    useAppSideBarApiDivisionGetAll();
   const { data: dataWarehouses, error: errorWarehouses } =
-    useIndexReactQuery().warehouseGetAll;
+    useAppSideBarApiWarehouseGetAll();
 
   useEffect(() => {
     if (errorDivivosn || errorWarehouses) {
       const res = handlerError(errorDivivosn ?? errorWarehouses);
-      setTimeout(() => {
-        if (res == Answer.LOGOUT) void navigate("/auth", { replace: true });
-      }, 1000);
+      if (res == Answer.LOGOUT) void navigate("/auth", { replace: true });
     }
   }, [navigate, errorWarehouses, errorDivivosn]);
 

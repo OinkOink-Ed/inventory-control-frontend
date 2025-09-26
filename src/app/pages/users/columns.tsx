@@ -47,14 +47,14 @@ export const columns: ColumnDef<GetResponseAllUserDtoSchema>[] = [
     },
   },
   {
-    id: "Подразделение",
+    id: "Подразделения",
     accessorKey: "division",
     header: ({ column }) => {
-      return <DataTableColumnHeader column={column} title="Подразделение" />;
+      return <DataTableColumnHeader column={column} title="Подразделения" />;
     },
     cell: ({ row }) => {
       const divisions: GetResponseAllUserDtoSchema["division"] =
-        row.getValue("Подразделение");
+        row.getValue("Подразделения");
       return (
         <div className="flex flex-col">
           {Array.isArray(divisions) &&

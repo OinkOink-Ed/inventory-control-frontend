@@ -21,9 +21,17 @@ import {
 import { PostCreateDeliveryDtoSchema } from "@/app/api/generated";
 import { handlerError } from "@/app/helpers/handlerError";
 import { createDeliveryDtoShema } from "./shema";
-import { useApiCartridgeDeliveryFrom } from "./hooks/useApiCartridgeDeliveryFrom";
 import { useNavigate } from "react-router";
 import { Answer } from "@/app/Errors/Answer";
+import { useChoiceOfKabinetsStore } from "@/app/stores/choiseOfKabinets/useChoiseOfKabinetsStore";
+import { useEffect } from "react";
+import {
+  useDeliveryCartridgeFormApiCartrdgesCreateDelivery,
+  useDeliveryCartridgeFormApiCartridgeModelGetAll,
+  useDeliveryCartridgeFormApiDivisionIdByWarehouseId,
+  useDeliveryCartridgeFormApiKabinetsByUserId,
+  useDeliveryCartridgeFormApiStaffGetAllByDivisions,
+} from "./api/useDeliveryCartridgeFormApi";
 
 interface DeliveryCartridgeFormProps {
   warehouseId: number;
@@ -34,15 +42,18 @@ export function DeliveryCartridgeForm({
 }: DeliveryCartridgeFormProps) {
   const navigate = useNavigate();
 
-  const {
-    cartrdgesCreateDelivery,
-    cartridgeModelData,
-    cartridgeModelSuccess,
-    warehouseData,
-    warehouseSuccess,
-    staffData,
-    staffSuccess,
-  } = useApiCartridgeDeliveryFrom(warehouseId);
+  const { setChoiceOfKabinets, userChoices, clearChoiceOfKabinets } =
+    useChoiceOfKabinetsStore();
+
+  const { mutateAsync } = useDeliveryCartridgeFormApiCartrdgesCreateDelivery();
+  const { data: cartridgeModelData, isSuccess: cartridgeModelSuccess } =
+    useDeliveryCartridgeFormApiCartridgeModelGetAll();
+  const { data: divisionData } =
+    useDeliveryCartridgeFormApiDivisionIdByWarehouseId(warehouseId);
+  const { data: staffData, isSuccess: staffSuccess } =
+    useDeliveryCartridgeFormApiStaffGetAllByDivisions(warehouseId);
+  const { data: kabinetsData, isSuccess: kabinetsSuccess } =
+    useDeliveryCartridgeFormApiKabinetsByUserId();
 
   const form = useForm<PostCreateDeliveryDtoSchema>({
     resolver: zodResolver(createDeliveryDtoShema),
@@ -51,16 +62,34 @@ export function DeliveryCartridgeForm({
       model: { id: undefined },
       warehouse: { id: warehouseId },
       division: {
-        id: warehouseData ? warehouseData.data.division?.id : undefined,
+        id: divisionData ? divisionData.data.id : undefined,
       },
       accepting: { id: undefined },
       kabinet: { id: undefined },
     },
   });
 
+  useEffect(() => {
+    const subscription = form.watch((value, { name }) => {
+      if (name === "accepting.id") {
+        setChoiceOfKabinets({ userChoices: value.accepting?.id });
+        form.resetField("kabinet");
+      }
+    });
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [setChoiceOfKabinets, form]);
+
+  useEffect(() => {
+    return () => {
+      clearChoiceOfKabinets();
+    };
+  }, [clearChoiceOfKabinets]);
+
   async function onSubmit(data: PostCreateDeliveryDtoSchema): Promise<void> {
     try {
-      const res = await cartrdgesCreateDelivery.mutateAsync(data);
+      const res = await mutateAsync(data);
       toast.success(`${res.data.message}`, {
         position: "top-center",
       });
@@ -136,44 +165,6 @@ export function DeliveryCartridgeForm({
         />
         <FormField
           control={form.control}
-          name="kabinet.id"
-          render={({ field }) => (
-            <FormItem className="h-24 w-[400px]">
-              <FormLabel>Кабинет</FormLabel>
-              <Select
-                onValueChange={(value) =>
-                  field.onChange(value ? Number(value) : undefined)
-                }
-                value={field.value?.toString() ?? ""}
-              >
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Выберите кабинет" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {warehouseSuccess && warehouseData?.data.division ? (
-                    warehouseData.data.division.kabinets.map((item) => (
-                      <SelectItem
-                        key={`${item.id}+${item.number}`}
-                        value={item.id.toString()}
-                      >
-                        {item.number}
-                      </SelectItem>
-                    ))
-                  ) : (
-                    <SelectItem value="Идет загрузка данных">
-                      Идет загрузка данных
-                    </SelectItem>
-                  )}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
           name="accepting.id"
           render={({ field }) => (
             <FormItem className="h-24 w-[400px]">
@@ -197,6 +188,45 @@ export function DeliveryCartridgeForm({
                         value={item.id.toString()}
                       >
                         {item.lastname} {item.name} {item.patronimyc}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <SelectItem value="Идет загрузка данных">
+                      Идет загрузка данных
+                    </SelectItem>
+                  )}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="kabinet.id"
+          render={({ field }) => (
+            <FormItem className="h-24 w-[400px]">
+              <FormLabel>Кабинет</FormLabel>
+              <Select
+                disabled={!userChoices}
+                onValueChange={(value) =>
+                  field.onChange(value ? Number(value) : undefined)
+                }
+                value={field.value?.toString() ?? ""}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Выберите кабинет" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {kabinetsSuccess && kabinetsData?.data ? (
+                    kabinetsData.data.map((item) => (
+                      <SelectItem
+                        key={`${item.id}+${item.number}`}
+                        value={item.id.toString()}
+                      >
+                        {item.number}
                       </SelectItem>
                     ))
                   ) : (

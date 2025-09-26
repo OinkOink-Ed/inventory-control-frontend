@@ -1,6 +1,5 @@
 import { columns } from "./columns";
 import { DataTable } from "../../../components/DataTable/DataTable";
-import { useIndexReactQuery } from "@/app/api/indexReactQuery";
 import DialogForm from "@/components/DialogForm";
 import { UserForm } from "./UserForm";
 import { facetedUsersData } from "./facetedData";
@@ -9,9 +8,11 @@ import { handlerError } from "@/app/helpers/handlerError";
 import { Answer } from "@/app/Errors/Answer";
 import { useNavigate } from "react-router";
 import { useEffect } from "react";
+import { ActionsForTable } from "@/components/ActionsForTable";
+import { useUsersTableApi } from "./api/useUsersTableApi";
 
 export function UsersTable() {
-  const { data, isSuccess, error } = useIndexReactQuery().userGetAll;
+  const { data, isSuccess, error } = useUsersTableApi();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,14 +31,19 @@ export function UsersTable() {
       titleTable="Список пользователей"
       defaultSort="ФИО"
       facetedOptions={facetedUsersData}
-      dialog={[
-        <DialogForm
-          key={"Создание пользователя"}
-          title="Создание пользователя"
-          buttonName="Создать пользователя"
-          form={<UserForm />}
-        />,
-      ]}
+      actions={
+        <ActionsForTable
+          actions={[
+            <DialogForm
+              key={"Создание пользователя"}
+              title="Создание пользователя"
+              buttonName="Создать пользователя"
+              form={<UserForm />}
+            />,
+          ]}
+        />
+      }
+      pageSize={12}
     />
   ) : (
     <SpinnerLoad />

@@ -37,7 +37,7 @@ export const facetedUsersData = [
     ],
   },
   {
-    columnName: "Подразделение",
+    columnName: "Подразделения",
     options: [
       {
         value: "Подразделение № 1",

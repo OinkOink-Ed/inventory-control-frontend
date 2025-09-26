@@ -1,4 +1,3 @@
-import { useIndexReactQuery } from "@/app/api/indexReactQuery";
 import { DataTable } from "@/components/DataTable/DataTable";
 import DialogForm from "@/components/DialogForm";
 import { columns } from "./columns";
@@ -8,11 +7,12 @@ import { handlerError } from "@/app/helpers/handlerError";
 import { Answer } from "@/app/Errors/Answer";
 import { useNavigate } from "react-router";
 import { useEffect } from "react";
+import { useCartridgeModelTableApi } from "./api/useCartridgeModelTableApi";
+import { ActionsForTable } from "@/components/ActionsForTable";
 
 export function CartridgeModelTable() {
   const navigate = useNavigate();
-  const { data, isSuccess, error } =
-    useIndexReactQuery().cartridgeModelGetAllDetailed;
+  const { data, isSuccess, error } = useCartridgeModelTableApi();
 
   useEffect(() => {
     if (error) {
@@ -29,14 +29,20 @@ export function CartridgeModelTable() {
       columns={columns}
       titleTable="Список моделей картриджей"
       defaultSort="Модель"
-      dialog={[
-        <DialogForm
-          key={"Создание модели картриджа"}
-          title="Создание модели картриджа"
-          buttonName="Добавить модель картриджа"
-          form={<CartridgeModelForm />}
-        />,
+      actions={[
+        <ActionsForTable
+          key={"Действия моделей картриджей"}
+          actions={[
+            <DialogForm
+              key={"Создание модели картриджа"}
+              title="Создание модели картриджа"
+              buttonName="Добавить модель картриджа"
+              form={<CartridgeModelForm />}
+            />,
+          ]}
+        ></ActionsForTable>,
       ]}
+      pageSize={12}
     />
   ) : (
     <SpinnerLoad />

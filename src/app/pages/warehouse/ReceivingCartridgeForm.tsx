@@ -21,9 +21,12 @@ import {
 import { PostCreateReceivingDto } from "@/app/api/generated";
 import { handlerError } from "@/app/helpers/handlerError";
 import { createReceivingDtoSchema } from "./shema";
-import { useApiCartidgeReceivingForm } from "./hooks/useApiCarrtidgeReceivingForm";
 import { Answer } from "@/app/Errors/Answer";
 import { useNavigate } from "react-router";
+import {
+  useReceivingCartridgeFormApiCartrdgesCreateReceiving,
+  useReceivingCartridgeFormApiCreateCartridgeModelGetAll,
+} from "./api/useReceivingCartridgeFormApi";
 
 interface ReceivingCartridgeFormProps {
   warehouseId: number;
@@ -33,11 +36,11 @@ export function ReceivingCartridgeForm({
   warehouseId,
 }: ReceivingCartridgeFormProps) {
   const navigate = useNavigate();
-  const {
-    cartrdgesCreateReceiving,
-    cartridgeModelData,
-    cartridgeModelSuccess,
-  } = useApiCartidgeReceivingForm(warehouseId);
+  const { mutateAsync } =
+    useReceivingCartridgeFormApiCartrdgesCreateReceiving();
+
+  const { data, isSuccess } =
+    useReceivingCartridgeFormApiCreateCartridgeModelGetAll();
 
   const form = useForm<PostCreateReceivingDto>({
     resolver: zodResolver(createReceivingDtoSchema),
@@ -50,7 +53,7 @@ export function ReceivingCartridgeForm({
 
   async function onSubmit(data: PostCreateReceivingDto): Promise<void> {
     try {
-      const res = await cartrdgesCreateReceiving.mutateAsync(data);
+      const res = await mutateAsync(data);
       toast.success(`${res.data.message}`, {
         position: "top-center",
       });
@@ -104,8 +107,8 @@ export function ReceivingCartridgeForm({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {cartridgeModelSuccess && cartridgeModelData ? (
-                      cartridgeModelData.data.map((item) => (
+                    {isSuccess && data ? (
+                      data.data.map((item) => (
                         <SelectItem key={item.id} value={item.id.toString()}>
                           {item.name}
                         </SelectItem>
