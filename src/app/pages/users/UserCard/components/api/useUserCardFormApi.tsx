@@ -41,13 +41,9 @@ export const useUsersFormApiGetDivision = () => {
 };
 
 export const useUsersFormApiGetKabinetsByUserIdForEditUser = () => {
-  const choiseDivision = useChoiseOfKabinetsForCreateUser(
-    (state) => state.userChoices,
-  );
+  const { userChoices } = useChoiseOfKabinetsForCreateUser();
 
-  const serializedDivisions = encodeURIComponent(
-    JSON.stringify(choiseDivision),
-  );
+  const serializedDivisions = encodeURIComponent(JSON.stringify(userChoices));
 
   return useQuery({
     queryKey: ["kabinetsByUserIdForCreateUser", serializedDivisions],
@@ -55,6 +51,6 @@ export const useUsersFormApiGetKabinetsByUserIdForEditUser = () => {
       kabinetControllerGetKabinetsByDivisionIdForCreateUser({
         divisionIds: serializedDivisions,
       }),
-    enabled: !!useMatch({ path: "/users/*" }) && !!choiseDivision,
+    enabled: !!useMatch({ path: "/users/*" }) && !!userChoices,
   });
 };

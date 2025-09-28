@@ -59,14 +59,11 @@ export function UserCardForm({ id }: UserCardFormProps) {
   const { data: roleData, isSuccess: roleSuccess } = useUsersFormApiGetRole();
   const { data: divisionData, isSuccess: divisionSuccess } =
     useUsersFormApiGetDivision();
+
   const { data: kabinetsData, isSuccess: kabinetsSuccess } =
     useUsersFormApiGetKabinetsByUserIdForEditUser();
 
   const { data, isSuccess } = useUserCardApi(id);
-
-  useEffect(() => {
-    console.log("render");
-  });
 
   const { clearChoiceOfKabinets, userChoices, setChoiceOfKabinets } =
     useChoiseOfKabinetsForCreateUser();
@@ -113,30 +110,30 @@ export function UserCardForm({ id }: UserCardFormProps) {
     }
   }, [isSuccess, reset, formValues]);
 
-  useEffect(() => {
-    const divisionValue = getValues("division");
+  const [selectedDivisionsIds, setSelectedDivisionsIds] = useState<
+    { id?: number | undefined }[]
+  >([]);
+  // useEffect(() => {
+  //   const divisionValue = watch("division");
 
-    if (
-      divisionValue &&
-      Array.isArray(divisionValue) &&
-      divisionValue.length > 0
-    ) {
-      setChoiceOfKabinets({ userChoices: divisionValue });
-    } else if (data?.data.division) {
-      setChoiceOfKabinets({ userChoices: data.data.division });
+  //   if (
+  //     divisionValue &&
+  //     Array.isArray(divisionValue) &&
+  //     divisionValue.length > 0
+  //   ) {
+  //     setSelected(divisionValue);
+  //   }
+  // }, [watch]);
+
+  useEffect(() => {
+    if (divisionData) {
+      setChoiceOfKabinets({
+        userChoices: divisionData.data.map((item) => {
+          return { id: item.id };
+        }),
+      });
     }
-  }, [setChoiceOfKabinets, data, getValues]);
-
-  useEffect(() => {
-    const subscription = watch((value, { name }) => {
-      if (name === "division") {
-        setChoiceOfKabinets({ userChoices: value.division });
-      }
-    });
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [setChoiceOfKabinets, watch]);
+  }, [setChoiceOfKabinets, divisionData]);
 
   useEffect(() => {
     return () => {
@@ -145,6 +142,7 @@ export function UserCardForm({ id }: UserCardFormProps) {
   }, [clearChoiceOfKabinets]);
 
   async function onSubmit(data: PutEditUserDtoSchema): Promise<void> {
+    return console.log(data);
     try {
       const changedData: PutEditUserDtoSchema = {};
 
@@ -377,15 +375,16 @@ export function UserCardForm({ id }: UserCardFormProps) {
                         return match;
                       }
                     });
-
               const selectedKabinetIds =
-                watch("kabinets")?.map((k) => k.id) ?? [];
+                watch("kabinets")?.map((k) => k.id) ??
+                data.data.kabinets.map((kab) => kab.id);
 
               const lockedDivisionIds =
                 kabinetsData?.data
-                  ?.filter((kabinet) => selectedKabinetIds.includes(kabinet.id))
+                  .filter((kabinet) => selectedKabinetIds.includes(kabinet.id))
                   .map((kabinet) => kabinet.division?.name)
-                  .filter((id): id is string => id !== undefined) ?? [];
+                  .filter((id): id is string => id !== undefined) ??
+                data.data.division.map((item) => item.name);
 
               return (
                 <FormItem className="h-24 w-[300px]">
@@ -407,13 +406,12 @@ export function UserCardForm({ id }: UserCardFormProps) {
                       <div className="max-h-60 overflow-y-auto p-2">
                         {divisionSuccess && divisionData ? (
                           divisionData.data.map((item) => {
-                            const isLocked = lockedDivisionIds.includes(
+                            const isLocked = lockedDivisionIds?.includes(
                               item.name,
                             );
                             const isChecked = currentValues.some(
                               (div) => div.id === item.id,
                             );
-
                             return (
                               <div
                                 key={item.id}
@@ -480,8 +478,11 @@ export function UserCardForm({ id }: UserCardFormProps) {
                     (item) => item !== null && typeof item.id === "number",
                   )
                 : [];
+
               const selectedKabionetsNames = currentValues.map((div) => {
-                const kabinet = kabinetsData?.data?.find((d) => d.id == div.id);
+                const kabinet =
+                  kabinetsData?.data?.find((d) => d.id === div.id) ??
+                  data?.data.kabinets?.find((d) => d.id === div.id);
                 return kabinet;
               });
 

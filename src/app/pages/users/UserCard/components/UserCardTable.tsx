@@ -3,7 +3,6 @@ import { columns } from "./columns";
 import { useUserCardTableProps } from "./api/useUserCardTableApi";
 import { SpinnerLoad } from "@/components/SpinnerLoad";
 import { GetResponseAcceptedCartridgeByUserDtoMySchema } from "./shema";
-import { useEffect } from "react";
 
 interface UserCardTableProps {
   id: number;
@@ -11,11 +10,6 @@ interface UserCardTableProps {
 
 export default function UserCardtable({ id }: UserCardTableProps) {
   const { data, isSuccess } = useUserCardTableProps(id);
-
-  useEffect(() => {
-    console.log(isSuccess);
-    console.log(data);
-  });
 
   return isSuccess && data ? (
     <DataTable<
