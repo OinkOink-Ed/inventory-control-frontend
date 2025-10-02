@@ -94,7 +94,7 @@ export function UserForm() {
   async function onSubmit(data: PostCreateUserDto): Promise<void> {
     try {
       const res = await mutateAsync(data);
-      toast.success(`${res.data.message}`, {
+      toast.success(`${res.message}`, {
         position: "top-center",
       });
       form.reset();
@@ -218,7 +218,7 @@ export function UserForm() {
                   </FormControl>
                   <SelectContent>
                     {roleSuccess && roleData ? (
-                      roleData.data.map((item) => (
+                      roleData.map((item) => (
                         <SelectItem
                           key={item.roleName}
                           value={item.id.toString()}
@@ -265,7 +265,7 @@ export function UserForm() {
                     <DropdownMenuContent className="w-[400px] p-0">
                       <div className="max-h-60 overflow-y-auto p-2">
                         {divisionSuccess && divisionData ? (
-                          divisionData.data.map((item) => (
+                          divisionData.map((item) => (
                             <div
                               key={item.id}
                               className="flex items-center space-x-2 p-2"
@@ -333,7 +333,7 @@ export function UserForm() {
                     <DropdownMenuContent className="w-[400px] p-0">
                       <div className="max-h-60 overflow-y-auto p-2">
                         {kabinetsSuccess && kabinetsData ? (
-                          kabinetsData.data.map((item) => (
+                          kabinetsData.map((item) => (
                             <div
                               key={item.id}
                               className="flex items-center space-x-2 p-2"

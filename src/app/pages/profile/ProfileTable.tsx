@@ -1,15 +1,11 @@
 import { DataTable } from "@/components/DataTable/DataTable";
 import { columns } from "./columns";
-import { useUserCardTableProps } from "./api/useUserCardTableApi";
 import { SpinnerLoad } from "@/components/SpinnerLoad";
+import { useProfileCardTable } from "./api/useProfileCardFormApi";
 import { GetResponseAcceptedCartridgeByUserDtoMySchema } from "./shema";
 
-interface UserCardTableProps {
-  id: number;
-}
-
-export default function UserCardtable({ id }: UserCardTableProps) {
-  const { data, isSuccess } = useUserCardTableProps(id);
+export default function ProfileTable() {
+  const { data, isSuccess } = useProfileCardTable();
 
   return isSuccess && data ? (
     <DataTable<

@@ -1,18 +1,24 @@
-import { kabinetControllerCreate } from "@/app/api/generated";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  kabinetControllerCreate,
+  PostCreateKabinetDto,
+} from "@/app/api/generated";
+import { useQueryClient } from "@tanstack/react-query";
+import { useApiMutation } from "@/hooks/useApi";
 
 export const useKabinetsFormApi = (id: number) => {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: kabinetControllerCreate,
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ["kabinets", id],
-      });
-      await queryClient.invalidateQueries({
-        queryKey: ["warehousewithDivisionWithKabinets"],
-      });
+  return useApiMutation(
+    (data: PostCreateKabinetDto) => kabinetControllerCreate(data),
+    {
+      onSuccess: async () => {
+        await queryClient.invalidateQueries({
+          queryKey: ["kabinets", id],
+        });
+        await queryClient.invalidateQueries({
+          queryKey: ["warehousewithDivisionWithKabinets"],
+        });
+      },
     },
-  });
+  );
 };

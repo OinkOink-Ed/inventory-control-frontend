@@ -3,22 +3,22 @@ import {
   warehouseControllerGetWarehouses,
 } from "@/app/api/generated";
 import { decryptedProfile } from "@/app/helpers/decryptedProfile";
-import { useQuery } from "@tanstack/react-query";
+import { useApiQuery } from "@/hooks/useApi";
 
 export const useAppSideBarApiDivisionGetAll = () => {
   const profile = decryptedProfile();
-  return useQuery({
+  return useApiQuery({
     queryKey: ["division"],
     queryFn: divisionControllerGetDivisions,
-    enabled: profile.role.roleName !== "staff",
+    enabled: profile.role.roleName !== "staff" && profile.role.roleName !== "",
   });
 };
 
 export const useAppSideBarApiWarehouseGetAll = () => {
   const profile = decryptedProfile();
-  return useQuery({
+  return useApiQuery({
     queryKey: ["warehouses"],
     queryFn: warehouseControllerGetWarehouses,
-    enabled: profile.role.roleName !== "staff",
+    enabled: profile.role.roleName !== "staff" && profile.role.roleName !== "",
   });
 };

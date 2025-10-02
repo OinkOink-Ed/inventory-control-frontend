@@ -62,7 +62,7 @@ export function DeliveryCartridgeForm({
       model: { id: undefined },
       warehouse: { id: warehouseId },
       division: {
-        id: divisionData ? divisionData.data.id : undefined,
+        id: divisionData ? divisionData.id : undefined,
       },
       accepting: { id: undefined },
       kabinet: { id: undefined },
@@ -90,7 +90,7 @@ export function DeliveryCartridgeForm({
   async function onSubmit(data: PostCreateDeliveryDtoSchema): Promise<void> {
     try {
       const res = await mutateAsync(data);
-      toast.success(`${res.data.message}`, {
+      toast.success(`${res.message}`, {
         position: "top-center",
       });
 
@@ -144,7 +144,7 @@ export function DeliveryCartridgeForm({
                 </FormControl>
                 <SelectContent>
                   {cartridgeModelSuccess && cartridgeModelData ? (
-                    cartridgeModelData.data.map((item) => (
+                    cartridgeModelData.map((item) => (
                       <SelectItem
                         key={`${item.id}+${item.name}`}
                         value={item.id.toString()}
@@ -182,7 +182,7 @@ export function DeliveryCartridgeForm({
                 </FormControl>
                 <SelectContent>
                   {staffSuccess && staffData ? (
-                    staffData.data.map((item) => (
+                    staffData.map((item) => (
                       <SelectItem
                         key={`${item.id}+${item.lastname}+${item.name}+${item.patronimyc}`}
                         value={item.id.toString()}
@@ -220,8 +220,8 @@ export function DeliveryCartridgeForm({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {kabinetsSuccess && kabinetsData?.data ? (
-                    kabinetsData.data.map((item) => (
+                  {kabinetsSuccess && kabinetsData ? (
+                    kabinetsData.map((item) => (
                       <SelectItem
                         key={`${item.id}+${item.number}`}
                         value={item.id.toString()}

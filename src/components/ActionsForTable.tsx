@@ -21,9 +21,7 @@ export function ActionsForTable({ actions }: ActionsForTableProps) {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="flex flex-col">
         {actions.map((node, index) => (
-          <DropdownMenuItem key={index} asChild>
-            {node}
-          </DropdownMenuItem>
+          <DropdownMenuItem key={index}>{node}</DropdownMenuItem>
         ))}
       </DropdownMenuContent>
     </DropdownMenu>

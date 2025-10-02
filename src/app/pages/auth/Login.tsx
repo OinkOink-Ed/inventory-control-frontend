@@ -16,17 +16,17 @@ import { useProfileStore } from "@/app/stores/profile/useProfileStore";
 import { authControllerSignIn, PostAuthDto } from "@/app/api/generated";
 import { handlerError } from "@/app/helpers/handlerError";
 import { Answer } from "@/app/Errors/Answer";
-import { useEffect } from "react";
 import { queryClientInstans } from "@/app/queryClientInstans";
+// import { useEffect } from "react";
 
 export function Login() {
   const setProfile = useProfileStore((state) => state.setProfile);
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    void queryClientInstans.invalidateQueries();
-  }, []);
+  // useEffect(() => {
+  //   void queryClientInstans.invalidateQueries();
+  // }, []);
 
   const form = useForm<PostAuthDto>({
     resolver: zodResolver(authRequestDtoSchemaZOD),
@@ -37,15 +37,11 @@ export function Login() {
   });
 
   async function onSubmit(data: PostAuthDto): Promise<void> {
-    //Если бы у меня на сервере было бы обновление токенов, то я мог бы хранить его уже в QueryClient (насколько я понял), и к нему я мог бы через инстантс провайдера обращаться
-    //А значит мог бы делать запрос через некоторое время в фоне, после того как умрёт токен (зная время его жизни), посылать запрос на получение токена.
-    //Это механика рефреш аксесс, + на сервере я так ещё не умею делать.
-
     try {
-      const res = (await authControllerSignIn(data)).data;
+      const res = await authControllerSignIn(data);
 
       setProfile(res);
-
+      void queryClientInstans.invalidateQueries();
       void navigate("/");
     } catch (error: unknown) {
       const res = handlerError(error);

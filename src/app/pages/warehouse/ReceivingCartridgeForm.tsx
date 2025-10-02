@@ -54,7 +54,7 @@ export function ReceivingCartridgeForm({
   async function onSubmit(data: PostCreateReceivingDto): Promise<void> {
     try {
       const res = await mutateAsync(data);
-      toast.success(`${res.data.message}`, {
+      toast.success(`${res.message}`, {
         position: "top-center",
       });
       form.reset();
@@ -108,7 +108,7 @@ export function ReceivingCartridgeForm({
                   </FormControl>
                   <SelectContent>
                     {isSuccess && data ? (
-                      data.data.map((item) => (
+                      data.map((item) => (
                         <SelectItem key={item.id} value={item.id.toString()}>
                           {item.name}
                         </SelectItem>

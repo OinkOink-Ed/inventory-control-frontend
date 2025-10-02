@@ -16,6 +16,7 @@ export function isAuth() {
     const now = new Date();
 
     return now < expirationDate;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     return false;
   }

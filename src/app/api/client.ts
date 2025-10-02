@@ -29,6 +29,8 @@ export interface ResponseConfig<TData = unknown> {
   headers?: AxiosResponse["headers"];
 }
 
+export type ResponseErrorConfig<TError = unknown> = AxiosError<TError>;
+
 // Создаем экземпляр axios
 export const axiosInstance = axios.create({
   baseURL: "http://localhost:3000",
@@ -45,14 +47,14 @@ export const refreshAccessToken = async (): Promise<RefreshTokenResponse> => {
       token: refreshToken,
     });
 
-    const accessToken = response.data.token;
+    const accessToken = response.token;
 
     profile.getState().setProfile({
       access_token: accessToken,
       refresh_token: refreshToken,
     });
 
-    return response.data;
+    return response;
   } catch (error) {
     throw error instanceof Error
       ? error
@@ -62,13 +64,12 @@ export const refreshAccessToken = async (): Promise<RefreshTokenResponse> => {
 
 // Перехватчик запросов
 axiosInstance.interceptors.request.use((config) => {
-  const profile = useProfileStore.getState();
-
+  const { access_token } = useProfileStore.getState();
   if (config.url == "/api/auth") {
     return config;
   }
 
-  const accessToken = profile.access_token;
+  const accessToken = access_token;
 
   config.headers.Authorization = `Bearer ${accessToken}`;
   return config;

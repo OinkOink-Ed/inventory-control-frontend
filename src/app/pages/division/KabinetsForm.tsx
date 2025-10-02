@@ -39,7 +39,7 @@ export function KabinetsForm({ divisionId }: KabinetsFormProps) {
   async function onSubmit(data: PostCreateKabinetDto): Promise<void> {
     try {
       const res = await mutateAsync(data);
-      toast.success(`${res.data.message}`, {
+      toast.success(`${res.message}`, {
         position: "top-center",
       });
       form.reset();

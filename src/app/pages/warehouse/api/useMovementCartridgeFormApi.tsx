@@ -1,27 +1,31 @@
 import {
   cartridgeModelControllerGetModels,
   movementControllerCreate,
+  PostCreateMovementDto,
   userControllerGetAllByDivisions,
   warehouseControllerGetWarehouses,
 } from "@/app/api/generated";
 import { decryptedProfile } from "@/app/helpers/decryptedProfile";
 import { useChoiceOfStaffStore } from "@/app/stores/choiceOfStaff/useChoiceOfStaffStore";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useApiMutation, useApiQuery } from "@/hooks/useApi";
+import { useQueryClient } from "@tanstack/react-query";
 import { useMatch } from "react-router";
 
 export const useMovementCartridgeFormApiCartrdgesCreateMovement = () => {
   const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: movementControllerCreate,
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ["cartridges"],
-      });
+  return useApiMutation(
+    (data: PostCreateMovementDto) => movementControllerCreate(data),
+    {
+      onSuccess: async () => {
+        await queryClient.invalidateQueries({
+          queryKey: ["cartridges"],
+        });
+      },
     },
-  });
+  );
 };
 export const useMovementCartridgeFormApiCartridgeModelGetAll = () => {
-  return useQuery({
+  return useApiQuery({
     queryKey: ["modelsCartridges"],
     queryFn: cartridgeModelControllerGetModels,
     enabled: !!useMatch({ path: "/warehouse/:id", end: true }),
@@ -29,7 +33,7 @@ export const useMovementCartridgeFormApiCartridgeModelGetAll = () => {
 };
 export const useMovementCartridgeFormApiWarehouseGetAll = () => {
   const profile = decryptedProfile();
-  return useQuery({
+  return useApiQuery({
     queryKey: ["warehouses"],
     queryFn: warehouseControllerGetWarehouses,
     enabled: profile.role.roleName !== "staff",
@@ -42,7 +46,7 @@ export const useMovementCartridgeFormApiStaffGetAllByDivisions = (
     (state) => state.warehouseChoices,
   );
 
-  return useQuery({
+  return useApiQuery({
     queryKey: ["usersByWarehouse", choiseWarehouse, id],
     queryFn: () => {
       if (id) {

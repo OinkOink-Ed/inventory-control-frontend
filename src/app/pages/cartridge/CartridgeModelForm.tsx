@@ -32,7 +32,7 @@ export function CartridgeModelForm() {
   async function onSubmit(data: PostCreateCartridgeModelDto): Promise<void> {
     try {
       const res = await mutateAsync(data);
-      toast.success(`${res.data.message}`, {
+      toast.success(`${res.message}`, {
         position: "top-center",
       });
       form.reset();

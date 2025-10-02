@@ -65,14 +65,14 @@ export function AppSideBar() {
   }, [navigate, errorWarehouses, errorDivivosn]);
 
   const itemsDivision =
-    dataDivision?.data.map((item) => ({
+    dataDivision?.map((item) => ({
       title: `${item.name}`,
       url: `division/${item.id}`,
       icon: Book,
     })) ?? [];
 
   const itemsWarehouses =
-    dataWarehouses?.data.map((item, index) => ({
+    dataWarehouses?.map((item, index) => ({
       title: `Склад №${index + 1}`,
       url: `/warehouse/${item.id}`,
       icon: PackageCheck,
@@ -141,7 +141,7 @@ export function AppSideBar() {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link to={"profile"}>
+                  <Link to={`profile`}>
                     <User />
                     Профиль
                   </Link>

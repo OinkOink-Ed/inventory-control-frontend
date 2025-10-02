@@ -68,7 +68,7 @@ export function MovementCartridgeForm({
   async function onSubmit(data: PostCreateMovementDtoSchema): Promise<void> {
     try {
       const res = await mutateAsync(data);
-      toast.success(`${res.data.message}`, {
+      toast.success(`${res.message}`, {
         position: "top-center",
       });
       form.reset();
@@ -141,7 +141,7 @@ export function MovementCartridgeForm({
                   </FormControl>
                   <SelectContent>
                     {cartridgeModelSuccess && cartridgeModelData ? (
-                      cartridgeModelData.data.map((item) => (
+                      cartridgeModelData.map((item) => (
                         <SelectItem key={item.id} value={item.id.toString()}>
                           {item.name}
                         </SelectItem>
@@ -177,7 +177,7 @@ export function MovementCartridgeForm({
                   </FormControl>
                   <SelectContent>
                     {warehouseSuccess && warehouseData ? (
-                      warehouseData.data.map((item) => {
+                      warehouseData.map((item) => {
                         if (item.id !== warehouseId) {
                           return (
                             <SelectItem
@@ -221,7 +221,7 @@ export function MovementCartridgeForm({
                     </FormControl>
                     <SelectContent>
                       {staffSuccess && staffData ? (
-                        staffData.data.map((item) => {
+                        staffData.map((item) => {
                           if (item.role?.roleName === "user") {
                             return (
                               <SelectItem

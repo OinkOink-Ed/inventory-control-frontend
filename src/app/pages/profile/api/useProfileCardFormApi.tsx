@@ -3,17 +3,19 @@ import {
   kabinetControllerGetKabinetsByDivisionIdForCreateUser,
   PutEditUserDto,
   roleControllerGetRoles,
-  userControllerEditUser,
+  userControllerEditProfile,
+  userControllerGetCardProfileAcceptedCartridge,
+  userControllerGetProfileCard,
 } from "@/app/api/generated";
-import { decryptedProfile } from "@/app/helpers/decryptedProfile";
 import { useChoiseOfKabinetsForCreateUser } from "@/app/stores/choiseOfKabinetsForCreateUser/useChoiseOfKabinetsStore";
 import { useApiMutation, useApiQuery } from "@/hooks/useApi";
 import { useQueryClient } from "@tanstack/react-query";
+import { useMatch } from "react-router";
 
-export const useUserCardFormApi = (id: number) => {
+export const useProfileCardFormApi = (id: number) => {
   const queryClient = useQueryClient();
   return useApiMutation(
-    (data: PutEditUserDto) => userControllerEditUser(id, data),
+    (data: PutEditUserDto) => userControllerEditProfile(data),
     {
       onSuccess: async () => {
         await queryClient.invalidateQueries({
@@ -24,23 +26,30 @@ export const useUserCardFormApi = (id: number) => {
   );
 };
 
+export const useProfileCardApi = () => {
+  return useApiQuery({
+    queryKey: ["cartridgeAcceptedByStaffId"],
+    queryFn: userControllerGetProfileCard,
+    enabled: !!useMatch({ path: "/profile/", end: true }),
+  });
+};
+
 export const useUsersFormApiGetRole = () => {
   return useApiQuery({
     queryKey: ["roles"],
     queryFn: roleControllerGetRoles,
+    enabled: !!useMatch({ path: "/profile/", end: true }),
   });
 };
 
 export const useUsersFormApiGetDivision = () => {
-  const profile = decryptedProfile();
-
   return useApiQuery({
     queryKey: ["division"],
     queryFn: divisionControllerGetDivisions,
-    enabled: profile.role.roleName !== "staff",
+    enabled: !!useMatch({ path: "/profile/", end: true }),
   });
 };
-
+//Надо бы сделать для edit отдельный контроллер на сервее и тут использовать как метод
 export const useUsersFormApiGetKabinetsByUserIdForEditUser = () => {
   const { userChoices } = useChoiseOfKabinetsForCreateUser();
 
@@ -52,6 +61,14 @@ export const useUsersFormApiGetKabinetsByUserIdForEditUser = () => {
       kabinetControllerGetKabinetsByDivisionIdForCreateUser({
         divisionIds: serializedDivisions,
       }),
-    enabled: !!userChoices,
+    enabled: !!useMatch({ path: "/profile/", end: true }) && !!userChoices,
+  });
+};
+
+export const useProfileCardTable = () => {
+  return useApiQuery({
+    queryKey: ["accepted-cartridge"],
+    queryFn: userControllerGetCardProfileAcceptedCartridge,
+    enabled: !!useMatch({ path: "/profile/" }),
   });
 };

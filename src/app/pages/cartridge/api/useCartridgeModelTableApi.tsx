@@ -1,9 +1,9 @@
 import { cartridgeModelControllerGetModelsAndTheirCreator } from "@/app/api/generated";
-import { useQuery } from "@tanstack/react-query";
 import { useMatch } from "react-router";
+import { useApiQuery } from "@/hooks/useApi";
 
 export const useCartridgeModelTableApi = () => {
-  return useQuery({
+  return useApiQuery({
     queryKey: ["modelsCartridgesDetailed"],
     queryFn: cartridgeModelControllerGetModelsAndTheirCreator,
     enabled: !!useMatch({ path: "/cartrideModel", end: true }),

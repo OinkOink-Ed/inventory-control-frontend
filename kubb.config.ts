@@ -49,10 +49,11 @@ export default defineConfig(() => {
           type: "tag",
         },
         operations: true,
-        dataReturnType: "full",
+        dataReturnType: "data",
         paramsType: "inline",
         parser: "zod",
         importPath: "../../../client.ts",
+        client: "axios",
       }),
     ],
   };

@@ -7,13 +7,13 @@ import {
 } from "@/app/api/generated";
 import { useChoiceOfStaffStore } from "@/app/stores/choiceOfStaff/useChoiceOfStaffStore";
 import { useChoiceOfKabinetsStore } from "@/app/stores/choiseOfKabinets/useChoiseOfKabinetsStore";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useApiMutation, useApiQuery } from "@/hooks/useApi";
+import { useQueryClient } from "@tanstack/react-query";
 import { useMatch } from "react-router";
 
 export const useDeliveryCartridgeFormApiCartrdgesCreateDelivery = () => {
   const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: deliveryControllerCreate,
+  return useApiMutation(deliveryControllerCreate, {
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: ["cartridges"],
@@ -26,7 +26,7 @@ export const useDeliveryCartridgeFormApiCartrdgesCreateDelivery = () => {
 };
 
 export const useDeliveryCartridgeFormApiCartridgeModelGetAll = () => {
-  return useQuery({
+  return useApiQuery({
     queryKey: ["modelsCartridges"],
     queryFn: cartridgeModelControllerGetModels,
     enabled: !!useMatch({ path: "/warehouse/:id", end: true }),
@@ -36,7 +36,7 @@ export const useDeliveryCartridgeFormApiCartridgeModelGetAll = () => {
 export const useDeliveryCartridgeFormApiDivisionIdByWarehouseId = (
   id: number,
 ) => {
-  return useQuery({
+  return useApiQuery({
     queryKey: ["divisionIdByWarehouseId", id],
     queryFn: () => divisionControllerGetDivision(id),
     enabled: !!useMatch({ path: "/warehouse/:id", end: true }) && !!id,
@@ -49,7 +49,7 @@ export const useDeliveryCartridgeFormApiStaffGetAllByDivisions = (
   const choiseWarehouse = useChoiceOfStaffStore(
     (state) => state.warehouseChoices,
   );
-  return useQuery({
+  return useApiQuery({
     queryKey: ["usersByWarehouse", choiseWarehouse, id],
     queryFn: () => {
       if (id) {
@@ -64,7 +64,7 @@ export const useDeliveryCartridgeFormApiStaffGetAllByDivisions = (
 
 export const useDeliveryCartridgeFormApiKabinetsByUserId = () => {
   const choiseUser = useChoiceOfKabinetsStore((state) => state.userChoices);
-  return useQuery({
+  return useApiQuery({
     queryKey: ["kabinetsByUserId", choiseUser],
     queryFn: () => kabinetControllerGetKabinetsByUserId(choiseUser!),
     enabled: !!useMatch({ path: "/warehouse/:id", end: true }) && !!choiseUser,

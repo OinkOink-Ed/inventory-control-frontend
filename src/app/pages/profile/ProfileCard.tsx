@@ -1,4 +1,15 @@
-import { Button } from "@/components/ui/Button/Button";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router";
+import { decryptedProfile } from "@/app/helpers/decryptedProfile";
+import { useChoiseOfKabinetsForCreateUser } from "@/app/stores/choiseOfKabinetsForCreateUser/useChoiseOfKabinetsStore";
+import { formatPhoneNumber } from "@/app/helpers/formatPhoneNumber";
+import { useForm } from "react-hook-form";
+import { PutEditUserDto, PutEditUserDtoSchema } from "@/app/api/generated";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { editCardUserDtoSchemaZOD } from "../users/UserCard/components/shema";
+import { toast } from "sonner";
+import { handlerError } from "@/app/helpers/handlerError";
+import { Answer } from "@/app/Errors/Answer";
 import {
   Form,
   FormControl,
@@ -8,9 +19,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import {
   Select,
   SelectContent,
@@ -18,48 +26,36 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { PutEditUserDto, PutEditUserDtoSchema } from "@/app/api/generated";
-import { InputPhone } from "@/components/InputPhone";
-import { handlerError } from "@/app/helpers/handlerError";
-import { useNavigate } from "react-router";
-import { Answer } from "@/app/Errors/Answer";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useEffect, useMemo, useState } from "react";
-import { useChoiseOfKabinetsForCreateUser } from "@/app/stores/choiseOfKabinetsForCreateUser/useChoiseOfKabinetsStore";
-
+import { Button } from "@/components/ui/Button/Button";
 import { ChevronDown } from "lucide-react";
-import { formatPhoneNumber } from "@/app/helpers/formatPhoneNumber";
+import { Checkbox } from "@/components/ui/checkbox";
+import { SpinnerLoad } from "@/components/SpinnerLoad";
+import { InputPhone } from "@/components/InputPhone";
 import {
-  useUserCardFormApi,
+  useProfileCardApi,
+  useProfileCardFormApi,
   useUsersFormApiGetDivision,
   useUsersFormApiGetKabinetsByUserIdForEditUser,
   useUsersFormApiGetRole,
-} from "./api/useUserCardFormApi";
-import { decryptedProfile } from "@/app/helpers/decryptedProfile";
-import { SpinnerLoad } from "@/components/SpinnerLoad";
-import { useUserCardApi } from "../api/useUserCardApi";
-import { editCardUserDtoSchemaZOD } from "./shema";
+} from "./api/useProfileCardFormApi";
 
-interface UserCardFormProps {
-  id: number;
-}
-
-export function UserCardForm({ id }: UserCardFormProps) {
+export function ProfileCard() {
   const navigate = useNavigate();
+
   const [isFormDisabled, setIsFormDisabled] = useState(true);
 
-  const { mutateAsync } = useUserCardFormApi(id);
+  const { mutateAsync } = useProfileCardFormApi(decryptedProfile().id);
   const { data: roleData, isSuccess: roleSuccess } = useUsersFormApiGetRole();
   const { data: divisionData, isSuccess: divisionSuccess } =
     useUsersFormApiGetDivision();
   const { data: kabinetsData, isSuccess: kabinetsSuccess } =
     useUsersFormApiGetKabinetsByUserIdForEditUser();
-  const { data, isSuccess } = useUserCardApi(id);
+  const { data, isSuccess } = useProfileCardApi();
 
   const { clearChoiceOfKabinets, userChoices, setChoiceOfKabinets } =
     useChoiseOfKabinetsForCreateUser();
@@ -313,10 +309,7 @@ export function UserCardForm({ id }: UserCardFormProps) {
                       field.onChange(value ? Number(value) : undefined)
                     }
                     value={currentValue}
-                    disabled={
-                      decryptedProfile().role.roleName !== "admin" ||
-                      isFormDisabled
-                    }
+                    disabled={true}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -335,7 +328,6 @@ export function UserCardForm({ id }: UserCardFormProps) {
                               <SelectItem
                                 value={currentRole.id.toString()}
                                 disabled
-                                className="cursor-not-allowed opacity-50"
                               >
                                 {currentRole.roleName} (текущая)
                               </SelectItem>
@@ -527,7 +519,7 @@ export function UserCardForm({ id }: UserCardFormProps) {
               const selectedKabionetsNames = currentValues.map((div) => {
                 const kabinet =
                   kabinetsData?.find((d) => d.id === div.id) ??
-                  data?.kabinets?.find((d) => d.id === div.id);
+                  data.kabinets?.find((d) => d.id === div.id);
                 return kabinet;
               });
 
@@ -549,7 +541,11 @@ export function UserCardForm({ id }: UserCardFormProps) {
                       <Button
                         variant="outline"
                         className="w-full justify-between"
-                        disabled={field.disabled}
+                        disabled={
+                          decryptedProfile().role.roleName === "user" ||
+                          decryptedProfile().role.roleName === "staff" ||
+                          isFormDisabled
+                        }
                       >
                         {currentValues.length > 0
                           ? `Выбрано: ${currentValues.length}`
@@ -636,13 +632,6 @@ export function UserCardForm({ id }: UserCardFormProps) {
                 type="button"
                 className="w-[200px]"
                 onClick={() => setIsFormDisabled(false)}
-                disabled={
-                  !(decryptedProfile().role.roleName === "admin") &&
-                  !(
-                    decryptedProfile().role.roleName !== "admin" &&
-                    data.role?.roleName === "staff"
-                  )
-                }
               >
                 Редактировать
               </Button>
@@ -655,7 +644,6 @@ export function UserCardForm({ id }: UserCardFormProps) {
                     setIsFormDisabled(true);
                     reset();
                   }}
-                  disabled={isFormDisabled}
                 >
                   Отмена
                 </Button>
