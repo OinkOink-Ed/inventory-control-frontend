@@ -8,20 +8,11 @@ import {
 import { decryptedProfile } from "@/app/helpers/decryptedProfile";
 import { useChoiceOfStaffStore } from "@/app/stores/choiceOfStaff/useChoiceOfStaffStore";
 import { useApiMutation, useApiQuery } from "@/hooks/useApi";
-import { useQueryClient } from "@tanstack/react-query";
 import { useMatch } from "react-router";
 
 export const useMovementCartridgeFormApiCartrdgesCreateMovement = () => {
-  const queryClient = useQueryClient();
-  return useApiMutation(
-    (data: PostCreateMovementDto) => movementControllerCreate(data),
-    {
-      onSuccess: async () => {
-        await queryClient.invalidateQueries({
-          queryKey: ["cartridges"],
-        });
-      },
-    },
+  return useApiMutation((data: PostCreateMovementDto) =>
+    movementControllerCreate(data),
   );
 };
 export const useMovementCartridgeFormApiCartridgeModelGetAll = () => {

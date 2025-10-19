@@ -70,10 +70,6 @@ export function UserForm() {
   });
 
   useEffect(() => {
-    console.log("Render");
-  });
-
-  useEffect(() => {
     const subscription = form.watch((value, { name }) => {
       if (name === "division") {
         setChoiceOfKabinets({ userChoices: value.division });

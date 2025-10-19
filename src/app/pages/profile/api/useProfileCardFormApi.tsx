@@ -9,26 +9,17 @@ import {
 } from "@/app/api/generated";
 import { useChoiseOfKabinetsForCreateUser } from "@/app/stores/choiseOfKabinetsForCreateUser/useChoiseOfKabinetsStore";
 import { useApiMutation, useApiQuery } from "@/hooks/useApi";
-import { useQueryClient } from "@tanstack/react-query";
 import { useMatch } from "react-router";
 
-export const useProfileCardFormApi = (id: number) => {
-  const queryClient = useQueryClient();
-  return useApiMutation(
-    (data: PutEditUserDto) => userControllerEditProfile(data),
-    {
-      onSuccess: async () => {
-        await queryClient.invalidateQueries({
-          queryKey: ["cartridgeAcceptedByStaffId", id],
-        });
-      },
-    },
+export const useProfileCardFormApi = () => {
+  return useApiMutation((data: PutEditUserDto) =>
+    userControllerEditProfile(data),
   );
 };
 
 export const useProfileCardApi = () => {
   return useApiQuery({
-    queryKey: ["cartridgeAcceptedByStaffId"],
+    queryKey: ["profileCard"],
     queryFn: userControllerGetProfileCard,
     enabled: !!useMatch({ path: "/profile/", end: true }),
   });
@@ -53,21 +44,19 @@ export const useUsersFormApiGetDivision = () => {
 export const useUsersFormApiGetKabinetsByUserIdForEditUser = () => {
   const { userChoices } = useChoiseOfKabinetsForCreateUser();
 
-  const serializedDivisions = encodeURIComponent(JSON.stringify(userChoices));
-
   return useApiQuery({
-    queryKey: ["kabinetsByUserIdForCreateUser", serializedDivisions],
+    queryKey: ["kabinetsByUserIdForCreateUser", userChoices],
     queryFn: () =>
       kabinetControllerGetKabinetsByDivisionIdForCreateUser({
-        divisionIds: serializedDivisions,
+        divisionIds: encodeURIComponent(JSON.stringify(userChoices)),
       }),
     enabled: !!useMatch({ path: "/profile/", end: true }) && !!userChoices,
   });
 };
 
-export const useProfileCardTable = () => {
+export const useProfileCardTable = (id: number) => {
   return useApiQuery({
-    queryKey: ["accepted-cartridge"],
+    queryKey: ["accepted-cartridge", id],
     queryFn: userControllerGetCardProfileAcceptedCartridge,
     enabled: !!useMatch({ path: "/profile/" }),
   });

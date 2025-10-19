@@ -3,21 +3,14 @@ import {
   decommissioningControllerCreate,
 } from "@/app/api/generated";
 import { useApiMutation, useApiQuery } from "@/hooks/useApi";
-import { useQueryClient } from "@tanstack/react-query";
 import { useMatch } from "react-router";
 
 export const useDecommissioningCartrdigeFormApiCartrdgesCreateDecommissioning =
   () => {
-    const queryClient = useQueryClient();
-    return useApiMutation(decommissioningControllerCreate, {
-      onSuccess: async () => {
-        await queryClient.invalidateQueries({
-          queryKey: ["cartridges"],
-        });
-      },
-    });
+    return useApiMutation(decommissioningControllerCreate);
   };
 
+//Нужно подумать о том, чтобы возвращались не все модели, а только те модели, которые в наличии на складе
 export const useDecommissioningCartrdigeFormApiCartridgeModelGetAll = () => {
   return useApiQuery({
     queryKey: ["modelsCartridges"],

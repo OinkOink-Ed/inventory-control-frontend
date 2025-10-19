@@ -26,7 +26,7 @@ interface KabinetsFormProps {
 
 export function KabinetsForm({ divisionId }: KabinetsFormProps) {
   const navigate = useNavigate();
-  const { mutateAsync } = useKabinetsFormApi(divisionId);
+  const { mutateAsync } = useKabinetsFormApi();
 
   const form = useForm<PostCreateKabinetDto>({
     resolver: zodResolver(postCreateKabinetDtoSchema),

@@ -8,19 +8,10 @@ import {
 import { decryptedProfile } from "@/app/helpers/decryptedProfile";
 import { useChoiseOfKabinetsForCreateUser } from "@/app/stores/choiseOfKabinetsForCreateUser/useChoiseOfKabinetsStore";
 import { useApiMutation, useApiQuery } from "@/hooks/useApi";
-import { useQueryClient } from "@tanstack/react-query";
 
 export const useUserCardFormApi = (id: number) => {
-  const queryClient = useQueryClient();
-  return useApiMutation(
-    (data: PutEditUserDto) => userControllerEditUser(id, data),
-    {
-      onSuccess: async () => {
-        await queryClient.invalidateQueries({
-          queryKey: ["cartridgeAcceptedByStaffId", id],
-        });
-      },
-    },
+  return useApiMutation((data: PutEditUserDto) =>
+    userControllerEditUser(id, data),
   );
 };
 
@@ -44,13 +35,11 @@ export const useUsersFormApiGetDivision = () => {
 export const useUsersFormApiGetKabinetsByUserIdForEditUser = () => {
   const { userChoices } = useChoiseOfKabinetsForCreateUser();
 
-  const serializedDivisions = encodeURIComponent(JSON.stringify(userChoices));
-
   return useApiQuery({
-    queryKey: ["kabinetsByUserIdForCreateUser", serializedDivisions],
+    queryKey: ["kabinetsByUserIdForCreateUser", userChoices],
     queryFn: () =>
       kabinetControllerGetKabinetsByDivisionIdForCreateUser({
-        divisionIds: serializedDivisions,
+        divisionIds: encodeURIComponent(JSON.stringify(userChoices)),
       }),
     enabled: !!userChoices,
   });

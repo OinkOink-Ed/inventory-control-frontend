@@ -3,9 +3,11 @@ import { columns } from "./columns";
 import { SpinnerLoad } from "@/components/SpinnerLoad";
 import { useProfileCardTable } from "./api/useProfileCardFormApi";
 import { GetResponseAcceptedCartridgeByUserDtoMySchema } from "./shema";
+import { decryptedProfile } from "@/app/helpers/decryptedProfile";
 
 export default function ProfileTable() {
-  const { data, isSuccess } = useProfileCardTable();
+  const user = decryptedProfile();
+  const { data, isSuccess } = useProfileCardTable(user.id);
 
   return isSuccess && data ? (
     <DataTable<

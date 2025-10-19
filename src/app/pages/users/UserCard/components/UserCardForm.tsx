@@ -53,13 +53,13 @@ export function UserCardForm({ id }: UserCardFormProps) {
   const navigate = useNavigate();
   const [isFormDisabled, setIsFormDisabled] = useState(true);
 
+  const { data, isSuccess } = useUserCardApi(id);
   const { mutateAsync } = useUserCardFormApi(id);
   const { data: roleData, isSuccess: roleSuccess } = useUsersFormApiGetRole();
   const { data: divisionData, isSuccess: divisionSuccess } =
     useUsersFormApiGetDivision();
   const { data: kabinetsData, isSuccess: kabinetsSuccess } =
     useUsersFormApiGetKabinetsByUserIdForEditUser();
-  const { data, isSuccess } = useUserCardApi(id);
 
   const { clearChoiceOfKabinets, userChoices, setChoiceOfKabinets } =
     useChoiseOfKabinetsForCreateUser();

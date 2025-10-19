@@ -8,21 +8,10 @@ import {
 import { useChoiceOfStaffStore } from "@/app/stores/choiceOfStaff/useChoiceOfStaffStore";
 import { useChoiceOfKabinetsStore } from "@/app/stores/choiseOfKabinets/useChoiseOfKabinetsStore";
 import { useApiMutation, useApiQuery } from "@/hooks/useApi";
-import { useQueryClient } from "@tanstack/react-query";
 import { useMatch } from "react-router";
 
 export const useDeliveryCartridgeFormApiCartrdgesCreateDelivery = () => {
-  const queryClient = useQueryClient();
-  return useApiMutation(deliveryControllerCreate, {
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ["cartridges"],
-      });
-      await queryClient.invalidateQueries({
-        queryKey: ["cartridgeAcceptedByStaffId"],
-      });
-    },
-  });
+  return useApiMutation(deliveryControllerCreate);
 };
 
 export const useDeliveryCartridgeFormApiCartridgeModelGetAll = () => {

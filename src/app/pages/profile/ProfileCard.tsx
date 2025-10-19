@@ -49,7 +49,7 @@ export function ProfileCard() {
 
   const [isFormDisabled, setIsFormDisabled] = useState(true);
 
-  const { mutateAsync } = useProfileCardFormApi(decryptedProfile().id);
+  const { mutateAsync } = useProfileCardFormApi();
   const { data: roleData, isSuccess: roleSuccess } = useUsersFormApiGetRole();
   const { data: divisionData, isSuccess: divisionSuccess } =
     useUsersFormApiGetDivision();
