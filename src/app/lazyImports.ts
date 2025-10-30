@@ -11,3 +11,4 @@ export const WarehouseLayout = lazy(() => import("./Layouts/WarehouseLayout"));
 export const DivisionLayout = lazy(() => import("./Layouts/DivisionLayout"));
 export const ProfileLayout = lazy(() => import("./Layouts/ProfileLayout"));
 export const ReportsLayout = lazy(() => import("./Layouts/ReportsLayout"));
+export const DashboardLayout = lazy(() => import("./Layouts/DashboardLayout"));

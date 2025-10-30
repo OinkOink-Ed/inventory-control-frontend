@@ -64,7 +64,11 @@ export function Login() {
               <FormItem className="h-20">
                 <FormLabel>Логин</FormLabel>
                 <FormControl>
-                  <Input placeholder="Логин" {...field} />
+                  <Input
+                    placeholder="Логин"
+                    autoComplete="username"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -77,7 +81,12 @@ export function Login() {
               <FormItem className="h-20">
                 <FormLabel>Пароль</FormLabel>
                 <FormControl>
-                  <Input type="password" placeholder="Пароль" {...field} />
+                  <Input
+                    type="password"
+                    placeholder="Пароль"
+                    autoComplete="password"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

@@ -27,8 +27,6 @@ export function SocketProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    console.log("Провайдер установлен");
-
     const newSocket = io(SOCKET_URL, {
       autoConnect: false,
       auth: { token: token },
@@ -117,6 +115,9 @@ function registerEventListeners(socket: Socket, queryClient: QueryClient) {
             await queryClient.invalidateQueries({
               queryKey: ["cartridges", data.divisionId],
             });
+            await queryClient.invalidateQueries({
+              queryKey: ["dashboard"],
+            });
             break;
         }
       },
@@ -159,6 +160,9 @@ function registerEventListeners(socket: Socket, queryClient: QueryClient) {
         await queryClient.invalidateQueries({
           queryKey: ["cartridges", data.warehouseId],
         });
+        await queryClient.invalidateQueries({
+          queryKey: ["dashboard"],
+        });
       },
     );
 
@@ -171,6 +175,9 @@ function registerEventListeners(socket: Socket, queryClient: QueryClient) {
         await queryClient.invalidateQueries({
           queryKey: ["cartridges", data.newDivisionId],
         });
+        await queryClient.invalidateQueries({
+          queryKey: ["dashboard"],
+        });
       },
     );
 
@@ -179,6 +186,9 @@ function registerEventListeners(socket: Socket, queryClient: QueryClient) {
       async (data: ReceivingCartridgeEventType) => {
         await queryClient.invalidateQueries({
           queryKey: ["cartridges", data.warehouseId],
+        });
+        await queryClient.invalidateQueries({
+          queryKey: ["dashboard"],
         });
       },
     );

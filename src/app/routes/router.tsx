@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import {
   AppLayout,
   CartridgeModelLayout,
+  DashboardLayout,
   DivisionLayout,
   LoginLayout,
   ProfileLayout,
@@ -53,6 +54,16 @@ export const router = createBrowserRouter([
         element: (
           <Suspense key="warehouse" fallback={<SpinnerLoad />}>
             <WarehouseLayout />
+          </Suspense>
+        ),
+      },
+      {
+        loader: UserAndAdminRoute,
+        path: "dashboard",
+
+        element: (
+          <Suspense key="dashboard" fallback={<SpinnerLoad />}>
+            <DashboardLayout />
           </Suspense>
         ),
       },

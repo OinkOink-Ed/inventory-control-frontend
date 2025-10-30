@@ -32,6 +32,7 @@ import {
   useDeliveryCartridgeFormApiKabinetsByUserId,
   useDeliveryCartridgeFormApiStaffGetAllByDivisions,
 } from "./api/useDeliveryCartridgeFormApi";
+import { deliveryPDF } from "@/app/helpers/generatedPDF/deliveryPdf";
 
 interface DeliveryCartridgeFormProps {
   warehouseId: number;
@@ -55,14 +56,32 @@ export function DeliveryCartridgeForm({
   const { data: kabinetsData, isSuccess: kabinetsSuccess } =
     useDeliveryCartridgeFormApiKabinetsByUserId();
 
-  const form = useForm<PostCreateDeliveryDtoSchema>({
+  //Инициализация при создании - данные сервера нужно будет обновлять
+  const {
+    formState,
+    handleSubmit,
+    control,
+    reset,
+    watch,
+    clearErrors,
+    getFieldState,
+    getValues,
+    register,
+    resetField,
+    setError,
+    setFocus,
+    setValue,
+    trigger,
+    unregister,
+    subscribe,
+  } = useForm<PostCreateDeliveryDtoSchema>({
     resolver: zodResolver(createDeliveryDtoShema),
     defaultValues: {
       count: 0,
       model: { id: undefined },
       warehouse: { id: warehouseId },
       division: {
-        id: divisionData ? divisionData.id : undefined,
+        id: divisionData?.id,
       },
       accepting: { id: undefined },
       kabinet: { id: undefined },
@@ -70,22 +89,28 @@ export function DeliveryCartridgeForm({
   });
 
   useEffect(() => {
-    const subscription = form.watch((value, { name }) => {
+    const subscription = watch((value, { name }) => {
       if (name === "accepting.id") {
         setChoiceOfKabinets({ userChoices: value.accepting?.id });
-        form.resetField("kabinet");
+        resetField("kabinet");
       }
     });
     return () => {
       subscription.unsubscribe();
     };
-  }, [setChoiceOfKabinets, form]);
+  }, [setChoiceOfKabinets, resetField, watch]);
 
   useEffect(() => {
     return () => {
       clearChoiceOfKabinets();
     };
   }, [clearChoiceOfKabinets]);
+
+  useEffect(() => {
+    if (divisionData?.id !== undefined) {
+      setValue("division.id", divisionData.id);
+    }
+  }, [divisionData, setValue]);
 
   async function onSubmit(data: PostCreateDeliveryDtoSchema): Promise<void> {
     try {
@@ -94,22 +119,47 @@ export function DeliveryCartridgeForm({
         position: "top-center",
       });
 
-      form.reset();
+      deliveryPDF(
+        data,
+        cartridgeModelData,
+        staffData,
+        kabinetsData,
+        divisionData,
+      );
+
+      reset();
     } catch (error: unknown) {
       const res = handlerError(error);
       if (res == Answer.LOGOUT) void navigate("/auth", { replace: true });
-      if (res == Answer.RESET) form.reset();
+      if (res == Answer.RESET) reset();
     }
   }
 
   return (
-    <Form {...form}>
+    <Form
+      subscribe={subscribe}
+      formState={formState}
+      control={control}
+      reset={reset}
+      watch={watch}
+      clearErrors={clearErrors}
+      getFieldState={getFieldState}
+      getValues={getValues}
+      handleSubmit={handleSubmit}
+      register={register}
+      resetField={resetField}
+      setError={setError}
+      setFocus={setFocus}
+      setValue={setValue}
+      trigger={trigger}
+      unregister={unregister}
+    >
       <form
-        onSubmit={(event) => void form.handleSubmit(onSubmit)(event)}
+        onSubmit={(event) => void handleSubmit(onSubmit)(event)}
         className="flex flex-wrap justify-center gap-5"
       >
         <FormField
-          control={form.control}
+          control={control}
           name="count"
           render={({ field }) => (
             <FormItem className="h-24 w-[400px]">
@@ -126,7 +176,7 @@ export function DeliveryCartridgeForm({
           )}
         />
         <FormField
-          control={form.control}
+          control={control}
           name="model.id"
           render={({ field }) => (
             <FormItem className="h-24 w-[400px]">
@@ -164,7 +214,7 @@ export function DeliveryCartridgeForm({
           )}
         />
         <FormField
-          control={form.control}
+          control={control}
           name="accepting.id"
           render={({ field }) => (
             <FormItem className="h-24 w-[400px]">
@@ -202,7 +252,7 @@ export function DeliveryCartridgeForm({
           )}
         />
         <FormField
-          control={form.control}
+          control={control}
           name="kabinet.id"
           render={({ field }) => (
             <FormItem className="h-24 w-[400px]">

@@ -2,6 +2,7 @@ import {
   Archive,
   Book,
   ChevronRight,
+  LayoutDashboard,
   LogOut,
   LucideProps,
   PackageCheck,
@@ -158,6 +159,14 @@ export function AppSideBar() {
               {/* Меню для админа и пользователя */}
               {hasAccess && (
                 <>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
+                      <Link to={"dashboard"}>
+                        <LayoutDashboard />
+                        Дашборд
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
                       <Link to={"users"}>
