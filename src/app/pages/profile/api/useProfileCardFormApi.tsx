@@ -18,46 +18,44 @@ export const useProfileCardFormApi = () => {
 };
 
 export const useProfileCardApi = () => {
-  return useApiQuery({
+  return useApiQuery(userControllerGetProfileCard, {
     queryKey: ["profileCard"],
-    queryFn: userControllerGetProfileCard,
     enabled: !!useMatch({ path: "/profile/", end: true }),
   });
 };
 
 export const useUsersFormApiGetRole = () => {
-  return useApiQuery({
+  return useApiQuery(roleControllerGetRoles, {
     queryKey: ["roles"],
-    queryFn: roleControllerGetRoles,
     enabled: !!useMatch({ path: "/profile/", end: true }),
   });
 };
 
 export const useUsersFormApiGetDivision = () => {
-  return useApiQuery({
+  return useApiQuery(divisionControllerGetDivisions, {
     queryKey: ["division"],
-    queryFn: divisionControllerGetDivisions,
     enabled: !!useMatch({ path: "/profile/", end: true }),
   });
 };
-//Надо бы сделать для edit отдельный контроллер на сервее и тут использовать как метод
+//Надо бы сделать для edit отдельный контроллер на сервере и тут использовать как метод
 export const useUsersFormApiGetKabinetsByUserIdForEditUser = () => {
   const { userChoices } = useChoiseOfKabinetsForCreateUser();
 
-  return useApiQuery({
-    queryKey: ["kabinetsByUserIdForCreateUser", userChoices],
-    queryFn: () =>
+  return useApiQuery(
+    () =>
       kabinetControllerGetKabinetsByDivisionIdForCreateUser({
         divisionIds: encodeURIComponent(JSON.stringify(userChoices)),
       }),
-    enabled: !!useMatch({ path: "/profile/", end: true }) && !!userChoices,
-  });
+    {
+      queryKey: ["kabinetsByUserIdForCreateUser", userChoices],
+      enabled: !!useMatch({ path: "/profile/", end: true }) && !!userChoices,
+    },
+  );
 };
 
-export const useProfileCardTable = (id: number) => {
-  return useApiQuery({
+export const useProfileCardTable = (id: number | false) => {
+  return useApiQuery(userControllerGetCardProfileAcceptedCartridge, {
     queryKey: ["accepted-cartridge", id],
-    queryFn: userControllerGetCardProfileAcceptedCartridge,
-    enabled: !!useMatch({ path: "/profile/" }),
+    enabled: !!useMatch({ path: "/profile/" }) && !!id,
   });
 };

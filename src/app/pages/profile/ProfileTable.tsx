@@ -7,7 +7,8 @@ import { decryptedProfile } from "@/app/helpers/decryptedProfile";
 
 export default function ProfileTable() {
   const user = decryptedProfile();
-  const { data, isSuccess } = useProfileCardTable(user.id);
+
+  const { data, isSuccess } = useProfileCardTable(user ? user.id : user);
 
   return isSuccess && data ? (
     <DataTable<

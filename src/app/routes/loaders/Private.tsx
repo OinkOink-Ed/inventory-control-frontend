@@ -1,9 +1,10 @@
-import { isAuth } from "@/app/helpers/isAuth";
+import { isAuth } from "@/app/routes/api/isAuth";
 import { redirect } from "react-router";
 
 export default function PrivateRoute() {
-  if (isAuth()) {
-    return null; // Пользователь авторизован, продолжаем рендеринг
+  const result = isAuth();
+  if (result) {
+    return null;
   }
   return redirect("/auth");
 }

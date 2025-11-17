@@ -6,7 +6,6 @@ export const createUserDtoSchemaZOD = postCreateUserDtoSchema.extend({
   lastname: z.string().min(4, { message: "Требуется не менее 4 символов" }),
   name: z.string().min(4, { message: "Требуется не менее 4 символов" }),
   patronimyc: z.string().optional(),
-  // Здесь нужен паттерн для номера телефона
   telephone: z
     .string()
     .regex(/^\+7 \d{3} \d{3}-\d{2}-\d{2}$/, "Поле обязательно к заполнению")

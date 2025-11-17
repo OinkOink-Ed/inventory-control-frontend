@@ -14,7 +14,7 @@ interface DataTableRowActionsProps {
   linkToCard: ReactNode;
 }
 
-//Улучшить для выбора действия и их работы
+//Улучшить для выбора действия и их работы (Пока что не трубется?)
 export default function DataTableRowActions({
   linkToCard,
 }: DataTableRowActionsProps) {

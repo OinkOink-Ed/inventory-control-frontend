@@ -13,9 +13,8 @@ export const useReceivingCartridgeFormApiCartrdgesCreateReceiving = () => {
 };
 
 export const useReceivingCartridgeFormApiCreateCartridgeModelGetAll = () => {
-  return useApiQuery({
+  return useApiQuery(cartridgeModelControllerGetModels, {
     queryKey: ["modelsCartridges"],
-    queryFn: cartridgeModelControllerGetModels,
     enabled: !!useMatch({ path: "/warehouse/:id", end: true }),
   });
 };

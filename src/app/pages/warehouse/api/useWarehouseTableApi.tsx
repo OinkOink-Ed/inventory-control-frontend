@@ -3,9 +3,8 @@ import { useApiQuery } from "@/hooks/useApi";
 import { useMatch } from "react-router";
 
 export const useWarehouseTableApi = (id: number) => {
-  return useApiQuery({
+  return useApiQuery(() => cartridgeControllerGetCartridgesByWarehouse(id), {
     queryKey: ["cartridges", id],
-    queryFn: () => cartridgeControllerGetCartridgesByWarehouse(id),
     enabled: !!useMatch({ path: "/warehouse/:id", end: true }) && !!id,
   });
 };

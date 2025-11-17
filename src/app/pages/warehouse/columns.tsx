@@ -2,7 +2,6 @@ import { GetResponseAllCartridgeInWarehouseDtoSchema } from "@/app/api/generated
 import { formateDate } from "@/app/helpers/formateDate";
 import DataTableColumnHeader from "@/components/DataTable/DataTableColumnHeader";
 import DataTableColumnHeaderMultiSort from "@/components/DataTable/DataTableColumnHeaderMultiSort";
-// import DataTableRowActions from "@/components/DataTable/DataTableRowActions";
 import { ColumnDef } from "@tanstack/react-table";
 
 export const columns: ColumnDef<GetResponseAllCartridgeInWarehouseDtoSchema>[] =

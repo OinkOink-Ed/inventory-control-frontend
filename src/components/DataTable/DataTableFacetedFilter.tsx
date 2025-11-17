@@ -6,7 +6,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Separator } from "../ui/separator";
-import { Badge } from "../ui/badge";
+import { Badge } from "../ui/Badge/badge";
 import {
   Command,
   CommandEmpty,

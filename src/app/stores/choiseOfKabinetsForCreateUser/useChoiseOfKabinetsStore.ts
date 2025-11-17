@@ -10,7 +10,7 @@ export const useChoiseOfKabinetsForCreateUser = create<
       userChoices: undefined,
       setChoiceOfKabinets: (res) => {
         set({
-          userChoices: res.userChoices, // Просто заменяем весь массив
+          userChoices: res.userChoices,
         });
       },
       clearChoiceOfKabinets: () => {

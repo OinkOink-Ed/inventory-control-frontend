@@ -17,19 +17,17 @@ export const useUsersFormApiCreateUser = () => {
 };
 
 export const useUsersFormApiGetRole = () => {
-  return useApiQuery({
+  return useApiQuery(roleControllerGetRoles, {
     queryKey: ["roles"],
-    queryFn: roleControllerGetRoles,
   });
 };
 
 export const useUsersFormApiGetDivision = () => {
   const profile = decryptedProfile();
 
-  return useApiQuery({
+  return useApiQuery(divisionControllerGetDivisions, {
     queryKey: ["division"],
-    queryFn: divisionControllerGetDivisions,
-    enabled: profile.role.roleName !== "staff",
+    enabled: profile ? profile.role.roleName !== "staff" : profile,
   });
 };
 
@@ -38,13 +36,15 @@ export const useUsersFormApiGetKabinetsByUserIdForCreateUser = () => {
     (state) => state.userChoices,
   );
 
-  return useApiQuery({
-    queryKey: ["kabinetsByUserIdForCreateUser", choiseDivision],
-    queryFn: () => {
+  return useApiQuery(
+    () => {
       return kabinetControllerGetKabinetsByDivisionIdForCreateUser({
         divisionIds: encodeURIComponent(JSON.stringify(choiseDivision)),
       });
     },
-    enabled: !!useMatch({ path: "/users/*" }) && !!choiseDivision,
-  });
+    {
+      queryKey: ["kabinetsByUserIdForCreateUser", choiseDivision],
+      enabled: !!useMatch({ path: "/users/*" }) && !!choiseDivision,
+    },
+  );
 };

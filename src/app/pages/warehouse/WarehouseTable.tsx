@@ -26,6 +26,7 @@ export function WarehouseTable() {
   const [showDecommissioning, setShowDecommissioning] = useState(false);
   const [showReceiving, setShowReceiving] = useState(false);
   const [showMovement, setShowMovement] = useState(false);
+  const user = decryptedProfile();
 
   useEffect(() => {
     if (error) {
@@ -51,7 +52,7 @@ export function WarehouseTable() {
         actions={
           <ActionsForTable
             actions={
-              decryptedProfile().role.roleName === "admin"
+              (user ? user.role.roleName === "admin" : user)
                 ? [
                     <Button
                       key={"Выдача картриджей"}
@@ -109,7 +110,7 @@ export function WarehouseTable() {
         }
         pageSize={18}
       />
-      {decryptedProfile().role.roleName === "admin" ? (
+      {(user ? user.role.roleName === "admin" : user) ? (
         <>
           <DialogForm
             openState={showDelivery}

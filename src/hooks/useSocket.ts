@@ -13,7 +13,7 @@ export const SocketContext = createContext<SocketContextType | undefined>(
 export const useSocket = () => {
   const context = useContext(SocketContext);
   if (!context) {
-    throw new Error("Сокет должен использовать вместе с Сокет провадйером");
+    throw new Error("Сокет должен использоваться вместе с Сокет провадйером");
   }
   return context;
 };

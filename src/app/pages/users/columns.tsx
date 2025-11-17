@@ -94,7 +94,6 @@ export const columns: ColumnDef<GetResponseAllUserDtoSchema>[] = [
   },
   {
     id: "Действия",
-    //Позже буду в компонент передать row
     cell: (row) => {
       return (
         <DataTableRowActions

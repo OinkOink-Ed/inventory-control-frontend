@@ -1,5 +1,6 @@
 import { Atom } from "lucide-react";
 
+//Возможно нужно получать подразделения и роли и статусы из БД
 export const facetedCartridgeData = [
   {
     columnName: "Состояние",
@@ -14,16 +15,6 @@ export const facetedCartridgeData = [
         label: "Moved",
         icon: Atom,
       },
-      // {
-      //   value: "issued",
-      //   label: "Issued",
-      //   icon: Atom,
-      // },
-      // {
-      //   value: "decommissioned",
-      //   label: "Decommissioned",
-      //   icon: Atom,
-      // },
     ],
   },
 ];

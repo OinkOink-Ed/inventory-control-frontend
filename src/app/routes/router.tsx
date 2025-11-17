@@ -33,7 +33,6 @@ export const router = createBrowserRouter([
         <LoginLayout />
       </Suspense>
     ),
-    errorElement: <ErrorBoundary />,
   },
 
   {
@@ -49,13 +48,12 @@ export const router = createBrowserRouter([
       {
         loader: UserAndAdminRoute,
         path: "warehouse/:id",
-
-        // TODO список складов + операции
         element: (
           <Suspense key="warehouse" fallback={<SpinnerLoad />}>
             <WarehouseLayout />
           </Suspense>
         ),
+        errorElement: <ErrorBoundary />,
       },
       {
         loader: UserAndAdminRoute,
@@ -66,27 +64,23 @@ export const router = createBrowserRouter([
             <DashboardLayout />
           </Suspense>
         ),
+        errorElement: <ErrorBoundary />,
       },
       {
         loader: UserAndAdminRoute,
         path: "division/:id",
-
-        // TODO список подразделений + операции
-
         element: (
           <Suspense key="division" fallback={<SpinnerLoad />}>
             <DivisionLayout />
           </Suspense>
         ),
+        errorElement: <ErrorBoundary />,
       },
       {
         children: [
           {
             loader: UserAndAdminRoute,
             path: "users",
-
-            // TODO список пользователей + операции
-
             element: (
               <Suspense key="users" fallback={<SpinnerLoad />}>
                 <UsersLayout />
@@ -110,37 +104,34 @@ export const router = createBrowserRouter([
           {
             loader: AdminRoute,
             path: "cartrideModel",
-
-            // TODO список моделей картриджей + операции
-
             element: (
               <Suspense key="cartrideModel" fallback={<SpinnerLoad />}>
                 <CartridgeModelLayout />
               </Suspense>
             ),
+            errorElement: <ErrorBoundary />,
           },
         ],
         errorElement: <ErrorBoundary />,
       },
       {
         path: "profile",
-        // TODO Компонент профиля
-
         element: (
           <Suspense key="profile" fallback={<SpinnerLoad />}>
             <ProfileLayout />
           </Suspense>
         ),
+        errorElement: <ErrorBoundary />,
       },
       {
         path: "reports",
         // TODO Подумать какие отчёты нужны
-
         element: (
           <Suspense key="reports" fallback={<SpinnerLoad />}>
             <ReportsLayout />
           </Suspense>
         ),
+        errorElement: <ErrorBoundary />,
       },
     ],
     errorElement: <ErrorBoundary />,

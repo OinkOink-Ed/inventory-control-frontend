@@ -7,18 +7,20 @@ import { useApiQuery } from "@/hooks/useApi";
 
 export const useAppSideBarApiDivisionGetAll = () => {
   const profile = decryptedProfile();
-  return useApiQuery({
+  return useApiQuery(divisionControllerGetDivisions, {
     queryKey: ["division"],
-    queryFn: divisionControllerGetDivisions,
-    enabled: profile.role.roleName !== "staff" && profile.role.roleName !== "",
+    enabled:
+      (profile ? profile.role.roleName !== "staff" : profile) &&
+      (profile ? profile.role.roleName !== "" : profile),
   });
 };
 
 export const useAppSideBarApiWarehouseGetAll = () => {
   const profile = decryptedProfile();
-  return useApiQuery({
+  return useApiQuery(warehouseControllerGetWarehouses, {
     queryKey: ["warehouses"],
-    queryFn: warehouseControllerGetWarehouses,
-    enabled: profile.role.roleName !== "staff" && profile.role.roleName !== "",
+    enabled:
+      (profile ? profile.role.roleName !== "staff" : profile) &&
+      (profile ? profile.role.roleName !== "" : profile),
   });
 };

@@ -23,9 +23,7 @@ import {
   SidebarMenuSubItem,
 } from "../ui/sidebar";
 import { Link, useNavigate } from "react-router";
-import { authControllerLogout } from "@/app/api/generated";
 import { handlerError } from "@/app/helpers/handlerError";
-import { useProfileStore } from "@/app/stores/profile/useProfileStore";
 import { Answer } from "@/app/Errors/Answer";
 import {
   Collapsible,
@@ -33,12 +31,12 @@ import {
   CollapsibleTrigger,
 } from "../ui/collapsible";
 import { decryptedProfile } from "@/app/helpers/decryptedProfile";
-import { useEffect } from "react";
-import { queryClientInstans } from "@/app/queryClientInstans";
+import { useEffect, useMemo } from "react";
 import {
   useAppSideBarApiDivisionGetAll,
   useAppSideBarApiWarehouseGetAll,
 } from "./api/useAppSideBarApi";
+import { useLogout } from "@/hooks/useLogout";
 
 interface MenuItem {
   title: string;
@@ -49,8 +47,6 @@ interface MenuItem {
 }
 
 export function AppSideBar() {
-  const refreshToken = useProfileStore((state) => state.refresh_token);
-  const clearProfile = useProfileStore((state) => state.clearProfile);
   const navigate = useNavigate();
 
   const { data: dataDivision, error: errorDivivosn } =
@@ -64,6 +60,8 @@ export function AppSideBar() {
       if (res == Answer.LOGOUT) void navigate("/auth", { replace: true });
     }
   }, [navigate, errorWarehouses, errorDivivosn]);
+
+  const logoutHandler = useLogout();
 
   const itemsDivision =
     dataDivision?.map((item) => ({
@@ -79,58 +77,44 @@ export function AppSideBar() {
       icon: PackageCheck,
     })) ?? [];
 
-  async function logout() {
-    try {
-      await authControllerLogout({ token: refreshToken });
-
-      clearProfile();
-      void queryClientInstans.removeQueries();
-      void navigate("/auth");
-    } catch (error) {
-      const res = handlerError(error);
-      if (res == Answer.LOGOUT) void navigate("/auth", { replace: true });
-    }
-  }
-
   const profile = decryptedProfile();
-  const isAdmin = profile?.role?.roleName === "admin";
-  const isUser = profile?.role?.roleName === "user";
+  const isAdmin = profile ? profile?.role?.roleName === "admin" : profile;
+  const isUser = profile ? profile?.role?.roleName === "user" : profile;
   const hasAccess = isAdmin || isUser;
 
-  const renderCollapsibleMenu = (
-    title: string,
-    items: MenuItem[],
-    icon: React.ReactNode,
-  ) => (
-    <Collapsible className="group/collapsible">
-      <SidebarMenuItem>
-        <CollapsibleTrigger asChild>
-          <SidebarMenuButton>
-            {icon}
-            <span>{title}</span>
-            <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
-          </SidebarMenuButton>
-        </CollapsibleTrigger>
-      </SidebarMenuItem>
-      <CollapsibleContent>
-        <SidebarMenuSub>
-          {items.length > 0 ? (
-            items.map((item) => (
-              <SidebarMenuSubItem key={item.title}>
-                <SidebarMenuButton asChild>
-                  <Link to={item.url}>
-                    <item.icon />
-                    <span>{item.title}</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuSubItem>
-            ))
-          ) : (
-            <div>Идёт загрузка</div>
-          )}
-        </SidebarMenuSub>
-      </CollapsibleContent>
-    </Collapsible>
+  const renderCollapsibleMenu = useMemo(
+    () => (title: string, items: MenuItem[], icon: React.ReactNode) => (
+      <Collapsible className="group/collapsible">
+        <SidebarMenuItem>
+          <CollapsibleTrigger asChild>
+            <SidebarMenuButton>
+              {icon}
+              <span>{title}</span>
+              <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
+            </SidebarMenuButton>
+          </CollapsibleTrigger>
+        </SidebarMenuItem>
+        <CollapsibleContent>
+          <SidebarMenuSub>
+            {items.length > 0 ? (
+              items.map((item) => (
+                <SidebarMenuSubItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <Link to={item.url}>
+                      <item.icon />
+                      <span>{item.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuSubItem>
+              ))
+            ) : (
+              <div>Идёт загрузка</div>
+            )}
+          </SidebarMenuSub>
+        </CollapsibleContent>
+      </Collapsible>
+    ),
+    [],
   );
 
   return (
@@ -215,7 +199,7 @@ export function AppSideBar() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton onClick={() => void logout()}>
+            <SidebarMenuButton onClick={() => void logoutHandler()}>
               <LogOut />
               Выход
             </SidebarMenuButton>

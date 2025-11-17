@@ -15,9 +15,8 @@ export const useDeliveryCartridgeFormApiCartrdgesCreateDelivery = () => {
 };
 
 export const useDeliveryCartridgeFormApiCartridgeModelGetAll = () => {
-  return useApiQuery({
+  return useApiQuery(cartridgeModelControllerGetModels, {
     queryKey: ["modelsCartridges"],
-    queryFn: cartridgeModelControllerGetModels,
     enabled: !!useMatch({ path: "/warehouse/:id", end: true }),
   });
 };
@@ -25,9 +24,8 @@ export const useDeliveryCartridgeFormApiCartridgeModelGetAll = () => {
 export const useDeliveryCartridgeFormApiDivisionIdByWarehouseId = (
   id: number,
 ) => {
-  return useApiQuery({
+  return useApiQuery(() => divisionControllerGetDivision(id), {
     queryKey: ["divisionIdByWarehouseId", id],
-    queryFn: () => divisionControllerGetDivision(id),
     enabled: !!useMatch({ path: "/warehouse/:id", end: true }) && !!id,
   });
 };
@@ -38,24 +36,25 @@ export const useDeliveryCartridgeFormApiStaffGetAllByDivisions = (
   const choiseWarehouse = useChoiceOfStaffStore(
     (state) => state.warehouseChoices,
   );
-  return useApiQuery({
-    queryKey: ["usersByWarehouse", choiseWarehouse, id],
-    queryFn: () => {
+  return useApiQuery(
+    () => {
       if (id) {
         return userControllerGetAllByDivisions(id);
       }
       return userControllerGetAllByDivisions(choiseWarehouse!);
     },
-    enabled:
-      !!useMatch({ path: "/warehouse/*" }) && (!!choiseWarehouse || !!id),
-  });
+    {
+      queryKey: ["usersByWarehouse", choiseWarehouse, id],
+      enabled:
+        !!useMatch({ path: "/warehouse/*" }) && (!!choiseWarehouse || !!id),
+    },
+  );
 };
 
 export const useDeliveryCartridgeFormApiKabinetsByUserId = () => {
   const choiseUser = useChoiceOfKabinetsStore((state) => state.userChoices);
-  return useApiQuery({
+  return useApiQuery(() => kabinetControllerGetKabinetsByUserId(choiseUser!), {
     queryKey: ["kabinetsByUserId", choiseUser],
-    queryFn: () => kabinetControllerGetKabinetsByUserId(choiseUser!),
     enabled: !!useMatch({ path: "/warehouse/:id", end: true }) && !!choiseUser,
   });
 };

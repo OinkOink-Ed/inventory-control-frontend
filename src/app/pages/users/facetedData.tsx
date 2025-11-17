@@ -1,5 +1,6 @@
 import { Atom } from "lucide-react";
 
+//Возможно нужно получать подразделения и роли и статусы из БД
 export const facetedUsersData = [
   {
     columnName: "Роль",

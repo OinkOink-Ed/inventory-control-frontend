@@ -53,6 +53,8 @@ export function UserCardForm({ id }: UserCardFormProps) {
   const navigate = useNavigate();
   const [isFormDisabled, setIsFormDisabled] = useState(true);
 
+  const user = decryptedProfile();
+
   const { data, isSuccess } = useUserCardApi(id);
   const { mutateAsync } = useUserCardFormApi(id);
   const { data: roleData, isSuccess: roleSuccess } = useUsersFormApiGetRole();
@@ -314,7 +316,7 @@ export function UserCardForm({ id }: UserCardFormProps) {
                     }
                     value={currentValue}
                     disabled={
-                      decryptedProfile().role.roleName !== "admin" ||
+                      (user ? user.role.roleName === "admin" : user) ||
                       isFormDisabled
                     }
                   >
@@ -386,26 +388,25 @@ export function UserCardForm({ id }: UserCardFormProps) {
                   )
                 : [];
 
-              const selectedDivisionNames =
-                decryptedProfile().role.roleName !== "admin"
-                  ? currentValues.map(() => {
-                      const division = divisionData?.find((item) => item);
-                      if (division) {
-                        const regex = /№ \d+/;
-                        const match = regex.exec(division.name);
-                        return match;
-                      }
-                    })
-                  : currentValues.map((div) => {
-                      const division = divisionData?.find(
-                        (d) => d.id === div.id,
-                      );
-                      if (division) {
-                        const regex = /№ \d+/;
-                        const match = regex.exec(division.name);
-                        return match;
-                      }
-                    });
+              const selectedDivisionNames = (
+                user ? user.role.roleName === "admin" : user
+              )
+                ? currentValues.map(() => {
+                    const division = divisionData?.find((item) => item);
+                    if (division) {
+                      const regex = /№ \d+/;
+                      const match = regex.exec(division.name);
+                      return match;
+                    }
+                  })
+                : currentValues.map((div) => {
+                    const division = divisionData?.find((d) => d.id === div.id);
+                    if (division) {
+                      const regex = /№ \d+/;
+                      const match = regex.exec(division.name);
+                      return match;
+                    }
+                  });
               const selectedKabinetIds =
                 watch("kabinets")?.map((k) => k.id) ??
                 data.kabinets.map((kab) => kab.id);
@@ -422,8 +423,8 @@ export function UserCardForm({ id }: UserCardFormProps) {
                   className="h-24 w-[300px]"
                   style={{
                     cursor:
-                      decryptedProfile().role.roleName === "user" ||
-                      decryptedProfile().role.roleName === "staff" ||
+                      (user ? user.role.roleName === "admin" : user) ||
+                      (user ? user.role.roleName === "staff" : user) ||
                       isFormDisabled
                         ? "not-allowed"
                         : "pointer",
@@ -436,8 +437,8 @@ export function UserCardForm({ id }: UserCardFormProps) {
                         variant="outline"
                         className="w-full justify-between"
                         disabled={
-                          decryptedProfile().role.roleName === "user" ||
-                          decryptedProfile().role.roleName === "staff" ||
+                          (user ? user.role.roleName === "user" : user) ||
+                          (user ? user.role.roleName === "staff" : user) ||
                           isFormDisabled
                         }
                       >
@@ -536,8 +537,8 @@ export function UserCardForm({ id }: UserCardFormProps) {
                   className="h-24 w-[300px]"
                   style={{
                     cursor:
-                      decryptedProfile().role.roleName === "user" ||
-                      decryptedProfile().role.roleName === "staff" ||
+                      (user ? user.role.roleName === "user" : user) ||
+                      (user ? user.role.roleName === "staff" : user) ||
                       isFormDisabled
                         ? "not-allowed"
                         : "pointer",
@@ -637,9 +638,9 @@ export function UserCardForm({ id }: UserCardFormProps) {
                 className="w-[200px]"
                 onClick={() => setIsFormDisabled(false)}
                 disabled={
-                  !(decryptedProfile().role.roleName === "admin") &&
+                  !(user ? user.role.roleName === "admin" : user) &&
                   !(
-                    decryptedProfile().role.roleName !== "admin" &&
+                    (user ? user.role.roleName === "admin" : user) &&
                     data.role?.roleName === "staff"
                   )
                 }

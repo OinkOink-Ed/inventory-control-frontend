@@ -15,6 +15,15 @@ export default defineConfig({
     },
     react(),
   ],
+  server: {
+    host: true,
+    proxy: {
+      "/api": {
+        target: "http://host.docker.internal:3000",
+        changeOrigin: true,
+      },
+    },
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

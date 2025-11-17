@@ -16,31 +16,31 @@ export const useUserCardFormApi = (id: number) => {
 };
 
 export const useUsersFormApiGetRole = () => {
-  return useApiQuery({
+  return useApiQuery(roleControllerGetRoles, {
     queryKey: ["roles"],
-    queryFn: roleControllerGetRoles,
   });
 };
 
 export const useUsersFormApiGetDivision = () => {
   const profile = decryptedProfile();
 
-  return useApiQuery({
+  return useApiQuery(divisionControllerGetDivisions, {
     queryKey: ["division"],
-    queryFn: divisionControllerGetDivisions,
-    enabled: profile.role.roleName !== "staff",
+    enabled: profile ? profile.role.roleName !== "staff" : profile,
   });
 };
 
 export const useUsersFormApiGetKabinetsByUserIdForEditUser = () => {
   const { userChoices } = useChoiseOfKabinetsForCreateUser();
 
-  return useApiQuery({
-    queryKey: ["kabinetsByUserIdForCreateUser", userChoices],
-    queryFn: () =>
+  return useApiQuery(
+    () =>
       kabinetControllerGetKabinetsByDivisionIdForCreateUser({
         divisionIds: encodeURIComponent(JSON.stringify(userChoices)),
       }),
-    enabled: !!userChoices,
-  });
+    {
+      queryKey: ["kabinetsByUserIdForCreateUser", userChoices],
+      enabled: !!userChoices,
+    },
+  );
 };

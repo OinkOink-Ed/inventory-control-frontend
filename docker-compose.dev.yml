@@ -1,0 +1,21 @@
+services:
+  client:
+    build: .
+    restart: unless-stopped
+    environment:
+      # App
+      NODE_ENV: development
+      # Для hot-reload в Docker
+      CHOKIDAR_USEPOLLING: "true"
+
+    ports:
+      - "5173:5173"
+
+    volumes:
+      - ./:/app
+      - node_modules:/app/node_modules
+      - pnpm_store:/pnpm/store
+
+volumes:
+  pnpm_store:
+  node_modules:

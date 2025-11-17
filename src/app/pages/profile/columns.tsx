@@ -55,20 +55,11 @@ export const columns: ColumnDef<GetResponseAcceptedCartridgeByUserDtoMySchema>[]
         return <span>{`${formateDate(props.row.original.createdAt)}`}</span>;
       },
     },
-    //   id: "Действия",
-    //   //Позже буду в компонент передать row
-    //   cell: (row) => {
-    //     return (
-    //       <DataTableRowActions
-    //         linkToCard={
-    //           <DropdownMenuItem>
-    //             <Link to={`/staff/${row.row.original.id}`}>
-    //               Перейти в карточку
-    //             </Link>
-    //           </DropdownMenuItem>
-    //         }
-    //       />
-    //     );
-    //   },
-    // },
+    {
+      id: "Действия",
+      //Позже буду в компонент передать row
+      cell: () => {
+        return <></>;
+      },
+    },
   ];

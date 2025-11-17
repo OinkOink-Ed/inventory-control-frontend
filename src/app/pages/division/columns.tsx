@@ -3,6 +3,7 @@ import { formateDate } from "@/app/helpers/formateDate";
 import DataTableColumnHeader from "@/components/DataTable/DataTableColumnHeader";
 import { ColumnDef } from "@tanstack/react-table";
 
+//Подумать о дополнительных колонках
 export const columns: ColumnDef<GetResponseKabinetsDtoSchema>[] = [
   {
     id: "Номер",

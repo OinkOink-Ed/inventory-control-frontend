@@ -16,20 +16,19 @@ export const useMovementCartridgeFormApiCartrdgesCreateMovement = () => {
   );
 };
 export const useMovementCartridgeFormApiCartridgeModelGetAll = () => {
-  return useApiQuery({
+  return useApiQuery(cartridgeModelControllerGetModels, {
     queryKey: ["modelsCartridges"],
-    queryFn: cartridgeModelControllerGetModels,
     enabled: !!useMatch({ path: "/warehouse/:id", end: true }),
   });
 };
 export const useMovementCartridgeFormApiWarehouseGetAll = () => {
   const profile = decryptedProfile();
-  return useApiQuery({
+  return useApiQuery(warehouseControllerGetWarehouses, {
     queryKey: ["warehouses"],
-    queryFn: warehouseControllerGetWarehouses,
-    enabled: profile.role.roleName !== "staff",
+    enabled: profile ? profile.role.roleName !== "staff" : profile,
   });
 };
+
 export const useMovementCartridgeFormApiStaffGetAllByDivisions = (
   id: number,
 ) => {
@@ -37,15 +36,17 @@ export const useMovementCartridgeFormApiStaffGetAllByDivisions = (
     (state) => state.warehouseChoices,
   );
 
-  return useApiQuery({
-    queryKey: ["usersByWarehouse", choiseWarehouse, id],
-    queryFn: () => {
+  return useApiQuery(
+    () => {
       if (id) {
         return userControllerGetAllByDivisions(id);
       }
       return userControllerGetAllByDivisions(choiseWarehouse!);
     },
-    enabled:
-      !!useMatch({ path: "/warehouse/*" }) && (!!choiseWarehouse || !!id),
-  });
+    {
+      queryKey: ["usersByWarehouse", choiseWarehouse, id],
+      enabled:
+        !!useMatch({ path: "/warehouse/*" }) && (!!choiseWarehouse || !!id),
+    },
+  );
 };

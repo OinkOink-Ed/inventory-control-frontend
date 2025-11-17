@@ -3,9 +3,8 @@ import { useApiQuery } from "@/hooks/useApi";
 import { useMatch } from "react-router";
 
 export const useUsersTableApi = () => {
-  return useApiQuery({
+  return useApiQuery(userControllerGetAll, {
     queryKey: ["users", "table"],
-    queryFn: userControllerGetAll,
     enabled: !!useMatch({ path: "/users", end: true }),
   });
 };

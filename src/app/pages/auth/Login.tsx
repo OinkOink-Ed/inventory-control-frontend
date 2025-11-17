@@ -17,16 +17,11 @@ import { authControllerSignIn, PostAuthDto } from "@/app/api/generated";
 import { handlerError } from "@/app/helpers/handlerError";
 import { Answer } from "@/app/Errors/Answer";
 import { queryClientInstans } from "@/app/queryClientInstans";
-// import { useEffect } from "react";
 
 export function Login() {
   const setProfile = useProfileStore((state) => state.setProfile);
 
   const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   void queryClientInstans.invalidateQueries();
-  // }, []);
 
   const form = useForm<PostAuthDto>({
     resolver: zodResolver(authRequestDtoSchemaZOD),

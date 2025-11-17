@@ -10,11 +10,10 @@ export const useDecommissioningCartrdigeFormApiCartrdgesCreateDecommissioning =
     return useApiMutation(decommissioningControllerCreate);
   };
 
-//Нужно подумать о том, чтобы возвращались не все модели, а только те модели, которые в наличии на складе
+//Нужно подумать о том, чтобы возвращались не все модели, а только те модели, которые в наличии на складе - это будет правильнее
 export const useDecommissioningCartrdigeFormApiCartridgeModelGetAll = () => {
-  return useApiQuery({
+  return useApiQuery(cartridgeModelControllerGetModels, {
     queryKey: ["modelsCartridges"],
-    queryFn: cartridgeModelControllerGetModels,
     enabled: !!useMatch({ path: "/warehouse/:id", end: true }),
   });
 };

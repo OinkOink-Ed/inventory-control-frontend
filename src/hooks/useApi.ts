@@ -1,5 +1,6 @@
 import axiosClient from "@/app/api/client";
 import {
+  QueryKey,
   useMutation,
   UseMutationOptions,
   useQuery,
@@ -23,17 +24,16 @@ export function useApiMutation<TData, TVariables>(
 }
 
 export function useApiQuery<TData>(
-  options: Omit<UseQueryOptions<TData>, "queryFn"> & {
-    queryFn: (config: {
-      signal?: AbortSignal;
-      client?: typeof axiosClient;
-    }) => Promise<TData>;
-  },
+  queryFn: (config: {
+    signal?: AbortSignal;
+    client?: typeof axiosClient;
+  }) => Promise<TData>,
+  options: Omit<UseQueryOptions<TData>, "queryFn"> & { queryKey: QueryKey },
 ) {
   return useQuery({
     ...options,
     queryFn: (context) =>
-      options.queryFn({
+      queryFn({
         signal: context.signal,
         client: axiosClient,
       }),
