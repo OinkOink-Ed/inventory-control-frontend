@@ -16,7 +16,7 @@ export function useLogout(): () => Promise<void> {
       await authControllerLogout({ token: refreshToken });
 
       clearProfile();
-      queryClientInstans.removeQueries();
+      queryClientInstans.clear();
       void navigate("/auth");
     } catch (error) {
       const res = handlerError(error);
