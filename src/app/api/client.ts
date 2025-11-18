@@ -33,7 +33,7 @@ export type ResponseErrorConfig<TError = unknown> = AxiosError<TError>;
 
 // Создаем экземпляр axios
 export const axiosInstance = axios.create({
-  baseURL: "http://localhost:3000",
+  withCredentials: true,
 });
 
 // Функция для обновления токена

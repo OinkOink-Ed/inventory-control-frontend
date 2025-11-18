@@ -14,8 +14,6 @@ import {
 } from "./api/generated";
 import { useLogout } from "../hooks/useLogout";
 
-const SOCKET_URL = "http://localhost:3000";
-
 export function SocketProvider({ children }: { children: ReactNode }) {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
@@ -169,10 +167,11 @@ export function SocketProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    const newSocket = io(SOCKET_URL, {
+    const newSocket = io({
       autoConnect: false,
       auth: { token: token },
       withCredentials: true,
+      transports: ["websocket", "polling"],
     });
 
     newSocket.connect();
