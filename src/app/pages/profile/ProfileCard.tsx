@@ -126,7 +126,6 @@ export function ProfileCard() {
     .filter((div) => div?.id !== undefined)
     .map((div) => div.id!);
 
-  // Получаем начальные подразделения из данных пользователя
   const initialDivisionIds = useMemo(() => {
     return formValues.division
       .filter((div) => div?.id !== undefined)

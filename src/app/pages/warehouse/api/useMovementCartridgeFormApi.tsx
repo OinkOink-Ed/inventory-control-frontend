@@ -1,5 +1,5 @@
 import {
-  cartridgeModelControllerGetModels,
+  cartridgeModelControllerGetMogetModelsByWarehousedels,
   movementControllerCreate,
   PostCreateMovementDto,
   userControllerGetAllByDivisions,
@@ -15,11 +15,16 @@ export const useMovementCartridgeFormApiCartrdgesCreateMovement = () => {
     movementControllerCreate(data),
   );
 };
-export const useMovementCartridgeFormApiCartridgeModelGetAll = () => {
-  return useApiQuery(cartridgeModelControllerGetModels, {
-    queryKey: ["modelsCartridges"],
-    enabled: !!useMatch({ path: "/warehouse/:id", end: true }),
-  });
+export const useMovementCartridgeFormApiCartridgeModelGetAll = (
+  warehouseId: number,
+) => {
+  return useApiQuery(
+    () => cartridgeModelControllerGetMogetModelsByWarehousedels(warehouseId),
+    {
+      queryKey: ["modelsCartridges"],
+      enabled: !!useMatch({ path: "/warehouse/:id", end: true }),
+    },
+  );
 };
 export const useMovementCartridgeFormApiWarehouseGetAll = () => {
   const profile = decryptedProfile();

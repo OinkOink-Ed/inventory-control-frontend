@@ -37,6 +37,7 @@ export const useUsersFormApiGetDivision = () => {
     enabled: !!useMatch({ path: "/profile/", end: true }),
   });
 };
+
 //Надо бы сделать для edit отдельный контроллер на сервере и тут использовать как метод
 export const useUsersFormApiGetKabinetsByUserIdForEditUser = () => {
   const { userChoices } = useChoiseOfKabinetsForCreateUser();

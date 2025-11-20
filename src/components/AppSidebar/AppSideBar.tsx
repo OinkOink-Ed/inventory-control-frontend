@@ -22,7 +22,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubItem,
 } from "../ui/sidebar";
-import { Link, useNavigate } from "react-router";
+import { NavLink, useLocation, useNavigate } from "react-router";
 import { handlerError } from "@/app/helpers/handlerError";
 import { Answer } from "@/app/Errors/Answer";
 import {
@@ -48,6 +48,7 @@ interface MenuItem {
 
 export function AppSideBar() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const { data: dataDivision, error: errorDivivosn } =
     useAppSideBarApiDivisionGetAll();
@@ -83,53 +84,73 @@ export function AppSideBar() {
   const hasAccess = isAdmin || isUser;
 
   const renderCollapsibleMenu = useMemo(
-    () => (title: string, items: MenuItem[], icon: React.ReactNode) => (
-      <Collapsible className="group/collapsible">
-        <SidebarMenuItem>
-          <CollapsibleTrigger asChild>
-            <SidebarMenuButton>
-              {icon}
-              <span>{title}</span>
-              <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
-            </SidebarMenuButton>
-          </CollapsibleTrigger>
-        </SidebarMenuItem>
-        <CollapsibleContent>
-          <SidebarMenuSub>
-            {items.length > 0 ? (
-              items.map((item) => (
-                <SidebarMenuSubItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link to={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuSubItem>
-              ))
-            ) : (
-              <div>Идёт загрузка</div>
-            )}
-          </SidebarMenuSub>
-        </CollapsibleContent>
-      </Collapsible>
-    ),
+    () =>
+      (
+        isWarehouseOpen: boolean,
+        title: string,
+        items: MenuItem[],
+        icon: React.ReactNode,
+      ) => (
+        <Collapsible
+          className="group/collapsible"
+          defaultOpen={isWarehouseOpen}
+          onOpenChange={() => isWarehouseOpen}
+        >
+          <SidebarMenuItem>
+            <CollapsibleTrigger asChild>
+              <SidebarMenuButton>
+                {icon}
+                <span>{title}</span>
+                <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
+              </SidebarMenuButton>
+            </CollapsibleTrigger>
+          </SidebarMenuItem>
+          <CollapsibleContent>
+            <SidebarMenuSub>
+              {items.length > 0 ? (
+                items.map((item) => (
+                  <SidebarMenuSubItem key={item.title}>
+                    <SidebarMenuButton>
+                      <NavLink
+                        to={item.url}
+                        className={({ isActive }) =>
+                          `flex items-center gap-2 ${isActive ? "text-blue-600" : "text-gray-800"}`
+                        }
+                      >
+                        <item.icon className="h-4 w-4" />
+                        <span className="text-sm">{item.title}</span>
+                      </NavLink>
+                    </SidebarMenuButton>
+                  </SidebarMenuSubItem>
+                ))
+              ) : (
+                <div>Идёт загрузка</div>
+              )}
+            </SidebarMenuSub>
+          </CollapsibleContent>
+        </Collapsible>
+      ),
     [],
   );
 
   return (
-    <Sidebar collapsible="none" className="w-[322px]">
+    <Sidebar collapsible="none" className="w-[272px]">
       <SidebarContent>
         <SidebarGroupLabel>Профиль</SidebarGroupLabel>
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link to={`profile`}>
-                    <User />
-                    Профиль
-                  </Link>
+                <SidebarMenuButton>
+                  <NavLink
+                    to={`/profile`}
+                    className={({ isActive }) =>
+                      `flex items-center gap-2 ${isActive ? "text-blue-600" : "text-gray-800"}`
+                    }
+                  >
+                    <User className="h-4 w-4" />
+                    <span className="text-sm">Профиль</span>
+                  </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
@@ -144,28 +165,40 @@ export function AppSideBar() {
               {hasAccess && (
                 <>
                   <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link to={"dashboard"}>
-                        <LayoutDashboard />
-                        Дашборд
-                      </Link>
+                    <SidebarMenuButton>
+                      <NavLink
+                        to={"dashboard"}
+                        className={({ isActive }) =>
+                          `flex items-center gap-2 ${isActive ? "text-blue-600" : "text-gray-800"}`
+                        }
+                      >
+                        <LayoutDashboard className="h-4 w-4" />
+                        <span className="text-sm">Дашборд</span>
+                      </NavLink>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link to={"users"}>
-                        <User2 />
-                        Пользователи
-                      </Link>
+                    <SidebarMenuButton>
+                      <NavLink
+                        to={"users"}
+                        className={({ isActive }) =>
+                          `flex items-center gap-2 ${isActive ? "text-blue-600" : "text-gray-800"}`
+                        }
+                      >
+                        <User2 className="h-4 w-4" />
+                        <span className="text-sm">Пользователи</span>
+                      </NavLink>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                   {renderCollapsibleMenu(
+                    location.pathname.startsWith("/warehouse") ? true : false,
                     "Склады",
                     itemsWarehouses,
                     <PackageCheck />,
                   )}
 
                   {renderCollapsibleMenu(
+                    location.pathname.startsWith("/division") ? true : false,
                     "Подразделения",
                     itemsDivision,
                     <PackageCheck />,
@@ -175,20 +208,30 @@ export function AppSideBar() {
               {/* Меню для админа */}
               {isAdmin && (
                 <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <Link to={"cartrideModel"}>
-                      <Book />
-                      Модели картриджей
-                    </Link>
+                  <SidebarMenuButton>
+                    <NavLink
+                      to={"cartrideModel"}
+                      className={({ isActive }) =>
+                        `flex items-center gap-2 ${isActive ? "text-blue-600" : "text-gray-800"}`
+                      }
+                    >
+                      <Book className="h-4 w-4" />
+                      <span className="text-sm">Модели картриджей</span>
+                    </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               )}
               <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link to={"reports"}>
-                    <Archive />
-                    Отчёты
-                  </Link>
+                <SidebarMenuButton>
+                  <NavLink
+                    to={"reports"}
+                    className={({ isActive }) =>
+                      `flex items-center gap-2 ${isActive ? "text-blue-600" : "text-gray-800"}`
+                    }
+                  >
+                    <Archive className="h-4 w-4" />
+                    <span className="text-sm">Отчёты</span>
+                  </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>

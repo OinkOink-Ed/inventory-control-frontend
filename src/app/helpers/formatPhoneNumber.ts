@@ -4,7 +4,7 @@ export const formatPhoneNumber = (value: string | undefined): string => {
   // Удаляем все нецифровые символы кроме +
   const cleaned = value.replace(/[^\d+]/g, "");
 
-  // Если номер начинается не с +7, добавляем +7
+  // Если номер начинается не с +, добавляем +7
   if (!cleaned.startsWith("+")) {
     return "+7 ";
   }

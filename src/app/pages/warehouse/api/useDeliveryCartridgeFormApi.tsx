@@ -1,5 +1,5 @@
 import {
-  cartridgeModelControllerGetModels,
+  cartridgeModelControllerGetMogetModelsByWarehousedels,
   deliveryControllerCreate,
   divisionControllerGetDivision,
   kabinetControllerGetKabinetsByUserId,
@@ -14,11 +14,16 @@ export const useDeliveryCartridgeFormApiCartrdgesCreateDelivery = () => {
   return useApiMutation(deliveryControllerCreate);
 };
 
-export const useDeliveryCartridgeFormApiCartridgeModelGetAll = () => {
-  return useApiQuery(cartridgeModelControllerGetModels, {
-    queryKey: ["modelsCartridges"],
-    enabled: !!useMatch({ path: "/warehouse/:id", end: true }),
-  });
+export const useDeliveryCartridgeFormApiCartridgeModelGetAll = (
+  warehouseId: number,
+) => {
+  return useApiQuery(
+    () => cartridgeModelControllerGetMogetModelsByWarehousedels(warehouseId),
+    {
+      queryKey: ["modelsCartridges"],
+      enabled: !!useMatch({ path: "/warehouse/:id", end: true }),
+    },
+  );
 };
 
 export const useDeliveryCartridgeFormApiDivisionIdByWarehouseId = (

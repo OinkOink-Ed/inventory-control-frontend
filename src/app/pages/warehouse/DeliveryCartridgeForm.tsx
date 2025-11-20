@@ -48,7 +48,7 @@ export function DeliveryCartridgeForm({
 
   const { mutateAsync } = useDeliveryCartridgeFormApiCartrdgesCreateDelivery();
   const { data: cartridgeModelData, isSuccess: cartridgeModelSuccess } =
-    useDeliveryCartridgeFormApiCartridgeModelGetAll();
+    useDeliveryCartridgeFormApiCartridgeModelGetAll(warehouseId);
   const { data: divisionData } =
     useDeliveryCartridgeFormApiDivisionIdByWarehouseId(warehouseId);
   const { data: staffData, isSuccess: staffSuccess } =
@@ -56,7 +56,6 @@ export function DeliveryCartridgeForm({
   const { data: kabinetsData, isSuccess: kabinetsSuccess } =
     useDeliveryCartridgeFormApiKabinetsByUserId();
 
-  //Инициализация при создании - данные сервера нужно будет обновлять
   const {
     formState,
     handleSubmit,

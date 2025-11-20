@@ -40,7 +40,7 @@ export function ReceivingCartridgeForm({
     useReceivingCartridgeFormApiCartrdgesCreateReceiving();
 
   const { data, isSuccess } =
-    useReceivingCartridgeFormApiCreateCartridgeModelGetAll();
+    useReceivingCartridgeFormApiCreateCartridgeModelGetAll(warehouseId);
 
   const form = useForm<PostCreateReceivingDto>({
     resolver: zodResolver(createReceivingDtoSchema),

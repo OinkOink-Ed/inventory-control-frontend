@@ -1,5 +1,5 @@
 import {
-  cartridgeModelControllerGetModels,
+  cartridgeModelControllerGetMogetModelsByWarehousedels,
   PostCreateReceivingDto,
   receivingControllerCreate,
 } from "@/app/api/generated";
@@ -12,9 +12,14 @@ export const useReceivingCartridgeFormApiCartrdgesCreateReceiving = () => {
   );
 };
 
-export const useReceivingCartridgeFormApiCreateCartridgeModelGetAll = () => {
-  return useApiQuery(cartridgeModelControllerGetModels, {
-    queryKey: ["modelsCartridges"],
-    enabled: !!useMatch({ path: "/warehouse/:id", end: true }),
-  });
+export const useReceivingCartridgeFormApiCreateCartridgeModelGetAll = (
+  warehouseId: number,
+) => {
+  return useApiQuery(
+    () => cartridgeModelControllerGetMogetModelsByWarehousedels(warehouseId),
+    {
+      queryKey: ["modelsCartridges"],
+      enabled: !!useMatch({ path: "/warehouse/:id", end: true }),
+    },
+  );
 };

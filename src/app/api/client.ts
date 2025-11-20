@@ -31,12 +31,10 @@ export interface ResponseConfig<TData = unknown> {
 
 export type ResponseErrorConfig<TError = unknown> = AxiosError<TError>;
 
-// Создаем экземпляр axios
 export const axiosInstance = axios.create({
   withCredentials: true,
 });
 
-// Функция для обновления токена
 export const refreshAccessToken = async (): Promise<RefreshTokenResponse> => {
   const profile = useProfileStore;
 
@@ -62,7 +60,6 @@ export const refreshAccessToken = async (): Promise<RefreshTokenResponse> => {
   }
 };
 
-// Перехватчик запросов
 axiosInstance.interceptors.request.use((config) => {
   const { access_token } = useProfileStore.getState();
   if (config.url == "/api/auth") {
@@ -94,7 +91,6 @@ const processQueue = (error: Error | null, token: string | null = null) => {
   failedQueue = [];
 };
 
-// Перехватчик ответов
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
@@ -155,7 +151,6 @@ axiosInstance.interceptors.response.use(
   },
 );
 
-// Основной клиент
 export const axiosClient = async <
   TData,
   TError = unknown,

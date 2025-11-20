@@ -41,7 +41,7 @@ export function DecommissioningCartrdigeForm({
     useDecommissioningCartrdigeFormApiCartrdgesCreateDecommissioning();
 
   const { data, isSuccess } =
-    useDecommissioningCartrdigeFormApiCartridgeModelGetAll();
+    useDecommissioningCartrdigeFormApiCartridgeModelGetAll(warehouseId);
 
   const form = useForm<PostCreateDecommissioningDto>({
     resolver: zodResolver(createDecommissioningDtoShema),

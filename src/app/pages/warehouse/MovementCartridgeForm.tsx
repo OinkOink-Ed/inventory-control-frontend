@@ -42,7 +42,7 @@ export function MovementCartridgeForm({
   const navigate = useNavigate();
   const { mutateAsync } = useMovementCartridgeFormApiCartrdgesCreateMovement();
   const { data: cartridgeModelData, isSuccess: cartridgeModelSuccess } =
-    useMovementCartridgeFormApiCartridgeModelGetAll();
+    useMovementCartridgeFormApiCartridgeModelGetAll(warehouseId);
 
   const { data: warehouseData, isSuccess: warehouseSuccess } =
     useMovementCartridgeFormApiWarehouseGetAll();
