@@ -40,10 +40,10 @@ import {
   useUsersFormApiGetKabinetsByUserIdForEditUser,
   useUsersFormApiGetRole,
 } from "./api/useUserCardFormApi";
-import { decryptedProfile } from "@/app/helpers/decryptedProfile";
 import { SpinnerLoad } from "@/components/SpinnerLoad";
 import { useUserCardApi } from "../api/useUserCardApi";
 import { editCardUserDtoSchemaZOD } from "./shema";
+import { useRoleContext } from "@/app/providers/hooks/useRoleContext";
 
 interface UserCardFormProps {
   id: number;
@@ -53,7 +53,7 @@ export function UserCardForm({ id }: UserCardFormProps) {
   const navigate = useNavigate();
   const [isFormDisabled, setIsFormDisabled] = useState(true);
 
-  const user = decryptedProfile();
+  const { roleName } = useRoleContext();
 
   const { data, isSuccess } = useUserCardApi(id);
   const { mutateAsync } = useUserCardFormApi(id);
@@ -314,10 +314,7 @@ export function UserCardForm({ id }: UserCardFormProps) {
                       field.onChange(value ? Number(value) : undefined)
                     }
                     value={currentValue}
-                    disabled={
-                      (user ? user.role.roleName === "admin" : user) ||
-                      isFormDisabled
-                    }
+                    disabled={roleName === "admin" || isFormDisabled}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -387,25 +384,26 @@ export function UserCardForm({ id }: UserCardFormProps) {
                   )
                 : [];
 
-              const selectedDivisionNames = (
-                user ? user.role.roleName === "admin" : user
-              )
-                ? currentValues.map(() => {
-                    const division = divisionData?.find((item) => item);
-                    if (division) {
-                      const regex = /№ \d+/;
-                      const match = regex.exec(division.name);
-                      return match;
-                    }
-                  })
-                : currentValues.map((div) => {
-                    const division = divisionData?.find((d) => d.id === div.id);
-                    if (division) {
-                      const regex = /№ \d+/;
-                      const match = regex.exec(division.name);
-                      return match;
-                    }
-                  });
+              const selectedDivisionNames =
+                roleName === "admin"
+                  ? currentValues.map(() => {
+                      const division = divisionData?.find((item) => item);
+                      if (division) {
+                        const regex = /№ \d+/;
+                        const match = regex.exec(division.name);
+                        return match;
+                      }
+                    })
+                  : currentValues.map((div) => {
+                      const division = divisionData?.find(
+                        (d) => d.id === div.id,
+                      );
+                      if (division) {
+                        const regex = /№ \d+/;
+                        const match = regex.exec(division.name);
+                        return match;
+                      }
+                    });
               const selectedKabinetIds =
                 watch("kabinets")?.map((k) => k.id) ??
                 data.kabinets.map((kab) => kab.id);
@@ -422,8 +420,8 @@ export function UserCardForm({ id }: UserCardFormProps) {
                   className="h-24 w-[300px]"
                   style={{
                     cursor:
-                      (user ? user.role.roleName === "admin" : user) ||
-                      (user ? user.role.roleName === "staff" : user) ||
+                      roleName === "admin" ||
+                      roleName === "staff" ||
                       isFormDisabled
                         ? "not-allowed"
                         : "pointer",
@@ -436,8 +434,8 @@ export function UserCardForm({ id }: UserCardFormProps) {
                         variant="outline"
                         className="w-full justify-between"
                         disabled={
-                          (user ? user.role.roleName === "user" : user) ||
-                          (user ? user.role.roleName === "staff" : user) ||
+                          roleName === "admin" ||
+                          roleName === "staff" ||
                           isFormDisabled
                         }
                       >
@@ -536,8 +534,8 @@ export function UserCardForm({ id }: UserCardFormProps) {
                   className="h-24 w-[300px]"
                   style={{
                     cursor:
-                      (user ? user.role.roleName === "user" : user) ||
-                      (user ? user.role.roleName === "staff" : user) ||
+                      roleName === "admin" ||
+                      roleName === "staff" ||
                       isFormDisabled
                         ? "not-allowed"
                         : "pointer",
@@ -637,11 +635,8 @@ export function UserCardForm({ id }: UserCardFormProps) {
                 className="w-[200px]"
                 onClick={() => setIsFormDisabled(false)}
                 disabled={
-                  !(user ? user.role.roleName === "admin" : user) &&
-                  !(
-                    (user ? user.role.roleName === "admin" : user) &&
-                    data.role?.roleName === "staff"
-                  )
+                  !(roleName === "admin") &&
+                  !(roleName === "admin" && data.role?.roleName === "staff")
                 }
               >
                 Редактировать

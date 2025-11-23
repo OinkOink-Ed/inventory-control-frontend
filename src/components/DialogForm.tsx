@@ -1,3 +1,4 @@
+import { useDialogFormShow } from "@/app/stores/dialogFormShow/useDialogFormShow";
 import {
   Dialog,
   DialogContent,
@@ -6,23 +7,19 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
-import { ReactNode } from "react";
-
-interface DialogFormProps {
+import { PropsWithChildren } from "react";
+import { DialogFormShowStore } from "@/app/stores/dialogFormShow/type";
+interface DialogFormProps extends PropsWithChildren {
   title: string;
-  form: ReactNode;
-  openState: boolean;
-  changeState: React.Dispatch<React.SetStateAction<boolean>>;
+  name: keyof DialogFormShowStore;
 }
 
-export function DialogForm({
-  title,
-  form,
-  openState,
-  changeState,
-}: DialogFormProps) {
+export function DialogForm({ title, name, children }: DialogFormProps) {
+  const show = useDialogFormShow((state) => state[`${name}`]);
+  const toggleShow = useDialogFormShow((state) => state.toggleDialogForm);
+
   return (
-    <Dialog open={openState} onOpenChange={changeState}>
+    <Dialog open={show} onOpenChange={() => toggleShow(name)}>
       <DialogTrigger asChild></DialogTrigger>
       <DialogContent className="flex min-w-[900px] flex-col">
         <DialogHeader>
@@ -31,7 +28,7 @@ export function DialogForm({
             Заполните требуемые поля
           </DialogDescription>
         </DialogHeader>
-        {form}
+        {children}
       </DialogContent>
     </Dialog>
   );

@@ -1,14 +1,4 @@
-import {
-  Archive,
-  Book,
-  ChevronRight,
-  LayoutDashboard,
-  LogOut,
-  LucideProps,
-  PackageCheck,
-  User,
-  User2,
-} from "lucide-react";
+import { Archive, LogOut, User } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -19,119 +9,22 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubItem,
 } from "../ui/sidebar";
-import { NavLink, useLocation, useNavigate } from "react-router";
-import { handlerError } from "@/app/helpers/handlerError";
-import { Answer } from "@/app/Errors/Answer";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "../ui/collapsible";
-import { decryptedProfile } from "@/app/helpers/decryptedProfile";
-import { useEffect, useMemo } from "react";
-import {
-  useAppSideBarApiDivisionGetAll,
-  useAppSideBarApiWarehouseGetAll,
-} from "./api/useAppSideBarApi";
 import { useLogout } from "@/hooks/useLogout";
-
-interface MenuItem {
-  title: string;
-  url: string;
-  icon: React.ForwardRefExoticComponent<
-    Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
-  >;
-}
+import { AdminAndUserItemsMenu } from "./components/AdminAndUserItemsMenu";
+import { AdminItemsMenu } from "./components/AdminItemsMenu";
+import { SidebarNavLink } from "./components/SidebarNavLink";
+import { useRoleContext } from "@/app/providers/hooks/useRoleContext";
+import { useMemo } from "react";
 
 export function AppSideBar() {
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  const { data: dataDivision, error: errorDivivosn } =
-    useAppSideBarApiDivisionGetAll();
-  const { data: dataWarehouses, error: errorWarehouses } =
-    useAppSideBarApiWarehouseGetAll();
-
-  useEffect(() => {
-    if (errorDivivosn || errorWarehouses) {
-      const res = handlerError(errorDivivosn ?? errorWarehouses);
-      if (res == Answer.LOGOUT) void navigate("/auth", { replace: true });
-    }
-  }, [navigate, errorWarehouses, errorDivivosn]);
-
   const logoutHandler = useLogout();
 
-  const itemsDivision =
-    dataDivision?.map((item) => ({
-      title: `${item.name}`,
-      url: `division/${item.id}`,
-      icon: Book,
-    })) ?? [];
+  const { roleName } = useRoleContext();
 
-  const itemsWarehouses =
-    dataWarehouses?.map((item, index) => ({
-      title: `Склад №${index + 1}`,
-      url: `/warehouse/${item.id}`,
-      icon: PackageCheck,
-    })) ?? [];
-
-  const profile = decryptedProfile();
-  const isAdmin = profile ? profile?.role?.roleName === "admin" : profile;
-  const isUser = profile ? profile?.role?.roleName === "user" : profile;
-  const hasAccess = isAdmin || isUser;
-
-  const renderCollapsibleMenu = useMemo(
-    () =>
-      (
-        isWarehouseOpen: boolean,
-        title: string,
-        items: MenuItem[],
-        icon: React.ReactNode,
-      ) => (
-        <Collapsible
-          className="group/collapsible"
-          defaultOpen={isWarehouseOpen}
-          onOpenChange={() => isWarehouseOpen}
-        >
-          <SidebarMenuItem>
-            <CollapsibleTrigger asChild>
-              <SidebarMenuButton>
-                {icon}
-                <span>{title}</span>
-                <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
-              </SidebarMenuButton>
-            </CollapsibleTrigger>
-          </SidebarMenuItem>
-          <CollapsibleContent>
-            <SidebarMenuSub>
-              {items.length > 0 ? (
-                items.map((item) => (
-                  <SidebarMenuSubItem key={item.title}>
-                    <SidebarMenuButton>
-                      <NavLink
-                        to={item.url}
-                        className={({ isActive }) =>
-                          `flex items-center gap-2 ${isActive ? "text-blue-600" : "text-gray-800"}`
-                        }
-                      >
-                        <item.icon className="h-4 w-4" />
-                        <span className="text-sm">{item.title}</span>
-                      </NavLink>
-                    </SidebarMenuButton>
-                  </SidebarMenuSubItem>
-                ))
-              ) : (
-                <div>Идёт загрузка</div>
-              )}
-            </SidebarMenuSub>
-          </CollapsibleContent>
-        </Collapsible>
-      ),
-    [],
-  );
+  const isAdmin = useMemo(() => roleName === "admin", [roleName]);
+  const isUser = useMemo(() => roleName === "user", [roleName]);
+  const hasAccess = useMemo(() => isAdmin || isUser, [isAdmin, isUser]);
 
   return (
     <Sidebar collapsible="none" className="w-[272px]">
@@ -142,15 +35,10 @@ export function AppSideBar() {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton>
-                  <NavLink
-                    to={`/profile`}
-                    className={({ isActive }) =>
-                      `flex items-center gap-2 ${isActive ? "text-blue-600" : "text-gray-800"}`
-                    }
-                  >
+                  <SidebarNavLink to="/profile">
                     <User className="h-4 w-4" />
                     <span className="text-sm">Профиль</span>
-                  </NavLink>
+                  </SidebarNavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
@@ -161,77 +49,14 @@ export function AppSideBar() {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {/* Меню для админа и пользователя */}
-              {hasAccess && (
-                <>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton>
-                      <NavLink
-                        to={"dashboard"}
-                        className={({ isActive }) =>
-                          `flex items-center gap-2 ${isActive ? "text-blue-600" : "text-gray-800"}`
-                        }
-                      >
-                        <LayoutDashboard className="h-4 w-4" />
-                        <span className="text-sm">Дашборд</span>
-                      </NavLink>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton>
-                      <NavLink
-                        to={"users"}
-                        className={({ isActive }) =>
-                          `flex items-center gap-2 ${isActive ? "text-blue-600" : "text-gray-800"}`
-                        }
-                      >
-                        <User2 className="h-4 w-4" />
-                        <span className="text-sm">Пользователи</span>
-                      </NavLink>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  {renderCollapsibleMenu(
-                    location.pathname.startsWith("/warehouse") ? true : false,
-                    "Склады",
-                    itemsWarehouses,
-                    <PackageCheck />,
-                  )}
-
-                  {renderCollapsibleMenu(
-                    location.pathname.startsWith("/division") ? true : false,
-                    "Подразделения",
-                    itemsDivision,
-                    <PackageCheck />,
-                  )}
-                </>
-              )}
-              {/* Меню для админа */}
-              {isAdmin && (
-                <SidebarMenuItem>
-                  <SidebarMenuButton>
-                    <NavLink
-                      to={"cartrideModel"}
-                      className={({ isActive }) =>
-                        `flex items-center gap-2 ${isActive ? "text-blue-600" : "text-gray-800"}`
-                      }
-                    >
-                      <Book className="h-4 w-4" />
-                      <span className="text-sm">Модели картриджей</span>
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              )}
+              {hasAccess && <AdminAndUserItemsMenu />}
+              {isAdmin && <AdminItemsMenu />}
               <SidebarMenuItem>
                 <SidebarMenuButton>
-                  <NavLink
-                    to={"reports"}
-                    className={({ isActive }) =>
-                      `flex items-center gap-2 ${isActive ? "text-blue-600" : "text-gray-800"}`
-                    }
-                  >
+                  <SidebarNavLink to="reports">
                     <Archive className="h-4 w-4" />
                     <span className="text-sm">Отчёты</span>
-                  </NavLink>
+                  </SidebarNavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>

@@ -21,7 +21,7 @@ import {
 import { PostCreateMovementDtoSchema } from "@/app/api/generated";
 import { handlerError } from "@/app/helpers/handlerError";
 import { createMovementDtoShema } from "./shema";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { Answer } from "@/app/Errors/Answer";
 import { useChoiceOfStaffStore } from "@/app/stores/choiceOfStaff/useChoiceOfStaffStore";
 import { useEffect } from "react";
@@ -31,24 +31,20 @@ import {
   useMovementCartridgeFormApiStaffGetAllByDivisions,
   useMovementCartridgeFormApiWarehouseGetAll,
 } from "./api/useMovementCartridgeFormApi";
+import { SpinnerLoad } from "@/components/SpinnerLoad";
 
-interface MovementCartridgeFormProps {
-  warehouseId: number;
-}
-
-export function MovementCartridgeForm({
-  warehouseId,
-}: MovementCartridgeFormProps) {
+export function MovementCartridgeForm() {
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { mutateAsync } = useMovementCartridgeFormApiCartrdgesCreateMovement();
   const { data: cartridgeModelData, isSuccess: cartridgeModelSuccess } =
-    useMovementCartridgeFormApiCartridgeModelGetAll(warehouseId);
+    useMovementCartridgeFormApiCartridgeModelGetAll();
 
   const { data: warehouseData, isSuccess: warehouseSuccess } =
     useMovementCartridgeFormApiWarehouseGetAll();
 
   const { data: staffData, isSuccess: staffSuccess } =
-    useMovementCartridgeFormApiStaffGetAllByDivisions(warehouseId);
+    useMovementCartridgeFormApiStaffGetAllByDivisions();
 
   const { setChoiceOfStaff, warehouseChoices, clearChoiceOfStaff } =
     useChoiceOfStaffStore();
@@ -57,10 +53,10 @@ export function MovementCartridgeForm({
     resolver: zodResolver(createMovementDtoShema),
     defaultValues: {
       count: 0,
-      warehouseFrom: { id: warehouseId },
+      warehouseFrom: { id: Number(id) },
       warehouseWhere: { id: undefined },
       model: { id: undefined },
-      warehouse: { id: warehouseId },
+      warehouse: { id: Number(id) },
       whoAccepted: { id: undefined },
     },
   });
@@ -98,7 +94,7 @@ export function MovementCartridgeForm({
     };
   }, [clearChoiceOfStaff]);
 
-  return (
+  return cartridgeModelSuccess && warehouseSuccess && staffSuccess ? (
     <>
       <Form {...form}>
         <form
@@ -140,17 +136,11 @@ export function MovementCartridgeForm({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {cartridgeModelSuccess && cartridgeModelData ? (
-                      cartridgeModelData.map((item) => (
-                        <SelectItem key={item.id} value={item.id.toString()}>
-                          {item.name}
-                        </SelectItem>
-                      ))
-                    ) : (
-                      <SelectItem value="Идет загрузка данных">
-                        Идет загрузка данных
+                    {cartridgeModelData.map((item) => (
+                      <SelectItem key={item.id} value={item.id.toString()}>
+                        {item.name}
                       </SelectItem>
-                    )}
+                    ))}
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -176,24 +166,15 @@ export function MovementCartridgeForm({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {warehouseSuccess && warehouseData ? (
-                      warehouseData.map((item) => {
-                        if (item.id !== warehouseId) {
-                          return (
-                            <SelectItem
-                              key={item.id}
-                              value={item.id.toString()}
-                            >
-                              {item.name}
-                            </SelectItem>
-                          );
-                        }
-                      })
-                    ) : (
-                      <SelectItem value="Идет загрузка данных">
-                        Идет загрузка данных
-                      </SelectItem>
-                    )}
+                    {warehouseData.map((item) => {
+                      if (item.id !== Number(id)) {
+                        return (
+                          <SelectItem key={item.id} value={item.id.toString()}>
+                            {item.name}
+                          </SelectItem>
+                        );
+                      }
+                    })}
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -220,24 +201,18 @@ export function MovementCartridgeForm({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {staffSuccess && staffData ? (
-                        staffData.map((item) => {
-                          if (item.role?.roleName === "user") {
-                            return (
-                              <SelectItem
-                                key={item.id}
-                                value={item.id.toString()}
-                              >
-                                {item.lastname} {item.name} {item.patronimyc}
-                              </SelectItem>
-                            );
-                          }
-                        })
-                      ) : (
-                        <SelectItem value="Идет загрузка данных">
-                          Идет загрузка данных
-                        </SelectItem>
-                      )}
+                      {staffData.map((item) => {
+                        if (item.role?.roleName === "user") {
+                          return (
+                            <SelectItem
+                              key={item.id}
+                              value={item.id.toString()}
+                            >
+                              {item.lastname} {item.name} {item.patronimyc}
+                            </SelectItem>
+                          );
+                        }
+                      })}
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -251,5 +226,7 @@ export function MovementCartridgeForm({
         </form>
       </Form>
     </>
+  ) : (
+    <SpinnerLoad />
   );
 }

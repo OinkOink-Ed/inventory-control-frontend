@@ -2,25 +2,21 @@ import {
   divisionControllerGetDivisions,
   warehouseControllerGetWarehouses,
 } from "@/app/api/generated";
-import { decryptedProfile } from "@/app/helpers/decryptedProfile";
 import { useApiQuery } from "@/hooks/useApi";
+import { useRoleContext } from "@/app/providers/hooks/useRoleContext";
 
 export const useAppSideBarApiDivisionGetAll = () => {
-  const profile = decryptedProfile();
+  const { roleName } = useRoleContext();
   return useApiQuery(divisionControllerGetDivisions, {
     queryKey: ["division"],
-    enabled:
-      (profile ? profile.role.roleName !== "staff" : profile) &&
-      (profile ? profile.role.roleName !== "" : profile),
+    enabled: roleName !== "staff",
   });
 };
 
 export const useAppSideBarApiWarehouseGetAll = () => {
-  const profile = decryptedProfile();
+  const { roleName } = useRoleContext();
   return useApiQuery(warehouseControllerGetWarehouses, {
     queryKey: ["warehouses"],
-    enabled:
-      (profile ? profile.role.roleName !== "staff" : profile) &&
-      (profile ? profile.role.roleName !== "" : profile),
+    enabled: roleName !== "staff",
   });
 };

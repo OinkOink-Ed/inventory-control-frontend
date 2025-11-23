@@ -3,18 +3,17 @@ import {
   decommissioningControllerCreate,
 } from "@/app/api/generated";
 import { useApiMutation, useApiQuery } from "@/hooks/useApi";
-import { useMatch } from "react-router";
+import { useMatch, useParams } from "react-router";
 
 export const useDecommissioningCartrdigeFormApiCartrdgesCreateDecommissioning =
   () => {
     return useApiMutation(decommissioningControllerCreate);
   };
 
-export const useDecommissioningCartrdigeFormApiCartridgeModelGetAll = (
-  warehouseId: number,
-) => {
+export const useDecommissioningCartrdigeFormApiCartridgeModelGetAll = () => {
+  const { id } = useParams<{ id: string }>();
   return useApiQuery(
-    () => cartridgeModelControllerGetMogetModelsByWarehousedels(warehouseId),
+    () => cartridgeModelControllerGetMogetModelsByWarehousedels(Number(id)),
     {
       queryKey: ["modelsCartridges"],
       enabled: !!useMatch({ path: "/warehouse/:id", end: true }),

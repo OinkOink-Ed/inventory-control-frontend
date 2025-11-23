@@ -22,26 +22,21 @@ import { PostCreateDecommissioningDto } from "@/app/api/generated";
 import { handlerError } from "@/app/helpers/handlerError";
 import { createDecommissioningDtoShema } from "./shema";
 import { Answer } from "@/app/Errors/Answer";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import {
   useDecommissioningCartrdigeFormApiCartrdgesCreateDecommissioning,
   useDecommissioningCartrdigeFormApiCartridgeModelGetAll,
 } from "./api/useDecommissioningCartrdigeFormApi";
 
-interface DecommissioningCartrdigeFormProps {
-  warehouseId: number;
-}
-
-export function DecommissioningCartrdigeForm({
-  warehouseId,
-}: DecommissioningCartrdigeFormProps) {
+export function DecommissioningCartrdigeForm() {
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
   const { mutateAsync } =
     useDecommissioningCartrdigeFormApiCartrdgesCreateDecommissioning();
 
   const { data, isSuccess } =
-    useDecommissioningCartrdigeFormApiCartridgeModelGetAll(warehouseId);
+    useDecommissioningCartrdigeFormApiCartridgeModelGetAll();
 
   const form = useForm<PostCreateDecommissioningDto>({
     resolver: zodResolver(createDecommissioningDtoShema),
@@ -49,7 +44,7 @@ export function DecommissioningCartrdigeForm({
       count: 0,
       comment: "",
       model: { id: undefined },
-      warehouse: { id: warehouseId },
+      warehouse: { id: Number(id) },
     },
   });
 

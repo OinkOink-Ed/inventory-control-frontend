@@ -21,7 +21,7 @@ import {
 import { PostCreateDeliveryDtoSchema } from "@/app/api/generated";
 import { handlerError } from "@/app/helpers/handlerError";
 import { createDeliveryDtoShema } from "./shema";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { Answer } from "@/app/Errors/Answer";
 import { useChoiceOfKabinetsStore } from "@/app/stores/choiseOfKabinets/useChoiseOfKabinetsStore";
 import { useEffect } from "react";
@@ -34,13 +34,8 @@ import {
 } from "./api/useDeliveryCartridgeFormApi";
 import { deliveryPDF } from "@/app/helpers/generatedPDF/deliveryPdf";
 
-interface DeliveryCartridgeFormProps {
-  warehouseId: number;
-}
-
-export function DeliveryCartridgeForm({
-  warehouseId,
-}: DeliveryCartridgeFormProps) {
+export function DeliveryCartridgeForm() {
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
   const { setChoiceOfKabinets, userChoices, clearChoiceOfKabinets } =
@@ -48,11 +43,11 @@ export function DeliveryCartridgeForm({
 
   const { mutateAsync } = useDeliveryCartridgeFormApiCartrdgesCreateDelivery();
   const { data: cartridgeModelData, isSuccess: cartridgeModelSuccess } =
-    useDeliveryCartridgeFormApiCartridgeModelGetAll(warehouseId);
+    useDeliveryCartridgeFormApiCartridgeModelGetAll();
   const { data: divisionData } =
-    useDeliveryCartridgeFormApiDivisionIdByWarehouseId(warehouseId);
+    useDeliveryCartridgeFormApiDivisionIdByWarehouseId();
   const { data: staffData, isSuccess: staffSuccess } =
-    useDeliveryCartridgeFormApiStaffGetAllByDivisions(warehouseId);
+    useDeliveryCartridgeFormApiStaffGetAllByDivisions();
   const { data: kabinetsData, isSuccess: kabinetsSuccess } =
     useDeliveryCartridgeFormApiKabinetsByUserId();
 
@@ -78,7 +73,7 @@ export function DeliveryCartridgeForm({
     defaultValues: {
       count: 0,
       model: { id: undefined },
-      warehouse: { id: warehouseId },
+      warehouse: { id: Number(id) },
       division: {
         id: divisionData?.id,
       },

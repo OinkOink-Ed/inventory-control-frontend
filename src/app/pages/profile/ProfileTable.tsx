@@ -3,12 +3,12 @@ import { columns } from "./columns";
 import { SpinnerLoad } from "@/components/SpinnerLoad";
 import { useProfileCardTable } from "./api/useProfileCardFormApi";
 import { GetResponseAcceptedCartridgeByUserDtoMySchema } from "./shema";
-import { decryptedProfile } from "@/app/helpers/decryptedProfile";
+import { useRoleContext } from "@/app/providers/hooks/useRoleContext";
 
 export default function ProfileTable() {
-  const user = decryptedProfile();
+  const { id } = useRoleContext();
 
-  const { data, isSuccess } = useProfileCardTable(user ? user.id : user);
+  const { data, isSuccess } = useProfileCardTable(id ?? 0);
 
   return isSuccess && data ? (
     <DataTable<

@@ -12,7 +12,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { ReactNode } from "react";
+import { useDataTableActions } from "./hooks/useDataTableActions";
 
 interface CountValues {
   name: string;
@@ -30,15 +30,14 @@ interface DataTableToolbarProps<TData> {
       icon: React.ComponentType<{ className?: string }>;
     }[];
   }[];
-  actions?: ReactNode;
 }
 
 export default function DataTableToolbar<TData>({
   table,
   facetedOptions,
   column,
-  actions,
 }: DataTableToolbarProps<TData>) {
+  const { toolbarActions } = useDataTableActions();
   const isFiltered = table.getState().columnFilters.length > 0;
   let unicValues;
   const result: CountValues[] = [];
@@ -89,7 +88,7 @@ export default function DataTableToolbar<TData>({
           </Button>
         )}
       </div>
-      {actions}
+      {toolbarActions}
       <div className="flex flex-1 justify-end gap-4">
         {column ? (
           <Dialog>

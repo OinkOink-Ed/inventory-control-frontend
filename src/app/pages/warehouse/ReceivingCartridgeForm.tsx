@@ -27,45 +27,44 @@ import {
   useReceivingCartridgeFormApiCartrdgesCreateReceiving,
   useReceivingCartridgeFormApiCreateCartridgeModelGetAll,
 } from "./api/useReceivingCartridgeFormApi";
+import { SpinnerLoad } from "@/components/SpinnerLoad";
+import { useCallback } from "react";
 
-interface ReceivingCartridgeFormProps {
-  warehouseId: number;
-}
-
-export function ReceivingCartridgeForm({
-  warehouseId,
-}: ReceivingCartridgeFormProps) {
+export function ReceivingCartridgeForm() {
   const navigate = useNavigate();
   const { mutateAsync } =
     useReceivingCartridgeFormApiCartrdgesCreateReceiving();
 
   const { data, isSuccess } =
-    useReceivingCartridgeFormApiCreateCartridgeModelGetAll(warehouseId);
+    useReceivingCartridgeFormApiCreateCartridgeModelGetAll();
 
   const form = useForm<PostCreateReceivingDto>({
     resolver: zodResolver(createReceivingDtoSchema),
     defaultValues: {
       count: 0,
       model: { id: undefined },
-      warehouse: { id: warehouseId },
+      warehouse: { id: undefined },
     },
   });
 
-  async function onSubmit(data: PostCreateReceivingDto): Promise<void> {
-    try {
-      const res = await mutateAsync(data);
-      toast.success(`${res.message}`, {
-        position: "top-center",
-      });
-      form.reset();
-    } catch (error: unknown) {
-      const res = handlerError(error);
-      if (res == Answer.LOGOUT) void navigate("/auth", { replace: true });
-      if (res == Answer.RESET) form.reset();
-    }
-  }
+  const onSubmit = useCallback(
+    async function (data: PostCreateReceivingDto): Promise<void> {
+      try {
+        const res = await mutateAsync(data);
+        toast.success(`${res.message}`, {
+          position: "top-center",
+        });
+        form.reset();
+      } catch (error: unknown) {
+        const res = handlerError(error);
+        if (res == Answer.LOGOUT) void navigate("/auth", { replace: true });
+        if (res == Answer.RESET) form.reset();
+      }
+    },
+    [form, mutateAsync, navigate],
+  );
 
-  return (
+  return isSuccess ? (
     <>
       <Form {...form}>
         <form
@@ -130,5 +129,7 @@ export function ReceivingCartridgeForm({
         </form>
       </Form>
     </>
+  ) : (
+    <SpinnerLoad />
   );
 }

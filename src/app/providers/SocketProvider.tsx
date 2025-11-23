@@ -1,9 +1,8 @@
 import { QueryClient, useQueryClient } from "@tanstack/react-query";
-import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import { PropsWithChildren, useCallback, useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
-import { decryptedProfile } from "./helpers/decryptedProfile";
-import { useProfileStore } from "./stores/profile/useProfileStore";
-import { SocketContext } from "@/hooks/useSocket";
+import { useProfileStore } from "../stores/profile/useProfileStore";
+import { SocketContext } from "@/app/providers/hooks/useSocketContext";
 import {
   CreateKabinetEventType,
   DecomissioningCartrdigeEventType,
@@ -11,29 +10,29 @@ import {
   MovementCartridgeEventType,
   ReceivingCartridgeEventType,
   UpdateUserEventType,
-} from "./api/generated";
-import { useLogout } from "../hooks/useLogout";
+} from "../api/generated";
+import { useLogout } from "../../hooks/useLogout";
+import { useRoleContext } from "@/app/providers/hooks/useRoleContext";
 
-export function SocketProvider({ children }: { children: ReactNode }) {
+export function SocketProvider({ children }: PropsWithChildren) {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const token = useProfileStore((state) => state.access_token);
   const queryClient = useQueryClient();
   const logoutHandler = useLogout();
 
-  const user = useMemo(() => decryptedProfile(), []);
+  const { roleName } = useRoleContext();
 
   const registerEventListeners = useCallback(
     (socket: Socket, queryClient: QueryClient) => {
-      if (user === false) {
+      if (roleName === undefined) {
         return;
       }
-
-      if (["staff", "user", "admin"].includes(user.role.roleName)) {
+      if (["staff", "user", "admin"].includes(roleName)) {
         socket.on("invalidateUserCard", async (data: UpdateUserEventType) => {
           const { userId } = data;
 
-          switch (user.role.roleName) {
+          switch (roleName) {
             case "staff":
               await queryClient.invalidateQueries({
                 queryKey: ["userCard", userId],
@@ -66,7 +65,7 @@ export function SocketProvider({ children }: { children: ReactNode }) {
             await queryClient.invalidateQueries({
               queryKey: ["accepted-cartridge", data.userId],
             });
-            switch (user.role.roleName) {
+            switch (roleName) {
               case "user":
               case "admin":
                 await queryClient.invalidateQueries({
@@ -85,7 +84,7 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         });
       }
 
-      if (["user", "admin"].includes(user.role.roleName)) {
+      if (["user", "admin"].includes(roleName)) {
         socket.on("invalidateModelCartridges", async () => {
           await queryClient.invalidateQueries({
             queryKey: ["modelsCartridgesDetailed"],
@@ -159,11 +158,11 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         );
       }
     },
-    [user, logoutHandler],
+    [roleName, logoutHandler],
   );
 
   useEffect(() => {
-    if (user === false || !token) {
+    if (roleName === undefined || !token) {
       return;
     }
 
@@ -208,7 +207,7 @@ export function SocketProvider({ children }: { children: ReactNode }) {
       setSocket(null);
       setIsConnected(false);
     };
-  }, [queryClient, token, registerEventListeners, user]);
+  }, [queryClient, token, registerEventListeners, roleName]);
 
   return (
     <SocketContext.Provider value={{ socket, isConnected }}>

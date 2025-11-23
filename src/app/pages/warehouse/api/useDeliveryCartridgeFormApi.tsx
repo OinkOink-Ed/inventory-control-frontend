@@ -8,58 +8,59 @@ import {
 import { useChoiceOfStaffStore } from "@/app/stores/choiceOfStaff/useChoiceOfStaffStore";
 import { useChoiceOfKabinetsStore } from "@/app/stores/choiseOfKabinets/useChoiseOfKabinetsStore";
 import { useApiMutation, useApiQuery } from "@/hooks/useApi";
-import { useMatch } from "react-router";
+import { useMatch, useParams } from "react-router";
 
 export const useDeliveryCartridgeFormApiCartrdgesCreateDelivery = () => {
   return useApiMutation(deliveryControllerCreate);
 };
 
-export const useDeliveryCartridgeFormApiCartridgeModelGetAll = (
-  warehouseId: number,
-) => {
+export const useDeliveryCartridgeFormApiCartridgeModelGetAll = () => {
+  const { id } = useParams<{ id: string }>();
+  const match = useMatch({ path: "/warehouse/:id", end: true });
   return useApiQuery(
-    () => cartridgeModelControllerGetMogetModelsByWarehousedels(warehouseId),
+    () => cartridgeModelControllerGetMogetModelsByWarehousedels(Number(id)),
     {
       queryKey: ["modelsCartridges"],
-      enabled: !!useMatch({ path: "/warehouse/:id", end: true }),
+      enabled: !!match,
     },
   );
 };
 
-export const useDeliveryCartridgeFormApiDivisionIdByWarehouseId = (
-  id: number,
-) => {
-  return useApiQuery(() => divisionControllerGetDivision(id), {
+export const useDeliveryCartridgeFormApiDivisionIdByWarehouseId = () => {
+  const { id } = useParams<{ id: string }>();
+  const match = useMatch({ path: "/warehouse/:id", end: true });
+  return useApiQuery(() => divisionControllerGetDivision(Number(id)), {
     queryKey: ["divisionIdByWarehouseId", id],
-    enabled: !!useMatch({ path: "/warehouse/:id", end: true }) && !!id,
+    enabled: !!match && !!id,
   });
 };
 
-export const useDeliveryCartridgeFormApiStaffGetAllByDivisions = (
-  id: number,
-) => {
+export const useDeliveryCartridgeFormApiStaffGetAllByDivisions = () => {
   const choiseWarehouse = useChoiceOfStaffStore(
     (state) => state.warehouseChoices,
   );
+
+  const { id } = useParams<{ id: string }>();
+  const match = useMatch({ path: "/warehouse/*" });
   return useApiQuery(
     () => {
       if (id) {
-        return userControllerGetAllByDivisions(id);
+        return userControllerGetAllByDivisions(Number(id));
       }
       return userControllerGetAllByDivisions(choiseWarehouse!);
     },
     {
       queryKey: ["usersByWarehouse", choiseWarehouse, id],
-      enabled:
-        !!useMatch({ path: "/warehouse/*" }) && (!!choiseWarehouse || !!id),
+      enabled: !!match && (!!choiseWarehouse || !!id),
     },
   );
 };
 
 export const useDeliveryCartridgeFormApiKabinetsByUserId = () => {
   const choiseUser = useChoiceOfKabinetsStore((state) => state.userChoices);
+  const match = useMatch({ path: "/warehouse/:id", end: true });
   return useApiQuery(() => kabinetControllerGetKabinetsByUserId(choiseUser!), {
     queryKey: ["kabinetsByUserId", choiseUser],
-    enabled: !!useMatch({ path: "/warehouse/:id", end: true }) && !!choiseUser,
+    enabled: !!match && !!choiseUser,
   });
 };

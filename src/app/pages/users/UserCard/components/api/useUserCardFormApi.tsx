@@ -5,9 +5,9 @@ import {
   roleControllerGetRoles,
   userControllerEditUser,
 } from "@/app/api/generated";
-import { decryptedProfile } from "@/app/helpers/decryptedProfile";
 import { useChoiseOfKabinetsForCreateUser } from "@/app/stores/choiseOfKabinetsForCreateUser/useChoiseOfKabinetsStore";
 import { useApiMutation, useApiQuery } from "@/hooks/useApi";
+import { useRoleContext } from "@/app/providers/hooks/useRoleContext";
 
 export const useUserCardFormApi = (id: number) => {
   return useApiMutation((data: PutEditUserDto) =>
@@ -22,11 +22,11 @@ export const useUsersFormApiGetRole = () => {
 };
 
 export const useUsersFormApiGetDivision = () => {
-  const profile = decryptedProfile();
+  const { roleName } = useRoleContext();
 
   return useApiQuery(divisionControllerGetDivisions, {
     queryKey: ["division"],
-    enabled: profile ? profile.role.roleName !== "staff" : profile,
+    enabled: roleName !== "staff",
   });
 };
 

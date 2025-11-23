@@ -16,7 +16,7 @@ export function PreRequestWrapperForAccess({
     if (error) {
       setTimeout(() => {
         void navigate(-1);
-      }, 1000);
+      }, 0);
     }
   }, [navigate, error]);
 

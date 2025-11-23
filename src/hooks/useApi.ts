@@ -12,6 +12,11 @@ type ApiMutationFunction<TData, TVariables> = (
   config?: { client?: typeof axiosClient },
 ) => Promise<TData>;
 
+type ApiQueryFunction<TData> = (config: {
+  signal?: AbortSignal;
+  client?: typeof axiosClient;
+}) => Promise<TData>;
+
 export function useApiMutation<TData, TVariables>(
   apiFunction: ApiMutationFunction<TData, TVariables>,
   options?: Omit<UseMutationOptions<TData, Error, TVariables>, "mutationFn">,
@@ -24,10 +29,7 @@ export function useApiMutation<TData, TVariables>(
 }
 
 export function useApiQuery<TData>(
-  queryFn: (config: {
-    signal?: AbortSignal;
-    client?: typeof axiosClient;
-  }) => Promise<TData>,
+  queryFn: ApiQueryFunction<TData>,
   options: Omit<UseQueryOptions<TData>, "queryFn"> & { queryKey: QueryKey },
 ) {
   return useQuery({
