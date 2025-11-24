@@ -6,7 +6,7 @@ import {
   warehouseControllerGetWarehouses,
 } from "@/app/api/generated";
 import { useChoiceOfStaffStore } from "@/app/stores/choiceOfStaff/useChoiceOfStaffStore";
-import { useApiMutation, useApiQuery } from "@/hooks/useApi";
+import { useApiMutation, useApiQuery } from "@/shared/api/hooks/useApi";
 import { useRoleContext } from "@/app/providers/hooks/useRoleContext";
 import { useMatch, useParams } from "react-router";
 

@@ -1,6 +1,6 @@
 import { cartridgeModelControllerGetModelsAndTheirCreator } from "@/app/api/generated";
 import { useMatch } from "react-router";
-import { useApiQuery } from "@/hooks/useApi";
+import { useApiQuery } from "@/shared/api/hooks/useApi";
 
 export const useCartridgeModelTableApi = () => {
   return useApiQuery(cartridgeModelControllerGetModelsAndTheirCreator, {

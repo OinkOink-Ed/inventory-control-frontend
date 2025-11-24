@@ -2,10 +2,10 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
+} from "@/shared/ui/dropdown-menu";
 import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
 import { useRoleContext } from "@/app/providers/hooks/useRoleContext";
-import { Button } from "./ui/Button/Button";
+import { Button } from "@/shared/ui/Button/Button";
 import { useDialogFormShow } from "@/app/stores/dialogFormShow/useDialogFormShow";
 import { memo, useMemo } from "react";
 

@@ -7,7 +7,7 @@ import {
 } from "@/app/api/generated";
 import { useChoiceOfStaffStore } from "@/app/stores/choiceOfStaff/useChoiceOfStaffStore";
 import { useChoiceOfKabinetsStore } from "@/app/stores/choiseOfKabinets/useChoiseOfKabinetsStore";
-import { useApiMutation, useApiQuery } from "@/hooks/useApi";
+import { useApiMutation, useApiQuery } from "@/shared/api/hooks/useApi";
 import { useMatch, useParams } from "react-router";
 
 export const useDeliveryCartridgeFormApiCartrdgesCreateDelivery = () => {

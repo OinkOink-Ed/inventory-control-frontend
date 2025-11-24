@@ -2,7 +2,7 @@ import {
   cartridgeModelControllerGetMogetModelsByWarehousedels,
   decommissioningControllerCreate,
 } from "@/app/api/generated";
-import { useApiMutation, useApiQuery } from "@/hooks/useApi";
+import { useApiMutation, useApiQuery } from "@/shared/api/hooks/useApi";
 import { useMatch, useParams } from "react-router";
 
 export const useDecommissioningCartrdigeFormApiCartrdgesCreateDecommissioning =

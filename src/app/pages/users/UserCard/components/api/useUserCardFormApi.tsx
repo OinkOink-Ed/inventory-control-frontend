@@ -6,7 +6,7 @@ import {
   userControllerEditUser,
 } from "@/app/api/generated";
 import { useChoiseOfKabinetsForCreateUser } from "@/app/stores/choiseOfKabinetsForCreateUser/useChoiseOfKabinetsStore";
-import { useApiMutation, useApiQuery } from "@/hooks/useApi";
+import { useApiMutation, useApiQuery } from "@/shared/api/hooks/useApi";
 import { useRoleContext } from "@/app/providers/hooks/useRoleContext";
 
 export const useUserCardFormApi = (id: number) => {

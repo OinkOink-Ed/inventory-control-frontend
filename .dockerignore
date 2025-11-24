@@ -49,7 +49,7 @@ coverage
 jest-cache
 
 # Generated / swagger
-src/app/api/generated
+src/shared/api/generated
 swaggerApi.json
 
 # Misc

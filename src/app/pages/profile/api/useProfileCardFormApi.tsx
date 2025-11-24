@@ -8,7 +8,7 @@ import {
   userControllerGetProfileCard,
 } from "@/app/api/generated";
 import { useChoiseOfKabinetsForCreateUser } from "@/app/stores/choiseOfKabinetsForCreateUser/useChoiseOfKabinetsStore";
-import { useApiMutation, useApiQuery } from "@/hooks/useApi";
+import { useApiMutation, useApiQuery } from "@/shared/api/hooks/useApi";
 import { useMatch } from "react-router";
 
 export const useProfileCardFormApi = () => {

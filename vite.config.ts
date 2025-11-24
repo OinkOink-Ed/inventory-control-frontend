@@ -1,6 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
-import { getApiSwagger } from "./getApiSwagger";
+import { getApiSwagger } from "./scripts/getApiSwagger";
 import path from "path";
 
 // https://vite.dev/config/

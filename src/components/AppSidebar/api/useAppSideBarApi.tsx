@@ -2,7 +2,7 @@ import {
   divisionControllerGetDivisions,
   warehouseControllerGetWarehouses,
 } from "@/app/api/generated";
-import { useApiQuery } from "@/hooks/useApi";
+import { useApiQuery } from "@/shared/api/hooks/useApi";
 import { useRoleContext } from "@/app/providers/hooks/useRoleContext";
 
 export const useAppSideBarApiDivisionGetAll = () => {

@@ -7,7 +7,11 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@/shared/*": ["./src/shared/*"],
+      "@/shared/ui/*": ["./src/shared/ui/*"],
+      "@/shared/lib/*": ["./src/shared/lib/*"],
+      "@/shared/hooks/*": ["./src/shared/hooks/*"]
     }
   }
 }

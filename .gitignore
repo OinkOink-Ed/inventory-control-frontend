@@ -22,5 +22,5 @@ dist-ssr
 *.sln
 *.sw?
 *.env
-src/app/api/generated
+src/shared/api/generated
 swaggerApi.json

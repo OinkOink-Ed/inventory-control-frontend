@@ -16,7 +16,7 @@ import {
   CommandList,
 } from "../ui/command";
 import { Column } from "@tanstack/react-table";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/lib/utils";
 
 interface DataTableFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>;
@@ -100,7 +100,7 @@ export default function DataTableFacetedFilter<TData, TValue>({
                       }
                       const filterValues = Array.from(selectedValues);
                       column?.setFilterValue(
-                        filterValues.length ? filterValues : undefined,
+                        filterValues.length ? filterValues : undefined
                       );
                     }}
                   >
@@ -109,7 +109,7 @@ export default function DataTableFacetedFilter<TData, TValue>({
                         "mr-2 flex h-4 w-4 self-center rounded-sm border border-primary",
                         isSelected
                           ? "bg-primary text-primary-foreground"
-                          : "opacity-50 [&_svg]:invisible",
+                          : "opacity-50 [&_svg]:invisible"
                       )}
                     >
                       <Check />

@@ -1,5 +1,5 @@
-import { userControllerCanEditUser } from "@/app/api/generated";
-import { useApiQuery } from "@/hooks/useApi";
+import { useApiQuery } from "@/shared/api";
+import { userControllerCanEditUser } from "@/shared/api/generated";
 
 export const usePreRequestWrapperForAccessApi = (id: number) => {
   return useApiQuery(() => userControllerCanEditUser(id), {

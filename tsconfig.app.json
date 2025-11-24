@@ -23,16 +23,13 @@
     "noUncheckedSideEffectImports": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@/app/*": ["./src/app/*"],
+      "@/pages/*": ["./src/pages/*"],
+      "@/features/*": ["./src/features/*"],
+      "@/entities/*": ["./src/entities/*"],
+      "@/shared/*": ["./src/shared/*"]
     }
   },
-  "include": [
-    "src",
-    "kubb.config.ts",
-    "getApiSwagger.ts",
-    "kubb.ts",
-    "src/app/api/generated/types/**/*",
-    "src/app/api/generated/schema/**/*",
-    "src/app/api/generated/index.ts"
-  ]
+  "include": ["src/**/*", "src/app/types/vite-env.d.ts", "vite.config.ts"]
 }

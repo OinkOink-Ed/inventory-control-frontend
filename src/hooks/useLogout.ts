@@ -1,4 +1,4 @@
-import { authControllerLogout } from "../app/api/generated";
+import { authControllerLogout } from "../shared/api/generated";
 import { queryClientInstans } from "../app/queryClientInstans";
 import { handlerError } from "../app/helpers/handlerError";
 import { Answer } from "../app/Errors/Answer";
