@@ -6,7 +6,7 @@ import { memo } from "react";
 export const AdminItemsMenu = memo(function AdminItemsMenu() {
   return (
     <SidebarMenuItem>
-      <SidebarMenuButton>
+      <SidebarMenuButton asChild>
         <SidebarNavLink to="cartrideModel">
           <Book className="h-4 w-4" />
           <span className="text-sm">Модели картриджей</span>

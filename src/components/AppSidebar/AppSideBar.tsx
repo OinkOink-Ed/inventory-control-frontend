@@ -27,14 +27,14 @@ export function AppSideBar() {
   const hasAccess = useMemo(() => isAdmin || isUser, [isAdmin, isUser]);
 
   return (
-    <Sidebar collapsible="none" className="w-[272px]">
+    <Sidebar collapsible="none">
       <SidebarContent>
         <SidebarGroupLabel>Профиль</SidebarGroupLabel>
         <SidebarGroup>
-          <SidebarGroupContent>
+          <SidebarGroupContent className="w-[230px]">
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton>
+                <SidebarMenuButton asChild>
                   <SidebarNavLink to="/profile">
                     <User className="h-4 w-4" />
                     <span className="text-sm">Профиль</span>
@@ -52,7 +52,7 @@ export function AppSideBar() {
               {hasAccess && <AdminAndUserItemsMenu />}
               {isAdmin && <AdminItemsMenu />}
               <SidebarMenuItem>
-                <SidebarMenuButton>
+                <SidebarMenuButton asChild>
                   <SidebarNavLink to="reports">
                     <Archive className="h-4 w-4" />
                     <span className="text-sm">Отчёты</span>

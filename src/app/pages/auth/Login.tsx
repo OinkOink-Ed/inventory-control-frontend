@@ -17,12 +17,9 @@ import { authControllerSignIn, PostAuthDto } from "@/app/api/generated";
 import { handlerError } from "@/app/helpers/handlerError";
 import { Answer } from "@/app/Errors/Answer";
 import { queryClientInstans } from "@/app/queryClientInstans";
-import { useRoleContext } from "@/app/providers/hooks/useRoleContext";
 
 export function Login() {
   const setProfile = useProfileStore((state) => state.setProfile);
-
-  const { setProfileContext } = useRoleContext();
 
   const navigate = useNavigate();
 
@@ -38,13 +35,7 @@ export function Login() {
     try {
       const res = await authControllerSignIn(data);
 
-      const { access_token, refresh_token, role, ...rest } = res;
-      const profileData = { ...rest, roleName: role?.roleName };
-      setProfileContext(profileData);
-      setProfile({
-        access_token: access_token,
-        refresh_token: refresh_token,
-      });
+      setProfile(res);
       await queryClientInstans.invalidateQueries();
       void navigate("/");
     } catch (error: unknown) {

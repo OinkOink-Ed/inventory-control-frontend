@@ -1,24 +1,24 @@
 import { RoleContext } from "@/app/providers/hooks/useRoleContext";
-import { PropsWithChildren, useMemo, useState } from "react";
+import { PropsWithChildren, useMemo } from "react";
+import { useGetProfile } from "./api/useGetProfile";
+import { SpinnerLoad } from "@/components/SpinnerLoad";
 
 export function RoleProvider({ children }: PropsWithChildren) {
-  const [profile, setProfileContext] = useState<{
-    name: string | undefined;
-    id: number | undefined;
-    lastname: string | undefined;
-    patronimyc: string | undefined;
-    roleName: string | undefined;
-  } | null>(null);
-
-  const roleName = useMemo(() => profile?.roleName, [profile]);
-  const id = useMemo(() => profile?.id, [profile]);
-  const lastname = useMemo(() => profile?.lastname, [profile]);
-  const patronimyc = useMemo(() => profile?.patronimyc, [profile]);
-  const name = useMemo(() => profile?.name, [profile]);
+  const { data, isSuccess } = useGetProfile();
 
   const value = useMemo(() => {
-    return { roleName, id, lastname, patronimyc, name, setProfileContext };
-  }, [roleName, id, lastname, patronimyc, name]);
+    return {
+      roleName: data?.role?.roleName,
+      id: data?.id,
+      lastname: data?.lastname,
+      patronimyc: data?.patronimyc,
+      name: data?.name,
+    };
+  }, [data]);
 
-  return <RoleContext.Provider value={value}>{children}</RoleContext.Provider>;
+  return isSuccess && data ? (
+    <RoleContext.Provider value={value}>{children}</RoleContext.Provider>
+  ) : (
+    <SpinnerLoad />
+  );
 }

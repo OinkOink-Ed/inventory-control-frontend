@@ -49,7 +49,7 @@ export const AdminAndUserItemsMenu = memo(function AdminAndUserItemsMenu() {
   return (
     <>
       <SidebarMenuItem>
-        <SidebarMenuButton>
+        <SidebarMenuButton asChild>
           <SidebarNavLink to="dashboard">
             <LayoutDashboard className="h-4 w-4" />
             <span className="text-sm">Дашборд</span>
@@ -57,7 +57,7 @@ export const AdminAndUserItemsMenu = memo(function AdminAndUserItemsMenu() {
         </SidebarMenuButton>
       </SidebarMenuItem>
       <SidebarMenuItem>
-        <SidebarMenuButton>
+        <SidebarMenuButton asChild>
           <SidebarNavLink to="users">
             <User2 className="h-4 w-4" />
             <span className="text-sm">Пользователи</span>

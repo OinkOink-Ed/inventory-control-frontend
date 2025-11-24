@@ -49,7 +49,7 @@ export const CollapsibleMenu = memo(function CollapsibleMenu({
           {items.length > 0 ? (
             items.map((item) => (
               <SidebarMenuSubItem key={item.url}>
-                <SidebarMenuButton>
+                <SidebarMenuButton asChild>
                   <SidebarNavLink to={item.url}>
                     <item.icon className="h-4 w-4" />
                     <span className="text-sm">{item.title}</span>

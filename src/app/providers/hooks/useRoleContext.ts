@@ -1,4 +1,4 @@
-import { createContext, Dispatch, SetStateAction, useContext } from "react";
+import { createContext, useContext } from "react";
 
 interface RoleContextProps {
   name: string | undefined;
@@ -6,15 +6,6 @@ interface RoleContextProps {
   lastname: string | undefined;
   patronimyc: string | undefined;
   roleName: string | undefined;
-  setProfileContext: Dispatch<
-    SetStateAction<{
-      name: string | undefined;
-      id: number | undefined;
-      lastname: string | undefined;
-      patronimyc: string | undefined;
-      roleName: string | undefined;
-    } | null>
-  >;
 }
 
 export const RoleContext = createContext<RoleContextProps | null>(null);

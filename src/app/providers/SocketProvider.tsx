@@ -1,8 +1,8 @@
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
-import { PropsWithChildren, useCallback, useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { PropsWithChildren, useCallback, useEffect } from "react";
 import { io, Socket } from "socket.io-client";
 import { useProfileStore } from "../stores/profile/useProfileStore";
-import { SocketContext } from "@/app/providers/hooks/useSocketContext";
+import { SocketContext } from "@/app/providers/hooks/socketContext";
 import {
   CreateKabinetEventType,
   DecomissioningCartrdigeEventType,
@@ -15,19 +15,17 @@ import { useLogout } from "../../hooks/useLogout";
 import { useRoleContext } from "@/app/providers/hooks/useRoleContext";
 
 export function SocketProvider({ children }: PropsWithChildren) {
-  const [socket, setSocket] = useState<Socket | null>(null);
-  const [isConnected, setIsConnected] = useState(false);
   const token = useProfileStore((state) => state.access_token);
-  const queryClient = useQueryClient();
   const logoutHandler = useLogout();
-
   const { roleName } = useRoleContext();
+  const queryClient = useQueryClient();
 
   const registerEventListeners = useCallback(
-    (socket: Socket, queryClient: QueryClient) => {
+    (socket: Socket) => {
       if (roleName === undefined) {
         return;
       }
+
       if (["staff", "user", "admin"].includes(roleName)) {
         socket.on("invalidateUserCard", async (data: UpdateUserEventType) => {
           const { userId } = data;
@@ -158,7 +156,7 @@ export function SocketProvider({ children }: PropsWithChildren) {
         );
       }
     },
-    [roleName, logoutHandler],
+    [roleName, logoutHandler, queryClient],
   );
 
   useEffect(() => {
@@ -177,11 +175,9 @@ export function SocketProvider({ children }: PropsWithChildren) {
 
     const handleConnect = () => {
       console.log("connect");
-      setIsConnected(true);
     };
 
     const handleDisconnect = () => {
-      setIsConnected(false);
       console.log("disconnect");
     };
 
@@ -195,22 +191,22 @@ export function SocketProvider({ children }: PropsWithChildren) {
 
     newSocket.on("connect_error", handleConnectError);
 
-    registerEventListeners(newSocket, queryClient);
+    registerEventListeners(newSocket);
 
-    setSocket(newSocket);
+    // setSocket(newSocket);
 
     return () => {
       newSocket.removeAllListeners();
       newSocket.disconnect();
       newSocket.close();
 
-      setSocket(null);
-      setIsConnected(false);
+      // setSocket(null);
+      // setIsConnected(false);
     };
-  }, [queryClient, token, registerEventListeners, roleName]);
+  }, [token, registerEventListeners, roleName]);
 
   return (
-    <SocketContext.Provider value={{ socket, isConnected }}>
+    <SocketContext.Provider value={undefined}>
       {children}
     </SocketContext.Provider>
   );
