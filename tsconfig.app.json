@@ -21,6 +21,8 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
+
+    /* Path mapping */
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
@@ -31,5 +33,6 @@
       "@/shared/*": ["./src/shared/*"]
     }
   },
-  "include": ["src/**/*", "src/app/types/vite-env.d.ts", "vite.config.ts"]
+  "include": ["src/**/*", "src/app/types/vite-env.d.ts"],
+  "exclude": ["vite.config.ts"]
 }

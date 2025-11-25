@@ -1,1 +1,1 @@
-export { useApiMutation, useApiQuery } from "./useApi";
+export { useApiMutation, useApiQuery } from "@/shared/api/hooks/useApi";

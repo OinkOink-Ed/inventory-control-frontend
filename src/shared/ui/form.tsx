@@ -17,7 +17,7 @@ import {
   FormItemContext,
   useFormField,
 } from "@/shared/hooks/useFormField";
-import { Label } from "./label";
+import { Label } from "@/shared/ui/label";
 
 const Form = FormProvider;
 
@@ -111,7 +111,7 @@ const FormDescription = React.forwardRef<
       id={formDescriptionId}
       className={cn(
         "text-[0.8rem] text-zinc-500 dark:text-zinc-400",
-        className
+        className,
       )}
       {...props}
     />
@@ -136,7 +136,7 @@ const FormMessage = React.forwardRef<
       id={formMessageId}
       className={cn(
         "text-[0.8rem] font-medium text-red-500 dark:text-red-900",
-        className
+        className,
       )}
       {...props}
     >

@@ -193,15 +193,10 @@ export function SocketProvider({ children }: PropsWithChildren) {
 
     registerEventListeners(newSocket);
 
-    // setSocket(newSocket);
-
     return () => {
       newSocket.removeAllListeners();
       newSocket.disconnect();
       newSocket.close();
-
-      // setSocket(null);
-      // setIsConnected(false);
     };
   }, [token, registerEventListeners, roleName]);
 
