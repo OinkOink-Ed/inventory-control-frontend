@@ -1,7 +1,7 @@
-import { isAuth } from "@/app/routes/api/isAuth";
+import { isAuth } from "@/app/router/guards/isAuth";
 import { redirect } from "react-router";
 
-export default function PrivateRoute() {
+export function PrivateRoute() {
   const result = isAuth();
   if (result) {
     return null;

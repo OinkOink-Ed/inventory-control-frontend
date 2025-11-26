@@ -11,17 +11,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/Button/Button";
 import { useNavigate } from "react-router";
 import { Input } from "@/components/ui/input";
-import { authRequestDtoSchemaZOD } from "./shema";
+import { authRequestDtoSchemaZOD } from "../model/shema";
 import { useProfileStore } from "@/app/stores/profile/useProfileStore";
 import { authControllerSignIn, PostAuthDto } from "@/app/api/generated";
 import { handlerError } from "@/app/helpers/handlerError";
 import { Answer } from "@/app/Errors/Answer";
 import { queryClientInstans } from "@/app/queryClientInstans";
+import { useOnSubmit } from "@/features/auth/api/useOnSubmit";
 
 export function Login() {
-  const setProfile = useProfileStore((state) => state.setProfile);
-
-  const navigate = useNavigate();
+  const {} = useOnSubmit();
 
   const form = useForm<PostAuthDto>({
     resolver: zodResolver(authRequestDtoSchemaZOD),
@@ -30,20 +29,6 @@ export function Login() {
       password: "",
     },
   });
-
-  async function onSubmit(data: PostAuthDto): Promise<void> {
-    try {
-      const res = await authControllerSignIn(data);
-
-      setProfile(res);
-      await queryClientInstans.invalidateQueries();
-      void navigate("/");
-    } catch (error: unknown) {
-      const res = handlerError(error);
-      if (res == Answer.LOGOUT) form.reset();
-      if (res == Answer.RESET) form.reset();
-    }
-  }
 
   return (
     <div className="flex h-svh justify-center">

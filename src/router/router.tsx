@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router";
-import { ErrorBoundary } from "../ErrorBoundary";
+import { ErrorBoundary } from "../app/ErrorBoundary";
 import { Suspense } from "react";
 import {
   AppLayout,
@@ -11,7 +11,7 @@ import {
   ReportsLayout,
   UsersLayout,
   WarehouseLayout,
-} from "../lazyImports";
+} from "../app/lazyImports";
 import { SpinnerLoad } from "@/components/SpinnerLoad";
 import PublicRoute from "./loaders/Public";
 import LoginSkeleton from "../pages/auth/LoginSkeleton";

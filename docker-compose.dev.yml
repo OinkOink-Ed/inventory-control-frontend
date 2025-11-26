@@ -3,7 +3,7 @@ services:
     build: .
     restart: unless-stopped
     env_file:
-      - .env
+      - ./src/app/.env
     ports:
       - "5173:5173"
     volumes:

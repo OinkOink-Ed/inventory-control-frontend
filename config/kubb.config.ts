@@ -6,12 +6,12 @@ import { pluginZod } from "@kubb/plugin-zod";
 
 export default defineConfig(() => {
   return {
-    root: ".",
+    root: "..",
     input: {
-      path: "./swaggerApi.json",
+      path: "./docs/swaggerApi.json",
     },
     output: {
-      path: "./src/app/api/generated",
+      path: "./src/ahared/api/generated",
       clean: true,
     },
     plugins: [

@@ -1,15 +1,14 @@
 import { CustomErrorForbidden } from "@/app/Errors/CustomErrorForbidden";
-import { isAuth } from "@/app/routes/api/isAuth";
+import { isAuth } from "@/app/router/guards/isAuth";
 import { redirect } from "react-router";
 
-export default function UserAndAdminRoute() {
+export function AdminRoute() {
   const result = isAuth();
-
   if (result === false) {
     return redirect("/auth");
   }
 
-  if (result.role.roleName !== "user" && result.role.roleName !== "admin") {
+  if (result.role.roleName !== "admin") {
     const error = new CustomErrorForbidden("Нет доступа к странице!", 403);
     throw error;
   }
