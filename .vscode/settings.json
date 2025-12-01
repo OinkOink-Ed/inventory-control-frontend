@@ -1,21 +1,4 @@
 {
-  "workbench.iconTheme": "vscode-icons",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "typescript.suggest.autoImports": true,
-  "javascript.suggest.autoImports": true,
-  "editor.formatOnSave": true,
-  "files.associations": {
-    "*.css": "tailwindcss"
-  },
-  "editor.quickSuggestions": {
-    "strings": "on"
-  },
-  "typescript.preferences.importModuleSpecifier": "non-relative",
-  "javascript.preferences.importModuleSpecifier": "non-relative",
-
-  "typescript.suggest.paths": true,
-  "typescript.preferences.includePackageJsonAutoImports": "auto",
-
-  "typescript.preferences.importModuleSpecifierEnding": "minimal",
-  "javascript.preferences.importModuleSpecifierEnding": "minimal"
+  "editor.formatOnSave": true
 }

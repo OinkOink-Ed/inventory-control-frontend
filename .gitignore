@@ -22,5 +22,5 @@ dist-ssr
 *.sln
 *.sw?
 *.env
-src/shared/api/generated
-swaggerApi.json
+src/shared/api/gen
+docs

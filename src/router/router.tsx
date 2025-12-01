@@ -24,6 +24,7 @@ import { PreRequestWrapperForAccess } from "@/components/PreRequestWrapperForAcc
 
 // SpinnerLoad можно будет заменить на Skeleton различный в дальнейшем
 
+
 export const router = createBrowserRouter([
   {
     path: "auth",

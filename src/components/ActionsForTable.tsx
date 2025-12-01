@@ -12,7 +12,8 @@ import { memo, useMemo } from "react";
 export const ActionsForTable = memo(function ActionsForTable() {
   const toggleShow = useDialogFormShow((state) => state.toggleDialogForm);
 
-  const { roleName } = useRoleContext();
+  const { roleName } 
+  = useRoleContext();
   const baseActions = useMemo(
     () => [
       <Button

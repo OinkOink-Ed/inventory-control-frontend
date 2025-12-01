@@ -3,13 +3,12 @@ services:
     build: .
     restart: unless-stopped
     env_file:
-      - ./src/app/.env
+      - .env
     ports:
       - "5173:5173"
     volumes:
       - .:/app
       - client_node_modules:/app/node_modules
-      - pnpm_store:/pnpm/store
     working_dir: /app
 
 volumes:

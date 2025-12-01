@@ -1,6 +1,5 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
-import { authControllerRefreshToken } from "@/shared/api/generated";
-import { useProfileStore } from "../../app/stores/profile/useProfileStore";
+import { authControllerRefreshTokenClient } from "@gen/clients/AuthService/authControllerRefreshTokenClient";
 
 interface RefreshTokenResponse {
   token: string;
@@ -41,7 +40,7 @@ export const refreshAccessToken = async (): Promise<RefreshTokenResponse> => {
   try {
     const refreshToken = profile.getState().refresh_token;
 
-    const response = await authControllerRefreshToken({
+    const response = await authControllerRefreshTokenClient({
       token: refreshToken,
     });
 
@@ -151,11 +150,7 @@ axiosInstance.interceptors.response.use(
   },
 );
 
-export const axiosClient = async <
-  TData,
-  TError = unknown,
-  TVariables = unknown,
->(
+const axiosClient = async <TData, TError = unknown, TVariables = unknown>(
   config: RequestConfig<TVariables>,
 ): Promise<ResponseConfig<TData>> => {
   const response = await axiosInstance
@@ -166,5 +161,4 @@ export const axiosClient = async <
 
   return response;
 };
-
 export default axiosClient;

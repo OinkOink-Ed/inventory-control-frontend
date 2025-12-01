@@ -49,8 +49,8 @@ coverage
 jest-cache
 
 # Generated / swagger
-src/shared/api/generated
-swaggerApi.json
+src/shared/api/gen
+docs
 
 # Misc
 *.local
