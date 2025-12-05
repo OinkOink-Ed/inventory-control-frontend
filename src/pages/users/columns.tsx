@@ -1,9 +1,9 @@
-import { GetResponseAllUserDtoSchema } from "@/app/api/generated";
 import DataTableColumnHeader from "@/components/DataTable/DataTableColumnHeader";
 import DataTableColumnHeaderMultiSort from "@/components/DataTable/DataTableColumnHeaderMultiSort";
 import DataTableRowActions from "@/components/DataTable/DataTableRowActions";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { ColumnDef } from "@tanstack/react-table";
+import type { GetResponseAllUserDtoSchema } from "@api/gen";
+import { type ColumnDef } from "@tanstack/react-table";
 import { Link } from "react-router";
 
 export const columns: ColumnDef<GetResponseAllUserDtoSchema>[] = [
@@ -99,7 +99,7 @@ export const columns: ColumnDef<GetResponseAllUserDtoSchema>[] = [
         <DataTableRowActions
           linkToCard={
             <DropdownMenuItem>
-              <Link to={`/users/${row.row.original.id}`}>
+              <Link to={`/users/${String(row.row.original.id)}`}>
                 Перейти в карточку
               </Link>
             </DropdownMenuItem>

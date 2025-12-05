@@ -1,9 +1,0 @@
-export function SpinnerLoad() {
-  return (
-    <div className="f
-    lex h-svh w-full 
-    justify-center">
-      <div className="z-50 h-12 w-12 animate-spin self-center rounded-full border-4 border-blue-500 border-t-blue-800"></div>
-    </div>
-  );
-}

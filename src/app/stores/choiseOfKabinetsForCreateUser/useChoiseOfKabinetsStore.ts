@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import { ChoiceOfKabinets, ChoiceOfKabinetsActions } from "./types";
+import { type ChoiceOfKabinets, type ChoiceOfKabinetsActions } from "./types";
 
 export const useChoiseOfKabinetsForCreateUser = create<
   ChoiceOfKabinets & ChoiceOfKabinetsActions
@@ -21,6 +21,6 @@ export const useChoiseOfKabinetsForCreateUser = create<
     {
       name: "ChoiceOfKabinets",
       storage: createJSONStorage(() => localStorage),
-    },
-  ),
+    }
+  )
 );

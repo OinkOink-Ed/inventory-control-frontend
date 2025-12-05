@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/Button/Button";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -18,11 +18,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { PostCreateDeliveryDtoSchema } from "@/app/api/generated";
-import { handlerError } from "@/app/helpers/handlerError";
 import { createDeliveryDtoShema } from "./shema";
 import { useNavigate, useParams } from "react-router";
-import { Answer } from "@/app/Errors/Answer";
 import { useChoiceOfKabinetsStore } from "@/app/stores/choiseOfKabinets/useChoiseOfKabinetsStore";
 import { useEffect } from "react";
 import {
@@ -32,7 +29,10 @@ import {
   useDeliveryCartridgeFormApiKabinetsByUserId,
   useDeliveryCartridgeFormApiStaffGetAllByDivisions,
 } from "./api/useDeliveryCartridgeFormApi";
-import { deliveryPDF } from "@/app/helpers/generatedPDF/deliveryPdf";
+import type { PostCreateDeliveryDtoSchema } from "@api/gen";
+import { deliveryPDF } from "@/shared/helpers/generatedPDF/deliveryPdf";
+import { handlerError } from "@/shared/helpers/handlerError";
+import { ANSWER } from "@/lib/const/Answer";
 
 export function DeliveryCartridgeForm() {
   const { id } = useParams<{ id: string }>();
@@ -51,24 +51,7 @@ export function DeliveryCartridgeForm() {
   const { data: kabinetsData, isSuccess: kabinetsSuccess } =
     useDeliveryCartridgeFormApiKabinetsByUserId();
 
-  const {
-    formState,
-    handleSubmit,
-    control,
-    reset,
-    watch,
-    clearErrors,
-    getFieldState,
-    getValues,
-    register,
-    resetField,
-    setError,
-    setFocus,
-    setValue,
-    trigger,
-    unregister,
-    subscribe,
-  } = useForm<PostCreateDeliveryDtoSchema>({
+  const form = useForm<PostCreateDeliveryDtoSchema>({
     resolver: zodResolver(createDeliveryDtoShema),
     defaultValues: {
       count: 0,
@@ -83,16 +66,16 @@ export function DeliveryCartridgeForm() {
   });
 
   useEffect(() => {
-    const subscription = watch((value, { name }) => {
+    const subscription = form.watch((value, { name }) => {
       if (name === "accepting.id") {
         setChoiceOfKabinets({ userChoices: value.accepting?.id });
-        resetField("kabinet");
+        form.resetField("kabinet");
       }
     });
     return () => {
       subscription.unsubscribe();
     };
-  }, [setChoiceOfKabinets, resetField, watch]);
+  }, [setChoiceOfKabinets, form]);
 
   useEffect(() => {
     return () => {
@@ -102,14 +85,14 @@ export function DeliveryCartridgeForm() {
 
   useEffect(() => {
     if (divisionData?.id !== undefined) {
-      setValue("division.id", divisionData.id);
+      form.setValue("division.id", divisionData.id);
     }
-  }, [divisionData, setValue]);
+  }, [divisionData, form]);
 
   async function onSubmit(data: PostCreateDeliveryDtoSchema): Promise<void> {
     try {
       const res = await mutateAsync(data);
-      toast.success(`${res.message}`, {
+      toast.success(res.message, {
         position: "top-center",
       });
 
@@ -121,33 +104,16 @@ export function DeliveryCartridgeForm() {
         divisionData,
       );
 
-      reset();
+      form.reset();
     } catch (error: unknown) {
       const res = handlerError(error);
-      if (res == Answer.LOGOUT) void navigate("/auth", { replace: true });
-      if (res == Answer.RESET) reset();
+      if (res == ANSWER.LOGOUT) void navigate("/auth", { replace: true });
+      if (res == ANSWER.RESET) form.reset();
     }
   }
 
   return (
-    <Form
-      subscribe={subscribe}
-      formState={formState}
-      control={control}
-      reset={reset}
-      watch={watch}
-      clearErrors={clearErrors}
-      getFieldState={getFieldState}
-      getValues={getValues}
-      handleSubmit={handleSubmit}
-      register={register}
-      resetField={resetField}
-      setError={setError}
-      setFocus={setFocus}
-      setValue={setValue}
-      trigger={trigger}
-      unregister={unregister}
-    >
+    <Form {...form}>
       <form
         onSubmit={(event) => void handleSubmit(onSubmit)(event)}
         className="flex flex-wrap justify-center gap-5"
@@ -176,9 +142,9 @@ export function DeliveryCartridgeForm() {
             <FormItem className="h-24 w-[400px]">
               <FormLabel>Модель</FormLabel>
               <Select
-                onValueChange={(value) =>
-                  field.onChange(value ? Number(value) : undefined)
-                }
+                onValueChange={(value) => {
+                  field.onChange(value ? Number(value) : undefined);
+                }}
                 value={field.value?.toString() ?? ""}
               >
                 <FormControl>
@@ -187,10 +153,10 @@ export function DeliveryCartridgeForm() {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {cartridgeModelSuccess && cartridgeModelData ? (
+                  {cartridgeModelSuccess ? (
                     cartridgeModelData.map((item) => (
                       <SelectItem
-                        key={`${item.id}+${item.name}`}
+                        key={`${String(item.id)}+${item.name}`}
                         value={item.id.toString()}
                       >
                         {item.name}
@@ -214,9 +180,9 @@ export function DeliveryCartridgeForm() {
             <FormItem className="h-24 w-[400px]">
               <FormLabel>Принимающий</FormLabel>
               <Select
-                onValueChange={(value) =>
-                  field.onChange(value ? Number(value) : undefined)
-                }
+                onValueChange={(value) => {
+                  field.onChange(value ? Number(value) : undefined);
+                }}
                 value={field.value?.toString() ?? ""}
               >
                 <FormControl>
@@ -225,10 +191,12 @@ export function DeliveryCartridgeForm() {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {staffSuccess && staffData ? (
+                  {staffSuccess ? (
                     staffData.map((item) => (
                       <SelectItem
-                        key={`${item.id}+${item.lastname}+${item.name}+${item.patronimyc}`}
+                        key={`${String(item.id)}+${item.lastname}+${
+                          item.name
+                        }+${item.patronimyc}`}
                         value={item.id.toString()}
                       >
                         {item.lastname} {item.name} {item.patronimyc}
@@ -253,9 +221,9 @@ export function DeliveryCartridgeForm() {
               <FormLabel>Кабинет</FormLabel>
               <Select
                 disabled={!userChoices}
-                onValueChange={(value) =>
-                  field.onChange(value ? Number(value) : undefined)
-                }
+                onValueChange={(value) => {
+                  field.onChange(value ? Number(value) : undefined);
+                }}
                 value={field.value?.toString() ?? ""}
               >
                 <FormControl>
@@ -264,10 +232,10 @@ export function DeliveryCartridgeForm() {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {kabinetsSuccess && kabinetsData ? (
+                  {kabinetsSuccess ? (
                     kabinetsData.map((item) => (
                       <SelectItem
-                        key={`${item.id}+${item.number}`}
+                        key={`${String(item.id)}+${item.number}`}
                         value={item.id.toString()}
                       >
                         {item.number}

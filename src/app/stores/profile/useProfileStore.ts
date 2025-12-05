@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import { ProfileActions, ProfileStore } from "./types";
+import { type ProfileActions, type ProfileStore } from "./types";
 
 export const useProfileStore = create<ProfileStore & ProfileActions>()(
   persist(
@@ -21,6 +21,6 @@ export const useProfileStore = create<ProfileStore & ProfileActions>()(
     {
       name: "profileStorage",
       storage: createJSONStorage(() => localStorage),
-    },
-  ),
+    }
+  )
 );

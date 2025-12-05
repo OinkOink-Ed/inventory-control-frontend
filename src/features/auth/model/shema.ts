@@ -1,4 +1,4 @@
-import { postAuthDtoSchema } from "@/app/api/generated";
+import { postAuthDtoSchema } from "@api/gen";
 import { z } from "zod";
 
 export const authRequestDtoSchemaZOD = postAuthDtoSchema.extend({

@@ -1,13 +1,13 @@
+import { useChoiseOfKabinetsForCreateUser } from "@/app/stores/choiseOfKabinetsForCreateUser/useChoiseOfKabinetsStore";
+import { useApiMutation, useApiQuery } from "@/shared/api/hooks/useApi";
+import { useRoleContext } from "@app-providers/RoleProvider/hooks/useRoleContext";
 import {
   divisionControllerGetDivisions,
   kabinetControllerGetKabinetsByDivisionIdForCreateUser,
-  PutEditUserDto,
   roleControllerGetRoles,
   userControllerEditUser,
-} from "@/app/api/generated";
-import { useChoiseOfKabinetsForCreateUser } from "@/app/stores/choiseOfKabinetsForCreateUser/useChoiseOfKabinetsStore";
-import { useApiMutation, useApiQuery } from "@/shared/api/hooks/useApi";
-import { useRoleContext } from "@/app/providers/hooks/useRoleContext";
+  type PutEditUserDto,
+} from "@api/gen";
 
 export const useUserCardFormApi = (id: number) => {
   return useApiMutation((data: PutEditUserDto) =>

@@ -1,14 +1,14 @@
-import { formateDate } from "@/app/helpers/formateDate";
-import { ColumnDef } from "@tanstack/react-table";
-import { GetResponseAcceptedCartridgeByUserDtoMySchema } from "./shema";
+import { type ColumnDef } from "@tanstack/react-table";
+import { type GetResponseAcceptedCartridgeByUserDtoMySchema } from "./shema";
 import DataTableColumnHeaderMultiSort from "@/components/DataTable/DataTableColumnHeaderMultiSort";
 import DataTableColumnHeader from "@/components/DataTable/DataTableColumnHeader";
+import { formateDate } from "@/shared/helpers/formateDate";
 
 export const columns: ColumnDef<GetResponseAcceptedCartridgeByUserDtoMySchema>[] =
   [
     {
       id: "Подразделение",
-      accessorFn: (row) => `${row.division}`,
+      accessorFn: (row) => row.division,
       header: ({ column }) => {
         return (
           <DataTableColumnHeaderMultiSort
@@ -21,7 +21,7 @@ export const columns: ColumnDef<GetResponseAcceptedCartridgeByUserDtoMySchema>[]
     },
     {
       id: "Кабинет",
-      accessorFn: (row) => `${row.kabinet}`,
+      accessorFn: (row) => row.kabinet,
       header: ({ column }) => {
         return <DataTableColumnHeader column={column} title="Кабинет" />;
       },
@@ -29,7 +29,7 @@ export const columns: ColumnDef<GetResponseAcceptedCartridgeByUserDtoMySchema>[]
     },
     {
       id: "Модель",
-      accessorFn: (row) => `${row.model}`,
+      accessorFn: (row) => row.model,
       header: ({ column }) => {
         return <DataTableColumnHeader column={column} title="Модель" />;
       },
@@ -37,7 +37,7 @@ export const columns: ColumnDef<GetResponseAcceptedCartridgeByUserDtoMySchema>[]
     },
     {
       id: "Количество",
-      accessorFn: (row) => `${row.count}`,
+      accessorFn: (row) => row.count,
       header: ({ column }) => {
         return <DataTableColumnHeader column={column} title="Количество" />;
       },
@@ -45,14 +45,14 @@ export const columns: ColumnDef<GetResponseAcceptedCartridgeByUserDtoMySchema>[]
     },
     {
       id: "Дата получения",
-      accessorFn: (row) => `${row.createdAt}`,
+      accessorFn: (row) => row.createdAt,
       header: ({ column }) => {
         return <DataTableColumnHeader column={column} title="Дата получения" />;
       },
       sortingFn: "datetime",
       enableMultiSort: true,
       cell: (props) => {
-        return <span>{`${formateDate(props.row.original.createdAt)}`}</span>;
+        return <span>{formateDate(props.row.original.createdAt)}</span>;
       },
     },
     {

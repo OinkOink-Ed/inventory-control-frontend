@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { DialogFormShowActions, DialogFormShowStore } from "./type";
+import { type DialogFormShowActions, type DialogFormShowStore } from "./type";
 
 export const useDialogFormShow = create<
   DialogFormShowStore & DialogFormShowActions
@@ -8,6 +8,9 @@ export const useDialogFormShow = create<
   delivery: false,
   movement: false,
   receiving: false,
+  add_kabinet: false,
+  create_model_cartridge: false,
+  create_user: false,
 
   toggleDialogForm(name) {
     set((state) => ({ [name]: !state[name] }));

@@ -1,31 +1,31 @@
 import { useNavigate, useParams } from "react-router";
-import { DataTable } from "@/components/DataTable/DataTable";
+import { useWarehouseTableApi } from "./api/useWarehouseTableApi";
+import { useEffect } from "react";
+import { handlerError } from "@/shared/helpers/handlerError";
+import { ANSWER } from "@/lib/const/Answer";
 import { columns } from "./columns";
-import { SpinnerLoad } from "@/components/SpinnerLoad";
 import { facetedCartridgeData } from "./facetedData";
+import { DeliveryCartridgeForm } from "./DeliveryCartridgeForm";
+import { DecommissioningCartrdigeForm } from "./DecommissioningCartrdigeForm";
 import { ReceivingCartridgeForm } from "./ReceivingCartridgeForm";
 import { MovementCartridgeForm } from "./MovementCartridgeForm";
-import { DecommissioningCartrdigeForm } from "./DecommissioningCartrdigeForm";
-import { DeliveryCartridgeForm } from "./DeliveryCartridgeForm";
-import { GetResponseAllCartridgeInWarehouseDtoSchema } from "@/app/api/generated";
-import { useEffect } from "react";
-import { Answer } from "@/app/Errors/Answer";
-import { handlerError } from "@/app/helpers/handlerError";
+import { Spinner } from "@/components/ui/spinner";
+import { DataTable } from "@/components/DataTable/DataTable";
 import { ActionsForTable } from "@/components/ActionsForTable";
-import { useWarehouseTableApi } from "./api/useWarehouseTableApi";
 import { DialogForm } from "@/components/DialogForm";
+import type { GetResponseAllCartridgeInWarehouseDtoSchema } from "@api/gen";
 
 export function WarehouseTable() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const warehouseId = parseInt(id!);
+  const warehouseId = id ? parseInt(id, 10) : undefined;
   const { error, isSuccess, data } = useWarehouseTableApi(warehouseId);
 
   useEffect(() => {
     if (error) {
       const res = handlerError(error);
       setTimeout(() => {
-        if (res == Answer.LOGOUT) void navigate("/auth", { replace: true });
+        if (res == ANSWER.LOGOUT) void navigate("/auth", { replace: true });
       }, 1000);
     }
   }, [navigate, error]);
@@ -81,6 +81,6 @@ export function WarehouseTable() {
       </DialogForm>
     </>
   ) : (
-    <SpinnerLoad />
+    <Spinner />
   );
 }

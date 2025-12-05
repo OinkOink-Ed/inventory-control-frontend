@@ -1,10 +1,17 @@
-import { cartridgeControllerGetCartridgesByWarehouse } from "@/app/api/generated";
 import { useApiQuery } from "@/shared/api/hooks/useApi";
+import { cartridgeControllerGetCartridgesByWarehouse } from "@api/gen";
 import { useMatch } from "react-router";
 
-export const useWarehouseTableApi = (id: number) => {
-  return useApiQuery(() => cartridgeControllerGetCartridgesByWarehouse(id), {
-    queryKey: ["cartridges", id],
-    enabled: !!useMatch({ path: "/warehouse/:id", end: true }) && !!id,
-  });
+export const useWarehouseTableApi = (id: number | undefined) => {
+  const path = useMatch({ path: "/warehouse/:id", end: true });
+  return useApiQuery(
+    () => {
+      if (!id) throw new Error("ID не является числом");
+      return cartridgeControllerGetCartridgesByWarehouse(id);
+    },
+    {
+      queryKey: ["cartridges", id],
+      enabled: !!path && !!id,
+    }
+  );
 };

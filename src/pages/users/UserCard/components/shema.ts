@@ -1,7 +1,7 @@
 import {
-  getResponseAcceptedCartridgeByUserDtoSchema,
   putEditUserDtoSchema,
-} from "@/app/api/generated";
+  type getResponseAcceptedCartridgeByUserDtoSchema,
+} from "@api/gen";
 import { z } from "zod";
 
 export type GetResponseAcceptedCartridgeByUserDtoMySchema = z.infer<
@@ -26,14 +26,14 @@ export const editCardUserDtoSchemaZOD = putEditUserDtoSchema.extend({
     .array(
       z.object({
         id: z.coerce.number({ message: "Поле обязательно к заполнению" }),
-      }),
+      })
     )
     .min(1, { message: "Выберите хотя бы одно подразделение" }),
   kabinets: z
     .array(
       z.object({
         id: z.coerce.number({ message: "Поле обязательно к заполнению" }),
-      }),
+      })
     )
     .min(1, { message: "Выберите хотя бы один кабинет" }),
 } satisfies Record<keyof PatchEditUserCardShape, z.ZodType>);

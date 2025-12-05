@@ -1,5 +1,5 @@
-import { cartridgeControllerGetCartridgesCount } from "@/app/api/generated";
 import { useApiQuery } from "@/shared/api/hooks/useApi";
+import { cartridgeControllerGetCartridgesCount } from "@api/gen";
 import { useMatch } from "react-router";
 
 export const useDashboardCartridgesCount = () => {

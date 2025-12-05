@@ -1,5 +1,5 @@
-import { userControllerGetCardUser } from "@/app/api/generated";
 import { useApiQuery } from "@/shared/api/hooks/useApi";
+import { userControllerGetCardUser } from "@api/gen";
 import { useMatch } from "react-router";
 
 export const useUserCardApi = (id: number) => {

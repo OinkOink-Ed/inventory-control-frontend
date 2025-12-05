@@ -1,8 +1,8 @@
-import { GetResponseAllCartridgeInWarehouseDtoSchema } from "@/app/api/generated";
-import { formateDate } from "@/app/helpers/formateDate";
 import DataTableColumnHeader from "@/components/DataTable/DataTableColumnHeader";
 import DataTableColumnHeaderMultiSort from "@/components/DataTable/DataTableColumnHeaderMultiSort";
-import { ColumnDef } from "@tanstack/react-table";
+import { formateDate } from "@/shared/helpers/formateDate";
+import type { GetResponseAllCartridgeInWarehouseDtoSchema } from "@api/gen";
+import { type ColumnDef } from "@tanstack/react-table";
 
 export const columns: ColumnDef<GetResponseAllCartridgeInWarehouseDtoSchema>[] =
   [
@@ -48,7 +48,7 @@ export const columns: ColumnDef<GetResponseAllCartridgeInWarehouseDtoSchema>[] =
       sortingFn: "datetime",
       enableMultiSort: true,
       cell: (props) => {
-        return <span>{`${formateDate(props.row.original.createdAt)}`}</span>;
+        return <span>{formateDate(props.row.original.createdAt)}</span>;
       },
     },
     {

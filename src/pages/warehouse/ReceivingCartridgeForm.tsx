@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/Button/Button";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -18,17 +18,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { PostCreateReceivingDto } from "@/app/api/generated";
-import { handlerError } from "@/app/helpers/handlerError";
 import { createReceivingDtoSchema } from "./shema";
-import { Answer } from "@/app/Errors/Answer";
 import { useNavigate } from "react-router";
 import {
   useReceivingCartridgeFormApiCartrdgesCreateReceiving,
   useReceivingCartridgeFormApiCreateCartridgeModelGetAll,
 } from "./api/useReceivingCartridgeFormApi";
-import { SpinnerLoad } from "@/components/SpinnerLoad";
 import { useCallback } from "react";
+import type { PostCreateReceivingDto } from "@api/gen";
+import { handlerError } from "@/shared/helpers/handlerError";
+import { ANSWER } from "@/lib/const/Answer";
+import { Spinner } from "@/components/ui/spinner";
 
 export function ReceivingCartridgeForm() {
   const navigate = useNavigate();
@@ -51,14 +51,14 @@ export function ReceivingCartridgeForm() {
     async function (data: PostCreateReceivingDto): Promise<void> {
       try {
         const res = await mutateAsync(data);
-        toast.success(`${res.message}`, {
+        toast.success(res.message, {
           position: "top-center",
         });
         form.reset();
       } catch (error: unknown) {
         const res = handlerError(error);
-        if (res == Answer.LOGOUT) void navigate("/auth", { replace: true });
-        if (res == Answer.RESET) form.reset();
+        if (res == ANSWER.LOGOUT) void navigate("/auth", { replace: true });
+        if (res == ANSWER.RESET) form.reset();
       }
     },
     [form, mutateAsync, navigate],
@@ -95,9 +95,9 @@ export function ReceivingCartridgeForm() {
               <FormItem className="h-24 w-[400px]">
                 <FormLabel>Модель</FormLabel>
                 <Select
-                  onValueChange={(value) =>
-                    field.onChange(value ? Number(value) : undefined)
-                  }
+                  onValueChange={(value) => {
+                    field.onChange(value ? Number(value) : undefined);
+                  }}
                   value={field.value?.toString() ?? ""}
                 >
                   <FormControl>
@@ -106,17 +106,11 @@ export function ReceivingCartridgeForm() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {isSuccess && data ? (
-                      data.map((item) => (
-                        <SelectItem key={item.id} value={item.id.toString()}>
-                          {item.name}
-                        </SelectItem>
-                      ))
-                    ) : (
-                      <SelectItem value="Идет загрузка данных">
-                        Идет загрузка данных
+                    {data.map((item) => (
+                      <SelectItem key={item.id} value={item.id.toString()}>
+                        {item.name}
                       </SelectItem>
-                    )}
+                    ))}
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -130,6 +124,6 @@ export function ReceivingCartridgeForm() {
       </Form>
     </>
   ) : (
-    <SpinnerLoad />
+    <Spinner />
   );
 }

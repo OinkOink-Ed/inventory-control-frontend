@@ -1,3 +1,7 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { authRequestDtoSchemaZOD } from "../model/shema";
+import type { PostAuthDto } from "@api/gen";
 import {
   Form,
   FormControl,
@@ -6,22 +10,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@/components/ui/Button/Button";
-import { useNavigate } from "react-router";
 import { Input } from "@/components/ui/input";
-import { authRequestDtoSchemaZOD } from "../model/shema";
-import { useProfileStore } from "@/app/stores/profile/useProfileStore";
-import { authControllerSignIn, PostAuthDto } from "@/app/api/generated";
-import { handlerError } from "@/app/helpers/handlerError";
-import { Answer } from "@/app/Errors/Answer";
-import { queryClientInstans } from "@/app/queryClientInstans";
-import { useOnSubmit } from "@/features/auth/api/useOnSubmit";
+import { Button } from "@/components/ui/button";
+import { useOnSubmit } from "../api/useOnSubmit";
 
 export function Login() {
-  const {} = useOnSubmit();
-
   const form = useForm<PostAuthDto>({
     resolver: zodResolver(authRequestDtoSchemaZOD),
     defaultValues: {
@@ -29,6 +22,8 @@ export function Login() {
       password: "",
     },
   });
+
+  const onSubmit = useOnSubmit({ reset: form.reset });
 
   return (
     <div className="flex h-svh justify-center">
@@ -72,7 +67,9 @@ export function Login() {
               </FormItem>
             )}
           />
-          <Button type="submit">Войти</Button>
+          <Button className="cursor-pointer" type="submit">
+            Войти
+          </Button>
         </form>
       </Form>
     </div>

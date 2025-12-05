@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/Button/Button";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -11,12 +11,12 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { createModelCartridgeDtoSchemaZOD } from "./shema";
-import { PostCreateCartridgeModelDto } from "@/app/api/generated";
-import { handlerError } from "@/app/helpers/handlerError";
-import { Answer } from "@/app/Errors/Answer";
 import { useNavigate } from "react-router";
-import { useCartridgeModelFormApi } from "./api/useCartridgeModelFormApi";
+import { useCartridgeModelFormApi } from "./useCartridgeModelFormApi";
+import type { PostCreateCartridgeModelDto } from "@api/gen";
+import { createModelCartridgeDtoSchemaZOD } from "../shema";
+import { handlerError } from "@/shared/helpers/handlerError";
+import { ANSWER } from "@/lib/const/Answer";
 
 export function CartridgeModelForm() {
   const { mutateAsync } = useCartridgeModelFormApi();
@@ -32,14 +32,14 @@ export function CartridgeModelForm() {
   async function onSubmit(data: PostCreateCartridgeModelDto): Promise<void> {
     try {
       const res = await mutateAsync(data);
-      toast.success(`${res.message}`, {
+      toast.success(res.message, {
         position: "top-center",
       });
       form.reset();
     } catch (error: unknown) {
       const res = handlerError(error);
-      if (res == Answer.LOGOUT) void navigate("/auth", { replace: true });
-      if (res == Answer.RESET) form.reset();
+      if (res == ANSWER.LOGOUT) void navigate("/auth", { replace: true });
+      if (res == ANSWER.RESET) form.reset();
     }
   }
 

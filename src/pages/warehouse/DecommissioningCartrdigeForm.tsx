@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/Button/Button";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -18,15 +18,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { PostCreateDecommissioningDto } from "@/app/api/generated";
-import { handlerError } from "@/app/helpers/handlerError";
 import { createDecommissioningDtoShema } from "./shema";
-import { Answer } from "@/app/Errors/Answer";
 import { useNavigate, useParams } from "react-router";
 import {
   useDecommissioningCartrdigeFormApiCartrdgesCreateDecommissioning,
   useDecommissioningCartrdigeFormApiCartridgeModelGetAll,
 } from "./api/useDecommissioningCartrdigeFormApi";
+import type { PostCreateDecommissioningDto } from "@api/gen";
+import { handlerError } from "@/shared/helpers/handlerError";
+import { ANSWER } from "@/lib/const/Answer";
 
 export function DecommissioningCartrdigeForm() {
   const { id } = useParams<{ id: string }>();
@@ -51,14 +51,14 @@ export function DecommissioningCartrdigeForm() {
   async function onSubmit(data: PostCreateDecommissioningDto): Promise<void> {
     try {
       const res = await mutateAsync(data);
-      toast.success(`${res.message}`, {
+      toast.success(res.message, {
         position: "top-center",
       });
       form.reset();
     } catch (error: unknown) {
       const res = handlerError(error);
-      if (res == Answer.LOGOUT) void navigate("/auth", { replace: true });
-      if (res == Answer.RESET) form.reset();
+      if (res == ANSWER.LOGOUT) void navigate("/auth", { replace: true });
+      if (res == ANSWER.RESET) form.reset();
     }
   }
 

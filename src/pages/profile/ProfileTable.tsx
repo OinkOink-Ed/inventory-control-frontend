@@ -1,21 +1,21 @@
 import { DataTable } from "@/components/DataTable/DataTable";
 import { columns } from "./columns";
-import { SpinnerLoad } from "@/components/SpinnerLoad";
 import { useProfileCardTable } from "./api/useProfileCardFormApi";
-import { GetResponseAcceptedCartridgeByUserDtoMySchema } from "./shema";
-import { useRoleContext } from "@/app/providers/hooks/useRoleContext";
+import { type GetResponseAcceptedCartridgeByUserDtoMySchema } from "./shema";
+import { useRoleContext } from "@app-providers/RoleProvider/hooks/useRoleContext";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function ProfileTable() {
   const { id } = useRoleContext();
 
   const { data, isSuccess } = useProfileCardTable(id ?? 0);
 
-  return isSuccess && data ? (
+  return isSuccess ? (
     <DataTable<
       GetResponseAcceptedCartridgeByUserDtoMySchema,
       GetResponseAcceptedCartridgeByUserDtoMySchema
     >
-      data={data?.flatMap((item) =>
+      data={data.flatMap((item) =>
         item.acceptedCartridge.flatMap((item) => item),
       )}
       columns={columns}
@@ -24,6 +24,6 @@ export default function ProfileTable() {
       pageSize={12}
     ></DataTable>
   ) : (
-    <SpinnerLoad />
+    <Spinner />
   );
 }

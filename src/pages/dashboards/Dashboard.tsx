@@ -9,13 +9,13 @@ import {
   YAxis,
 } from "recharts";
 import { useDashboardCartridgesCount } from "./api/useDashboard";
-import { SpinnerLoad } from "@/components/SpinnerLoad";
+import { Spinner } from "@/components/ui/spinner";
 
 export function Dashboard() {
   const { data, isSuccess } = useDashboardCartridgesCount();
 
   return isSuccess ? (
-    <div className="m-2 flex flex-grow flex-wrap items-center justify-center border">
+    <div className="m-2 flex grow flex-wrap items-center justify-center border">
       <div className="flex h-[95%] w-[95%] justify-center px-3 py-3">
         <BarChart
           style={{
@@ -41,6 +41,6 @@ export function Dashboard() {
       </div>
     </div>
   ) : (
-    <SpinnerLoad />
+    <Spinner />
   );
 }

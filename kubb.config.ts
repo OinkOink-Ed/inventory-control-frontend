@@ -52,7 +52,7 @@ export default defineConfig(() => {
         dataReturnType: "data",
         paramsType: "inline",
         parser: "zod",
-        importPath: "src/shared/api/client.ts",
+        importPath: "@client",
         client: "axios",
       }),
     ],

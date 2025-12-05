@@ -1,5 +1,10 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
-import { authControllerRefreshTokenClient } from "@gen/clients/AuthService/authControllerRefreshTokenClient";
+import axios, {
+  AxiosError,
+  type AxiosRequestConfig,
+  type AxiosResponse,
+} from "axios";
+import { useProfileStore } from "@app-stores/profile/useProfileStore";
+import { authControllerRefreshToken } from "./gen";
 
 interface RefreshTokenResponse {
   token: string;
@@ -40,7 +45,7 @@ export const refreshAccessToken = async (): Promise<RefreshTokenResponse> => {
   try {
     const refreshToken = profile.getState().refresh_token;
 
-    const response = await authControllerRefreshTokenClient({
+    const response = await authControllerRefreshToken({
       token: refreshToken,
     });
 
@@ -81,10 +86,12 @@ const processQueue = (error: Error | null, token: string | null = null) => {
   failedQueue.forEach((prom) => {
     if (error) {
       prom.reject(
-        error instanceof Error ? error : new Error("Queue processing failed"),
+        error instanceof Error ? error : new Error("Queue processing failed")
       );
     } else {
-      prom.resolve(token!);
+      if (token === null) {
+        prom.reject(new Error("Queue processing failed"));
+      } else prom.resolve(token);
     }
   });
   failedQueue = [];
@@ -115,7 +122,24 @@ axiosInstance.interceptors.response.use(
         return new Promise((resolve, reject) => {
           failedQueue.push({
             resolve: (token: string) => {
-              originalRequest.headers!.Authorization = `Bearer ${token}`;
+              // Безопасное обновление headers
+              const headers: Record<string, string> = {};
+
+              if (originalRequest.headers) {
+                // Обработка разных типов headers
+                if (originalRequest.headers instanceof axios.AxiosHeaders) {
+                  Object.assign(headers, originalRequest.headers.toJSON());
+                } else if (
+                  typeof originalRequest.headers === "object" &&
+                  !Array.isArray(originalRequest.headers)
+                ) {
+                  Object.assign(headers, originalRequest.headers);
+                }
+              }
+
+              headers.Authorization = `Bearer ${token}`;
+              originalRequest.headers = headers;
+
               resolve(axiosInstance(originalRequest));
             },
             reject,
@@ -131,8 +155,24 @@ axiosInstance.interceptors.response.use(
 
         processQueue(null, token);
 
-        originalRequest.headers!.Authorization = `Bearer ${token}`;
-        return axiosInstance(originalRequest);
+        // Тот же код для обновления headers
+        const headers: Record<string, string> = {};
+
+        if (originalRequest.headers) {
+          if (originalRequest.headers instanceof axios.AxiosHeaders) {
+            Object.assign(headers, originalRequest.headers.toJSON());
+          } else if (
+            typeof originalRequest.headers === "object" &&
+            !Array.isArray(originalRequest.headers)
+          ) {
+            Object.assign(headers, originalRequest.headers);
+          }
+        }
+
+        headers.Authorization = `Bearer ${token}`;
+        originalRequest.headers = headers;
+
+        return await axiosInstance(originalRequest);
       } catch (refreshError) {
         const errorToReject =
           refreshError instanceof Error
@@ -140,22 +180,22 @@ axiosInstance.interceptors.response.use(
             : new Error("Ошибка обновления токена авторизации");
         processQueue(errorToReject, null);
 
-        return Promise.reject(errorToReject);
+        return await Promise.reject(errorToReject);
       } finally {
         isRefreshing = false;
       }
     }
 
     return Promise.reject(error);
-  },
+  }
 );
 
-const axiosClient = async <TData, TError = unknown, TVariables = unknown>(
-  config: RequestConfig<TVariables>,
+const axiosClient = async <TData, TVariables = unknown>(
+  config: RequestConfig<TVariables>
 ): Promise<ResponseConfig<TData>> => {
   const response = await axiosInstance
     .request({ ...config })
-    .catch((e: AxiosError<TError>) => {
+    .catch((e: unknown) => {
       throw e;
     });
 

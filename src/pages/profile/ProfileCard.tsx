@@ -1,14 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import { useChoiseOfKabinetsForCreateUser } from "@/app/stores/choiseOfKabinetsForCreateUser/useChoiseOfKabinetsStore";
-import { formatPhoneNumber } from "@/app/helpers/formatPhoneNumber";
 import { useForm } from "react-hook-form";
-import { PutEditUserDto, PutEditUserDtoSchema } from "@/app/api/generated";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { editCardUserDtoSchemaZOD } from "../users/UserCard/components/shema";
 import { toast } from "sonner";
-import { handlerError } from "@/app/helpers/handlerError";
-import { Answer } from "@/app/Errors/Answer";
 import {
   Form,
   FormControl,
@@ -30,10 +26,9 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/Button/Button";
+import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
-import { SpinnerLoad } from "@/components/SpinnerLoad";
 import { InputPhone } from "@/components/InputPhone";
 import {
   useProfileCardApi,
@@ -42,7 +37,12 @@ import {
   useUsersFormApiGetKabinetsByUserIdForEditUser,
   useUsersFormApiGetRole,
 } from "./api/useProfileCardFormApi";
-import { useRoleContext } from "@/app/providers/hooks/useRoleContext";
+import { useRoleContext } from "@app-providers/RoleProvider/hooks/useRoleContext";
+import { formatPhoneNumber } from "@/shared/helpers/formatPhoneNumber";
+import type { PutEditUserDto, PutEditUserDtoSchema } from "@api/gen";
+import { handlerError } from "@/shared/helpers/handlerError";
+import { ANSWER } from "@/lib/const/Answer";
+import { Spinner } from "@/components/ui/spinner";
 
 export function ProfileCard() {
   const navigate = useNavigate();
@@ -66,7 +66,7 @@ export function ProfileCard() {
     return {
       name: data?.name ?? "",
       username: data?.username ?? "",
-      role: data?.role?.id ? { id: data?.role?.id } : undefined,
+      role: data?.role?.id ? { id: data.role.id } : undefined,
       lastname: data?.lastname ?? "",
       division: data?.division ?? [],
       kabinets: data?.kabinets ?? [],
@@ -123,13 +123,11 @@ export function ProfileCard() {
 
   const selectedDivisions = watch("division") ?? [];
   const selectedDivisionIds = selectedDivisions
-    .filter((div) => div?.id !== undefined)
-    .map((div) => div.id!);
+    .filter((div) => div.id !== undefined)
+    .map((div) => div.id);
 
   const initialDivisionIds = useMemo(() => {
-    return formValues.division
-      .filter((div) => div?.id !== undefined)
-      .map((div) => div.id);
+    return formValues.division.filter((div) => div.id).map((div) => div.id);
   }, [formValues.division]);
 
   const filteredKabinets = useMemo(() => {
@@ -185,7 +183,7 @@ export function ProfileCard() {
       });
 
       const res = await mutateAsync(data);
-      toast.success(`${res.message}`, {
+      toast.success(res.message, {
         position: "top-center",
       });
       setTimeout(() => {
@@ -197,8 +195,8 @@ export function ProfileCard() {
       setIsFormDisabled(true);
     } catch (error: unknown) {
       const res = handlerError(error);
-      if (res == Answer.LOGOUT) void navigate("/auth", { replace: true });
-      if (res == Answer.RESET) reset();
+      if (res == ANSWER.LOGOUT) void navigate("/auth", { replace: true });
+      if (res == ANSWER.RESET) reset();
     }
   }
 
@@ -300,15 +298,15 @@ export function ProfileCard() {
             name="role.id"
             render={({ field }) => {
               const currentValue = field.value?.toString() ?? "";
-              const currentRole = data?.role; // Роль редактируемого пользователя
+              const currentRole = data.role; // Роль редактируемого пользователя
 
               return (
                 <FormItem className="h-24 w-[300px]">
                   <FormLabel>Роль</FormLabel>
                   <Select
-                    onValueChange={(value) =>
-                      field.onChange(value ? Number(value) : undefined)
-                    }
+                    onValueChange={(value) => {
+                      field.onChange(value ? Number(value) : undefined);
+                    }}
                     value={currentValue}
                     disabled={true}
                   >
@@ -321,7 +319,7 @@ export function ProfileCard() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {roleSuccess && roleData ? (
+                      {roleSuccess ? (
                         <>
                           {/* Если текущей роли нет в списке доступных, показываем её как отдельный вариант */}
                           {currentRole &&
@@ -362,7 +360,7 @@ export function ProfileCard() {
               <FormItem className="h-24 w-[300px]">
                 <FormLabel>Состояние</FormLabel>
                 <FormControl>
-                  <Input disabled={true} value={data?.state}></Input>
+                  <Input disabled={true} value={data.state}></Input>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -374,15 +372,13 @@ export function ProfileCard() {
             name="division"
             render={({ field }) => {
               const currentValues = Array.isArray(field.value)
-                ? field.value.filter(
-                    (item) => item !== null && typeof item.id === "number",
-                  )
+                ? field.value.filter((item) => typeof item.id === "number")
                 : [];
 
               const selectedDivisionNames =
                 roleName !== "admin"
                   ? currentValues.map(() => {
-                      const division = divisionData?.find((item) => item);
+                      const division = divisionData?.[0];
                       if (division) {
                         const regex = /№ \d+/;
                         const match = regex.exec(division.name);
@@ -435,16 +431,16 @@ export function ProfileCard() {
                         }
                       >
                         {currentValues.length > 0
-                          ? `Выбрано: ${currentValues.length}`
+                          ? `Выбрано: ${String(currentValues.length)}`
                           : "Выберите подразделения"}
                         <ChevronDown />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-[300px] p-0">
                       <div className="max-h-60 overflow-y-auto p-2">
-                        {divisionSuccess && divisionData ? (
+                        {divisionSuccess ? (
                           divisionData.map((item) => {
-                            const isLocked = lockedDivisionIds?.includes(
+                            const isLocked = lockedDivisionIds.includes(
                               item.name,
                             );
                             const isChecked = currentValues.some(
@@ -491,15 +487,15 @@ export function ProfileCard() {
                     <div className="mb-2 flex flex-wrap gap-1">
                       {selectedDivisionNames.map((name, index) => (
                         <span
-                          key={index}
-                          className="rounded-full bg-primary px-2 py-1 text-xs text-primary-foreground"
+                          key={String(index) + String(name)}
+                          className="bg-primary text-primary-foreground rounded-full px-2 py-1 text-xs"
                         >
                           {name}
                         </span>
                       ))}
                     </div>
                   ) : (
-                    <SpinnerLoad />
+                    <Spinner />
                   )}
                   <FormMessage />
                 </FormItem>
@@ -512,15 +508,13 @@ export function ProfileCard() {
             name="kabinets"
             render={({ field }) => {
               const currentValues = Array.isArray(field.value)
-                ? field.value.filter(
-                    (item) => item !== null && typeof item.id === "number",
-                  )
+                ? field.value.filter((item) => typeof item.id === "number")
                 : [];
 
               const selectedKabionetsNames = currentValues.map((div) => {
                 const kabinet =
                   kabinetsData?.find((d) => d.id === div.id) ??
-                  data.kabinets?.find((d) => d.id === div.id);
+                  data.kabinets.find((d) => d.id === div.id);
                 return kabinet;
               });
 
@@ -549,14 +543,14 @@ export function ProfileCard() {
                         }
                       >
                         {currentValues.length > 0
-                          ? `Выбрано: ${currentValues.length}`
+                          ? `Выбрано: ${String(currentValues.length)}`
                           : "Выберите Кабинеты"}
                         <ChevronDown />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-[300px] p-0">
                       <div className="max-h-60 overflow-y-auto p-2">
-                        {kabinetsSuccess && kabinetsData ? (
+                        {kabinetsSuccess ? (
                           filteredKabinets.map((item) => (
                             <div
                               key={item.id}
@@ -581,7 +575,9 @@ export function ProfileCard() {
                                   }
                                 }}
                               />
-                              <FormLabel className="text-sm">{`${item.number} ${item.division?.name}`}</FormLabel>
+                              <FormLabel className="text-sm">{`${
+                                item.number
+                              } ${String(item.division?.name)}`}</FormLabel>
                             </div>
                           ))
                         ) : (
@@ -594,8 +590,8 @@ export function ProfileCard() {
                     <div className="mb-2 flex flex-wrap gap-1">
                       {selectedKabionetsNames.map((name, index) => (
                         <span
-                          key={index}
-                          className="rounded-full bg-primary px-2 py-1 text-xs text-primary-foreground"
+                          key={String(index) + String(name?.id)}
+                          className="bg-primary text-primary-foreground rounded-full px-2 py-1 text-xs"
                         >
                           {name?.number}
                         </span>
@@ -632,7 +628,9 @@ export function ProfileCard() {
               <Button
                 type="button"
                 className="w-[200px]"
-                onClick={() => setIsFormDisabled(false)}
+                onClick={() => {
+                  setIsFormDisabled(false);
+                }}
               >
                 Редактировать
               </Button>
@@ -659,6 +657,6 @@ export function ProfileCard() {
       </Form>
     </>
   ) : (
-    <SpinnerLoad />
+    <Spinner />
   );
 }

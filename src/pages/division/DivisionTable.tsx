@@ -1,28 +1,26 @@
 import { useNavigate, useParams } from "react-router";
-import { SpinnerLoad } from "@/components/SpinnerLoad";
 import { DataTable } from "@/components/DataTable/DataTable";
 import { columns } from "./columns";
-import { handlerError } from "@/app/helpers/handlerError";
-import { Answer } from "@/app/Errors/Answer";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { ActionsForTable } from "@/components/ActionsForTable";
 import { useDivisionTableApi } from "./api/useDivisionTableApi";
-import { Button } from "@/components/ui/Button/Button";
 import { KabinetsForm } from "./KabinetsForm";
 import { DialogForm } from "@/components/DialogForm";
+import { handlerError } from "@/shared/helpers/handlerError";
+import { ANSWER } from "@/lib/const/Answer";
+import { Spinner } from "@/components/ui/spinner";
 
 export function DivisionTable() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const divisionId = parseInt(id!);
+  const divisionId = id ? parseInt(id) : undefined;
   const { error, data, isSuccess } = useDivisionTableApi(divisionId);
-  const [showAddKabinet, setShowAddKabinet] = useState(false);
 
   useEffect(() => {
     if (error) {
       const res = handlerError(error);
       setTimeout(() => {
-        if (res == Answer.LOGOUT) void navigate("/auth", { replace: true });
+        if (res == ANSWER.LOGOUT) void navigate("/auth", { replace: true });
       }, 1000);
     }
   }, [navigate, error]);
@@ -34,31 +32,21 @@ export function DivisionTable() {
         columns={columns}
         titleTable="Список кабинетов"
         defaultSort="Номер"
-        actions={[
-          <ActionsForTable
-            key={"Действия подразделений"}
-            actions={[
-              <Button
-                key={"Добавление кабинета"}
-                variant={"outline"}
-                className="w-full border-none"
-                onClick={() => setShowAddKabinet(true)}
-              >
-                Добавить кабинет
-              </Button>,
-            ]}
-          ></ActionsForTable>,
-        ]}
         pageSize={12}
-      />
+      >
+        <DataTable.ToolbarActions>
+          <ActionsForTable />
+        </DataTable.ToolbarActions>
+      </DataTable>
       <DialogForm
         title="Добавление кабинета"
-        form={<KabinetsForm divisionId={divisionId} />}
-        openState={showAddKabinet}
-        changeState={setShowAddKabinet}
-      />
+        name="add_kabinet"
+        key={"Добавление кабинета"}
+      >
+        <KabinetsForm divisionId={divisionId} />
+      </DialogForm>
     </>
   ) : (
-    <SpinnerLoad />
+    <Spinner />
   );
 }

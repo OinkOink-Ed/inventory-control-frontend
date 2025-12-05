@@ -7,6 +7,8 @@ import { resolve } from "path";
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
+    react(),
+    tailwindcss(),
     {
       name: "api-shema",
       enforce: "pre",
@@ -14,21 +16,22 @@ export default defineConfig({
         await getApiSwagger();
       },
     },
-    react(),
-    tailwindcss(),
   ],
   resolve: {
     alias: {
-      "@gen-api": resolve(__dirname, "src/shared/api/gen/.index"),
+      "@gen-api": resolve(__dirname, "src/shared/api/gen/index.ts"),
+      "@client": resolve(__dirname, "src/shared/api/client.ts"),
       "@api": resolve(__dirname, "src/shared/api"),
       "@/lib": resolve(__dirname, "src/shared/lib"),
       "@/hooks": resolve(__dirname, "src/shared/hooks"),
       "@/components": resolve(__dirname, "src/shared/components"),
       "@app-providers": resolve(__dirname, "src/app/providers"),
-      "@app-stores/": resolve(__dirname, "src/app/providers"),
+      "@app-stores": resolve(__dirname, "src/app/stores"),
       "@app": resolve(__dirname, "src/app"),
+      "@features": resolve(__dirname, "src/features"),
       "@router": resolve(__dirname, "src/router"),
-      "@": resolve(__dirname, "src"),
+      "@widgest": resolve(__dirname, "src/widgest"),
+      "@": resolve(__dirname, "./src"),
     },
   },
   server: {

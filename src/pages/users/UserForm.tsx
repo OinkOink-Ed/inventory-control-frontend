@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/Button/Button";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import {
   Select,
@@ -19,11 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { createUserDtoSchemaZOD } from "./shema";
-import { PostCreateUserDto } from "@/app/api/generated";
-import { InputPhone } from "@/components/InputPhone";
-import { handlerError } from "@/app/helpers/handlerError";
 import { useNavigate } from "react-router";
-import { Answer } from "@/app/Errors/Answer";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
@@ -38,6 +34,10 @@ import {
   useUsersFormApiGetKabinetsByUserIdForCreateUser,
   useUsersFormApiGetRole,
 } from "./api/useUsersFormApi";
+import type { PostCreateUserDto } from "@api/gen";
+import { handlerError } from "@/shared/helpers/handlerError";
+import { ANSWER } from "@/lib/const/Answer";
+import { InputPhone } from "@/components/InputPhone";
 
 export function UserForm() {
   const navigate = useNavigate();
@@ -69,17 +69,15 @@ export function UserForm() {
     },
   });
 
+  const warehouseWhereId = useWatch({
+    control: form.control,
+    name: "division",
+  });
+
   useEffect(() => {
-    const subscription = form.watch((value, { name }) => {
-      if (name === "division") {
-        setChoiceOfKabinets({ userChoices: value.division });
-        form.resetField("kabinets");
-      }
-    });
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [setChoiceOfKabinets, form]);
+    setChoiceOfKabinets({ userChoices: warehouseWhereId });
+    form.resetField("kabinets");
+  }, [setChoiceOfKabinets, form, warehouseWhereId]);
 
   useEffect(() => {
     return () => {
@@ -90,14 +88,14 @@ export function UserForm() {
   async function onSubmit(data: PostCreateUserDto): Promise<void> {
     try {
       const res = await mutateAsync(data);
-      toast.success(`${res.message}`, {
+      toast.success(res.message, {
         position: "top-center",
       });
       form.reset();
     } catch (error: unknown) {
       const res = handlerError(error);
-      if (res == Answer.LOGOUT) void navigate("/auth", { replace: true });
-      if (res == Answer.RESET) form.reset();
+      if (res == ANSWER.LOGOUT) void navigate("/auth", { replace: true });
+      if (res == ANSWER.RESET) form.reset();
     }
   }
 
@@ -202,9 +200,9 @@ export function UserForm() {
               <FormItem className="h-24 w-[400px]">
                 <FormLabel>Роль</FormLabel>
                 <Select
-                  onValueChange={(value) =>
-                    field.onChange(value ? Number(value) : undefined)
-                  }
+                  onValueChange={(value) => {
+                    field.onChange(value ? Number(value) : undefined);
+                  }}
                   value={field.value?.toString() ?? ""}
                 >
                   <FormControl>
@@ -213,7 +211,7 @@ export function UserForm() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {roleSuccess && roleData ? (
+                    {roleSuccess ? (
                       roleData.map((item) => (
                         <SelectItem
                           key={item.roleName}
@@ -239,9 +237,7 @@ export function UserForm() {
             name="division"
             render={({ field }) => {
               const currentValues = Array.isArray(field.value)
-                ? field.value.filter(
-                    (item) => item !== null && typeof item.id === "number",
-                  )
+                ? field.value.filter((item) => typeof item.id === "number")
                 : [];
 
               return (
@@ -254,13 +250,13 @@ export function UserForm() {
                         className="w-full justify-start"
                       >
                         {currentValues.length > 0
-                          ? `Выбрано: ${currentValues.length}`
+                          ? `Выбрано: ${String(currentValues.length)}`
                           : "Выберите подразделения"}
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-[400px] p-0">
                       <div className="max-h-60 overflow-y-auto p-2">
-                        {divisionSuccess && divisionData ? (
+                        {divisionSuccess ? (
                           divisionData.map((item) => (
                             <div
                               key={item.id}
@@ -307,9 +303,7 @@ export function UserForm() {
             name="kabinets"
             render={({ field }) => {
               const currentValues = Array.isArray(field.value)
-                ? field.value.filter(
-                    (item) => item !== null && typeof item.id === "number",
-                  )
+                ? field.value.filter((item) => typeof item.id === "number")
                 : [];
 
               return (
@@ -322,13 +316,13 @@ export function UserForm() {
                         className="w-full justify-start"
                       >
                         {currentValues.length > 0
-                          ? `Выбрано: ${currentValues.length}`
+                          ? `Выбрано: ${String(currentValues.length)}`
                           : "Выберите Кабинеты"}
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-[400px] p-0">
                       <div className="max-h-60 overflow-y-auto p-2">
-                        {kabinetsSuccess && kabinetsData ? (
+                        {kabinetsSuccess ? (
                           kabinetsData.map((item) => (
                             <div
                               key={item.id}
@@ -353,7 +347,9 @@ export function UserForm() {
                                   }
                                 }}
                               />
-                              <FormLabel className="text-sm">{`${item.number} ${item.division?.name}`}</FormLabel>
+                              <FormLabel className="text-sm">{`${
+                                item.number
+                              } ${String(item.division?.name)}`}</FormLabel>
                             </div>
                           ))
                         ) : (

@@ -3,6 +3,9 @@ export interface DialogFormShowStore {
   decommissioning: boolean;
   receiving: boolean;
   movement: boolean;
+  create_user: boolean;
+  add_kabinet: boolean;
+  create_model_cartridge: boolean;
 }
 
 export interface DialogFormShowActions {

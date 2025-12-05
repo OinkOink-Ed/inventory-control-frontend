@@ -1,14 +1,14 @@
+import { useChoiceOfStaffStore } from "@/app/stores/choiceOfStaff/useChoiceOfStaffStore";
+import { useApiMutation, useApiQuery } from "@/shared/api/hooks/useApi";
+import { useRoleContext } from "@app-providers/RoleProvider/hooks/useRoleContext";
+import { useMatch, useParams } from "react-router";
 import {
   cartridgeModelControllerGetMogetModelsByWarehousedels,
   movementControllerCreate,
-  PostCreateMovementDto,
   userControllerGetAllByDivisions,
   warehouseControllerGetWarehouses,
-} from "@/app/api/generated";
-import { useChoiceOfStaffStore } from "@/app/stores/choiceOfStaff/useChoiceOfStaffStore";
-import { useApiMutation, useApiQuery } from "@/shared/api/hooks/useApi";
-import { useRoleContext } from "@/app/providers/hooks/useRoleContext";
-import { useMatch, useParams } from "react-router";
+  type PostCreateMovementDto,
+} from "@api/gen";
 
 export const useMovementCartridgeFormApiCartrdgesCreateMovement = () => {
   return useApiMutation((data: PostCreateMovementDto) =>
@@ -45,7 +45,9 @@ export const useMovementCartridgeFormApiStaffGetAllByDivisions = () => {
       if (id) {
         return userControllerGetAllByDivisions(Number(id));
       }
-      return userControllerGetAllByDivisions(choiseWarehouse!);
+      if (choiseWarehouse)
+        return userControllerGetAllByDivisions(choiseWarehouse);
+      else throw new Error("choiseWarehouse - undefined");
     },
     {
       queryKey: ["usersByWarehouse", choiseWarehouse, id],

@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/Button/Button";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import {
   Select,
@@ -18,11 +18,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { PostCreateMovementDtoSchema } from "@/app/api/generated";
-import { handlerError } from "@/app/helpers/handlerError";
 import { createMovementDtoShema } from "./shema";
 import { useNavigate, useParams } from "react-router";
-import { Answer } from "@/app/Errors/Answer";
 import { useChoiceOfStaffStore } from "@/app/stores/choiceOfStaff/useChoiceOfStaffStore";
 import { useEffect } from "react";
 import {
@@ -31,7 +28,10 @@ import {
   useMovementCartridgeFormApiStaffGetAllByDivisions,
   useMovementCartridgeFormApiWarehouseGetAll,
 } from "./api/useMovementCartridgeFormApi";
-import { SpinnerLoad } from "@/components/SpinnerLoad";
+import type { PostCreateMovementDtoSchema } from "@api/gen";
+import { handlerError } from "@/shared/helpers/handlerError";
+import { ANSWER } from "@/lib/const/Answer";
+import { Spinner } from "@/components/ui/spinner";
 
 export function MovementCartridgeForm() {
   const { id } = useParams<{ id: string }>();
@@ -64,29 +64,29 @@ export function MovementCartridgeForm() {
   async function onSubmit(data: PostCreateMovementDtoSchema): Promise<void> {
     try {
       const res = await mutateAsync(data);
-      toast.success(`${res.message}`, {
+      toast.success(res.message, {
         position: "top-center",
       });
       form.reset();
       clearChoiceOfStaff();
     } catch (error: unknown) {
       const res = handlerError(error);
-      if (res == Answer.LOGOUT) void navigate("/auth", { replace: true });
-      if (res == Answer.RESET) form.reset();
+      if (res == ANSWER.LOGOUT) void navigate("/auth", { replace: true });
+      if (res == ANSWER.RESET) form.reset();
     }
   }
 
+  const warehouseWhereId = useWatch({
+    control: form.control,
+    name: "warehouseWhere.id",
+  });
+
   useEffect(() => {
-    const subscription = form.watch((value, { name }) => {
-      if (name === "warehouseWhere.id") {
-        setChoiceOfStaff({ warehouseChoices: value.warehouseWhere?.id });
-        form.resetField("whoAccepted");
-      }
-    });
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [setChoiceOfStaff, form]);
+    if (warehouseWhereId) {
+      setChoiceOfStaff({ warehouseChoices: warehouseWhereId });
+      form.resetField("whoAccepted");
+    }
+  }, [setChoiceOfStaff, form, warehouseWhereId]);
 
   useEffect(() => {
     return () => {
@@ -125,9 +125,9 @@ export function MovementCartridgeForm() {
               <FormItem className="h-24 w-[400px]">
                 <FormLabel>Модель</FormLabel>
                 <Select
-                  onValueChange={(value) =>
-                    field.onChange(value ? Number(value) : undefined)
-                  }
+                  onValueChange={(value) => {
+                    field.onChange(value ? Number(value) : undefined);
+                  }}
                   value={field.value?.toString() ?? ""}
                 >
                   <FormControl>
@@ -155,9 +155,9 @@ export function MovementCartridgeForm() {
               <FormItem className="h-24 w-[400px]">
                 <FormLabel>Склад</FormLabel>
                 <Select
-                  onValueChange={(value) =>
-                    field.onChange(value ? Number(value) : undefined)
-                  }
+                  onValueChange={(value) => {
+                    field.onChange(value ? Number(value) : undefined);
+                  }}
                   value={field.value?.toString() ?? ""}
                 >
                   <FormControl>
@@ -190,9 +190,9 @@ export function MovementCartridgeForm() {
                   <FormLabel>Принимающий</FormLabel>
                   <Select
                     disabled={!warehouseChoices}
-                    onValueChange={(value) =>
-                      field.onChange(value ? Number(value) : undefined)
-                    }
+                    onValueChange={(value) => {
+                      field.onChange(value ? Number(value) : undefined);
+                    }}
                     value={field.value?.toString() ?? ""}
                   >
                     <FormControl>
@@ -227,6 +227,6 @@ export function MovementCartridgeForm() {
       </Form>
     </>
   ) : (
-    <SpinnerLoad />
+    <Spinner />
   );
 }

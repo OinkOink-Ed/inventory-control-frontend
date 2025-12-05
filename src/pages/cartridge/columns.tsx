@@ -1,7 +1,7 @@
-import { GetResponseAllDetailedCartridgeModelDtoSchema } from "@/app/api/generated";
-import { formateDate } from "@/app/helpers/formateDate";
 import DataTableColumnHeader from "@/components/DataTable/DataTableColumnHeader";
-import { ColumnDef } from "@tanstack/react-table";
+import { formateDate } from "@/shared/helpers/formateDate";
+import type { GetResponseAllDetailedCartridgeModelDtoSchema } from "@api/gen";
+import { type ColumnDef } from "@tanstack/react-table";
 
 //Подумать о дополнительных колонках
 export const columns: ColumnDef<GetResponseAllDetailedCartridgeModelDtoSchema>[] =
@@ -24,13 +24,15 @@ export const columns: ColumnDef<GetResponseAllDetailedCartridgeModelDtoSchema>[]
       sortingFn: "datetime",
       enableMultiSort: true,
       cell: (props) => {
-        return <span>{`${formateDate(props.row.original.createdAt)}`}</span>;
+        return <span>{formateDate(props.row.original.createdAt)}</span>;
       },
     },
     {
       id: "Создатель",
       accessorFn: (row) =>
-        `${row.creator?.lastname} ${row.creator?.name} ${row.creator?.patronimyc}`,
+        `${String(row.creator?.lastname)} ${String(row.creator?.name)} ${String(
+          row.creator?.patronimyc
+        )}`,
       header: ({ column }) => {
         return <DataTableColumnHeader column={column} title="Создатель" />;
       },

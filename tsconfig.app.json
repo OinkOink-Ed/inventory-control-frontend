@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "tsBuildInfoFile": "node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "target": "ES2022",
     "useDefineForClassFields": true,
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
@@ -26,7 +26,8 @@
 
     "baseUrl": ".",
     "paths": {
-      "@gen-api/*": ["src/shared/api/gen/.index"],
+      "@gen-api": ["src/shared/api/gen/index.ts"],
+      "@client": ["src/shared/api/client.ts"],
       "@api/*": ["src/shared/api/*"],
       "@/lib/*": ["src/shared/lib/*"],
       "@/hooks/*": ["src/shared/hooks/*"],
@@ -34,8 +35,10 @@
       "@app-providers/*": ["src/app/providers/*"],
       "@app-stores/*": ["src/app/stores/*"],
       "@app/*": ["src/app/*"],
+      "@features/*": ["src/features/*"],
       "@router/*": ["src/router/*"],
-      "@/*": ["src/*"]
+      "@widgest/*": ["src/widgest/*"],
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src"]

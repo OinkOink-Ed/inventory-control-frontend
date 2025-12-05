@@ -1,8 +1,8 @@
 import { DataTable } from "@/components/DataTable/DataTable";
 import { columns } from "./columns";
 import { useUserCardTableProps } from "./api/useUserCardTableApi";
-import { SpinnerLoad } from "@/components/SpinnerLoad";
-import { GetResponseAcceptedCartridgeByUserDtoMySchema } from "./shema";
+import { type GetResponseAcceptedCartridgeByUserDtoMySchema } from "./shema";
+import { Spinner } from "@/components/ui/spinner";
 
 interface UserCardTableProps {
   id: number;
@@ -11,13 +11,13 @@ interface UserCardTableProps {
 export default function UserCardtable({ id }: UserCardTableProps) {
   const { data, isSuccess } = useUserCardTableProps(id);
 
-  return isSuccess && data ? (
+  return isSuccess ? (
     <DataTable<
       GetResponseAcceptedCartridgeByUserDtoMySchema,
       GetResponseAcceptedCartridgeByUserDtoMySchema
     >
-      data={data?.flatMap((item) =>
-        item.acceptedCartridge.flatMap((item) => item),
+      data={data.flatMap((item) =>
+        item.acceptedCartridge.flatMap((item) => item)
       )}
       columns={columns}
       defaultSort="Подразделение"
@@ -25,6 +25,6 @@ export default function UserCardtable({ id }: UserCardTableProps) {
       pageSize={12}
     ></DataTable>
   ) : (
-    <SpinnerLoad />
+    <Spinner />
   );
 }

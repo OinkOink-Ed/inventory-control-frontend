@@ -1,4 +1,4 @@
-import { getResponseAcceptedCartridgeByUserDtoSchema } from "@/app/api/generated";
+import type { getResponseAcceptedCartridgeByUserDtoSchema } from "@api/gen";
 import { z } from "zod";
 
 export type GetResponseAcceptedCartridgeByUserDtoMySchema = z.infer<

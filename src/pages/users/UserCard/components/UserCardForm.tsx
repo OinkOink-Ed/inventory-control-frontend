@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/Button/Button";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -18,11 +18,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { PutEditUserDto, PutEditUserDtoSchema } from "@/app/api/generated";
 import { InputPhone } from "@/components/InputPhone";
-import { handlerError } from "@/app/helpers/handlerError";
 import { useNavigate } from "react-router";
-import { Answer } from "@/app/Errors/Answer";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
@@ -33,17 +30,20 @@ import { useEffect, useMemo, useState } from "react";
 import { useChoiseOfKabinetsForCreateUser } from "@/app/stores/choiseOfKabinetsForCreateUser/useChoiseOfKabinetsStore";
 
 import { ChevronDown } from "lucide-react";
-import { formatPhoneNumber } from "@/app/helpers/formatPhoneNumber";
 import {
   useUserCardFormApi,
   useUsersFormApiGetDivision,
   useUsersFormApiGetKabinetsByUserIdForEditUser,
   useUsersFormApiGetRole,
 } from "./api/useUserCardFormApi";
-import { SpinnerLoad } from "@/components/SpinnerLoad";
 import { useUserCardApi } from "../api/useUserCardApi";
 import { editCardUserDtoSchemaZOD } from "./shema";
-import { useRoleContext } from "@/app/providers/hooks/useRoleContext";
+import { useRoleContext } from "@app-providers/RoleProvider/hooks/useRoleContext";
+import type { PutEditUserDto, PutEditUserDtoSchema } from "@api/gen";
+import { handlerError } from "@/shared/helpers/handlerError";
+import { ANSWER } from "@/lib/const/Answer";
+import { Spinner } from "@/components/ui/spinner";
+import { formatPhoneNumber } from "@/shared/helpers/formatPhoneNumber";
 
 interface UserCardFormProps {
   id: number;
@@ -70,7 +70,7 @@ export function UserCardForm({ id }: UserCardFormProps) {
     return {
       name: data?.name ?? "",
       username: data?.username ?? "",
-      role: data?.role?.id ? { id: data?.role?.id } : undefined,
+      role: data?.role?.id ? { id: data.role.id } : undefined,
       lastname: data?.lastname ?? "",
       division: data?.division ?? [],
       kabinets: data?.kabinets ?? [],
@@ -127,13 +127,11 @@ export function UserCardForm({ id }: UserCardFormProps) {
 
   const selectedDivisions = watch("division") ?? [];
   const selectedDivisionIds = selectedDivisions
-    .filter((div) => div?.id !== undefined)
-    .map((div) => div.id!);
+    .filter((div) => div.id !== undefined)
+    .map((div) => div.id);
 
   const initialDivisionIds = useMemo(() => {
-    return formValues.division
-      .filter((div) => div?.id !== undefined)
-      .map((div) => div.id);
+    return formValues.division.filter((div) => div.id).map((div) => div.id);
   }, [formValues.division]);
 
   const filteredKabinets = useMemo(() => {
@@ -189,7 +187,7 @@ export function UserCardForm({ id }: UserCardFormProps) {
       });
 
       const res = await mutateAsync(data);
-      toast.success(`${res.message}`, {
+      toast.success(res.message, {
         position: "top-center",
       });
       setTimeout(() => {
@@ -201,8 +199,8 @@ export function UserCardForm({ id }: UserCardFormProps) {
       setIsFormDisabled(true);
     } catch (error: unknown) {
       const res = handlerError(error);
-      if (res == Answer.LOGOUT) void navigate("/auth", { replace: true });
-      if (res == Answer.RESET) reset();
+      if (res == ANSWER.LOGOUT) void navigate("/auth", { replace: true });
+      if (res == ANSWER.RESET) reset();
     }
   }
 
@@ -304,15 +302,15 @@ export function UserCardForm({ id }: UserCardFormProps) {
             name="role.id"
             render={({ field }) => {
               const currentValue = field.value?.toString() ?? "";
-              const currentRole = data?.role; // Роль редактируемого пользователя
+              const currentRole = data.role; // Роль редактируемого пользователя
 
               return (
                 <FormItem className="h-24 w-[300px]">
                   <FormLabel>Роль</FormLabel>
                   <Select
-                    onValueChange={(value) =>
-                      field.onChange(value ? Number(value) : undefined)
-                    }
+                    onValueChange={(value) => {
+                      field.onChange(value ? Number(value) : undefined);
+                    }}
                     value={currentValue}
                     disabled={roleName === "admin" || isFormDisabled}
                   >
@@ -325,7 +323,7 @@ export function UserCardForm({ id }: UserCardFormProps) {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {roleSuccess && roleData ? (
+                      {roleSuccess ? (
                         <>
                           {/* Если текущей роли нет в списке доступных, показываем её как отдельный вариант */}
                           {currentRole &&
@@ -367,7 +365,7 @@ export function UserCardForm({ id }: UserCardFormProps) {
               <FormItem className="h-24 w-[300px]">
                 <FormLabel>Состояние</FormLabel>
                 <FormControl>
-                  <Input disabled={true} value={data?.state}></Input>
+                  <Input disabled={true} value={data.state}></Input>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -379,15 +377,13 @@ export function UserCardForm({ id }: UserCardFormProps) {
             name="division"
             render={({ field }) => {
               const currentValues = Array.isArray(field.value)
-                ? field.value.filter(
-                    (item) => item !== null && typeof item.id === "number",
-                  )
+                ? field.value.filter((item) => typeof item.id === "number")
                 : [];
 
               const selectedDivisionNames =
                 roleName === "admin"
                   ? currentValues.map(() => {
-                      const division = divisionData?.find((item) => item);
+                      const division = divisionData?.[0];
                       if (division) {
                         const regex = /№ \d+/;
                         const match = regex.exec(division.name);
@@ -440,16 +436,16 @@ export function UserCardForm({ id }: UserCardFormProps) {
                         }
                       >
                         {currentValues.length > 0
-                          ? `Выбрано: ${currentValues.length}`
+                          ? `Выбрано: ${String(currentValues.length)}`
                           : "Выберите подразделения"}
                         <ChevronDown />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-[300px] p-0">
                       <div className="max-h-60 overflow-y-auto p-2">
-                        {divisionSuccess && divisionData ? (
+                        {divisionSuccess ? (
                           divisionData.map((item) => {
-                            const isLocked = lockedDivisionIds?.includes(
+                            const isLocked = lockedDivisionIds.includes(
                               item.name,
                             );
                             const isChecked = currentValues.some(
@@ -496,15 +492,15 @@ export function UserCardForm({ id }: UserCardFormProps) {
                     <div className="mb-2 flex flex-wrap gap-1">
                       {selectedDivisionNames.map((name, index) => (
                         <span
-                          key={index}
-                          className="rounded-full bg-primary px-2 py-1 text-xs text-primary-foreground"
+                          key={String(index) + String(name)}
+                          className="bg-primary text-primary-foreground rounded-full px-2 py-1 text-xs"
                         >
                           {name}
                         </span>
                       ))}
                     </div>
                   ) : (
-                    <SpinnerLoad />
+                    <Spinner />
                   )}
                   <FormMessage />
                 </FormItem>
@@ -517,15 +513,13 @@ export function UserCardForm({ id }: UserCardFormProps) {
             name="kabinets"
             render={({ field }) => {
               const currentValues = Array.isArray(field.value)
-                ? field.value.filter(
-                    (item) => item !== null && typeof item.id === "number",
-                  )
+                ? field.value.filter((item) => typeof item.id === "number")
                 : [];
 
               const selectedKabionetsNames = currentValues.map((div) => {
                 const kabinet =
                   kabinetsData?.find((d) => d.id === div.id) ??
-                  data?.kabinets?.find((d) => d.id === div.id);
+                  data.kabinets.find((d) => d.id === div.id);
                 return kabinet;
               });
 
@@ -550,14 +544,14 @@ export function UserCardForm({ id }: UserCardFormProps) {
                         disabled={field.disabled}
                       >
                         {currentValues.length > 0
-                          ? `Выбрано: ${currentValues.length}`
+                          ? `Выбрано: ${String(currentValues.length)}`
                           : "Выберите Кабинеты"}
                         <ChevronDown />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-[300px] p-0">
                       <div className="max-h-60 overflow-y-auto p-2">
-                        {kabinetsSuccess && kabinetsData ? (
+                        {kabinetsSuccess ? (
                           filteredKabinets.map((item) => (
                             <div
                               key={item.id}
@@ -582,7 +576,9 @@ export function UserCardForm({ id }: UserCardFormProps) {
                                   }
                                 }}
                               />
-                              <FormLabel className="text-sm">{`${item.number} ${item.division?.name}`}</FormLabel>
+                              <FormLabel className="text-sm">{`${
+                                item.number
+                              } ${String(item.division?.name)}`}</FormLabel>
                             </div>
                           ))
                         ) : (
@@ -595,8 +591,8 @@ export function UserCardForm({ id }: UserCardFormProps) {
                     <div className="mb-2 flex flex-wrap gap-1">
                       {selectedKabionetsNames.map((name, index) => (
                         <span
-                          key={index}
-                          className="rounded-full bg-primary px-2 py-1 text-xs text-primary-foreground"
+                          key={String(index) + String(name?.id)}
+                          className="bg-primary text-primary-foreground rounded-full px-2 py-1 text-xs"
                         >
                           {name?.number}
                         </span>
@@ -633,7 +629,9 @@ export function UserCardForm({ id }: UserCardFormProps) {
               <Button
                 type="button"
                 className="w-[200px]"
-                onClick={() => setIsFormDisabled(false)}
+                onClick={() => {
+                  setIsFormDisabled(false);
+                }}
                 disabled={
                   !(roleName === "admin") &&
                   !(roleName === "admin" && data.role?.roleName === "staff")
@@ -665,6 +663,6 @@ export function UserCardForm({ id }: UserCardFormProps) {
       </Form>
     </>
   ) : (
-    <SpinnerLoad />
+    <Spinner />
   );
 }

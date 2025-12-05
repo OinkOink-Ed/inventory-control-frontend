@@ -1,14 +1,14 @@
+import { useChoiseOfKabinetsForCreateUser } from "@/app/stores/choiseOfKabinetsForCreateUser/useChoiseOfKabinetsStore";
+import { useApiMutation, useApiQuery } from "@/shared/api/hooks/useApi";
+import { useRoleContext } from "@app-providers/RoleProvider/hooks/useRoleContext";
+import { useMatch } from "react-router";
 import {
   divisionControllerGetDivisions,
   kabinetControllerGetKabinetsByDivisionIdForCreateUser,
-  PostCreateUserDto,
   roleControllerGetRoles,
   userControllerCreateUser,
-} from "@/app/api/generated";
-import { useChoiseOfKabinetsForCreateUser } from "@/app/stores/choiseOfKabinetsForCreateUser/useChoiseOfKabinetsStore";
-import { useApiMutation, useApiQuery } from "@/shared/api/hooks/useApi";
-import { useRoleContext } from "@/app/providers/hooks/useRoleContext";
-import { useMatch } from "react-router";
+  type PostCreateUserDto,
+} from "@api/gen";
 
 export const useUsersFormApiCreateUser = () => {
   return useApiMutation((data: PostCreateUserDto) =>

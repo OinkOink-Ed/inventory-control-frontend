@@ -1,11 +1,11 @@
+import { useApiMutation } from "@/shared/api/hooks/useApi";
 import {
   cartridgeModelControllerCreate,
-  PostCreateCartridgeModelDto,
-} from "@/app/api/generated";
-import { useApiMutation } from "@/shared/api/hooks/useApi";
+  type PostCreateCartridgeModelDto,
+} from "@api/gen";
 
 export const useCartridgeModelFormApi = () => {
   return useApiMutation((data: PostCreateCartridgeModelDto) =>
-    cartridgeModelControllerCreate(data),
+    cartridgeModelControllerCreate(data)
   );
 };

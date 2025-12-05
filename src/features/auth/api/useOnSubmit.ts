@@ -1,15 +1,23 @@
-import { queryClientInstans } from "@/app/queryClientInstans";
+import { queryClientInstans } from "@api/queryClientInstans";
 import { useProfileStore } from "@/app/stores/profile/useProfileStore";
+import { authControllerSignIn, type PostAuthDto } from "@api/gen";
 import { useCallback } from "react";
+import type { UseFormReset } from "react-hook-form";
 import { useNavigate } from "react-router";
+import { handlerError } from "@/shared/helpers/handlerError";
+import { ANSWER } from "@/lib/const/Answer";
 
-export function useOnSubmit() {
+interface useOnSubmitProps {
+  reset: UseFormReset<PostAuthDto>;
+}
+
+export function useOnSubmit({ reset }: useOnSubmitProps) {
   const setProfile = useProfileStore((state) => state.setProfile);
 
   const navigate = useNavigate();
 
   const onSubmit = useCallback(
-    (data: PostAuthDto) => async (data: PostAuthDto) => {
+    async (data: PostAuthDto) => {
       try {
         const res = await authControllerSignIn(data);
 
@@ -18,12 +26,11 @@ export function useOnSubmit() {
         void navigate("/");
       } catch (error: unknown) {
         const res = handlerError(error);
-        if (res == Answer.LOGOUT) form.reset();
-        if (res == Answer.RESET) form.reset();
+        if (res == ANSWER.LOGOUT) reset();
+        if (res == ANSWER.RESET) reset();
       }
     },
-    [navigate, setProfile],
+    [navigate, reset, setProfile],
   );
-
   return onSubmit;
 }

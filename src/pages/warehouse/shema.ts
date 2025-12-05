@@ -3,7 +3,7 @@ import {
   postCreateDeliveryDtoSchema,
   postCreateMovementDtoSchema,
   postCreateReceivingDtoSchema,
-} from "@/app/api/generated";
+} from "@api/gen";
 import { z } from "zod";
 
 export const createReceivingDtoSchema = postCreateReceivingDtoSchema.extend({

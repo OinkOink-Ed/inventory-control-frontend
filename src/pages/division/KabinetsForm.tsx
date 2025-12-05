@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/Button/Button";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -11,17 +11,18 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import {
-  PostCreateKabinetDto,
-  postCreateKabinetDtoSchema,
-} from "@/app/api/generated";
-import { handlerError } from "@/app/helpers/handlerError";
+
 import { useKabinetsFormApi } from "./api/useKabinetsFormApi";
-import { Answer } from "@/app/Errors/Answer";
 import { useNavigate } from "react-router";
+import {
+  postCreateKabinetDtoSchema,
+  type PostCreateKabinetDto,
+} from "@api/gen";
+import { handlerError } from "@/shared/helpers/handlerError";
+import { ANSWER } from "@/lib/const/Answer";
 
 interface KabinetsFormProps {
-  divisionId: number;
+  divisionId: number | undefined;
 }
 
 export function KabinetsForm({ divisionId }: KabinetsFormProps) {
@@ -39,14 +40,14 @@ export function KabinetsForm({ divisionId }: KabinetsFormProps) {
   async function onSubmit(data: PostCreateKabinetDto): Promise<void> {
     try {
       const res = await mutateAsync(data);
-      toast.success(`${res.message}`, {
+      toast.success(res.message, {
         position: "top-center",
       });
       form.reset();
     } catch (error: unknown) {
       const res = handlerError(error);
-      if (res == Answer.LOGOUT) void navigate("/auth", { replace: true });
-      if (res == Answer.RESET) form.reset();
+      if (res == ANSWER.LOGOUT) void navigate("/auth", { replace: true });
+      if (res == ANSWER.RESET) form.reset();
     }
   }
 
