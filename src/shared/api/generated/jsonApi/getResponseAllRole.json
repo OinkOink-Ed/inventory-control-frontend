@@ -1,0 +1,1 @@
+{"type":"object","properties":{"id":{"type":"number"},"roleName":{"type":"string"}},"required":["id","roleName"],"x-readme-ref-name":"GetResponseAllRole"}

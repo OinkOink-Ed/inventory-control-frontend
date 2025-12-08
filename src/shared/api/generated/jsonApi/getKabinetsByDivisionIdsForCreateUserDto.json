@@ -1,0 +1,1 @@
+{"type":"object","properties":{"id":{"type":"number"},"number":{"type":"string"},"division":{"type":"object","properties":{"name":{"type":"string"},"id":{"type":"number"}},"required":["name","id"]}},"required":["id","number"],"x-readme-ref-name":"GetKabinetsByDivisionIdsForCreateUserDto"}

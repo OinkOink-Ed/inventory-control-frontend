@@ -1,0 +1,2 @@
+export { cartridgeControllerGetCartridgesByWarehouse } from "./cartridgeControllerGetCartridgesByWarehouse.ts";
+export { cartridgeControllerGetCartridgesCount } from "./cartridgeControllerGetCartridgesCount.ts";

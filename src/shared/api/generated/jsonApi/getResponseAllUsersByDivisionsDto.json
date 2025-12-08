@@ -1,0 +1,1 @@
+{"type":"object","properties":{"id":{"type":"number"},"name":{"type":"string"},"patronimyc":{"type":"string"},"lastname":{"type":"string"},"role":{"type":"object","properties":{"id":{"type":"number"},"roleName":{"type":"string"}},"required":["id","roleName"]}},"required":["id","name","patronimyc","lastname"],"x-readme-ref-name":"GetResponseAllUsersByDivisionsDto"}

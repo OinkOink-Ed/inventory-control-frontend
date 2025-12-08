@@ -1,0 +1,1 @@
+{"type":"object","properties":{"userId":{"type":"number"},"division":{"type":"array","items":{"properties":{"id":{"type":"number"}}}}},"required":["userId"],"x-readme-ref-name":"UpdateUserEventType"}

@@ -1,0 +1,1 @@
+{"type":"object","properties":{"id":{"type":"number"},"lastname":{"type":"string"},"name":{"type":"string"},"patronimyc":{"type":"string"},"role":{"type":"object","properties":{"roleName":{"type":"string"}},"required":["roleName"]}},"required":["id","lastname","name","patronimyc"],"x-readme-ref-name":"GetProfileDto"}

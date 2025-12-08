@@ -1,0 +1,1 @@
+{"type":"object","properties":{"comment":{"type":"string"},"count":{"type":"number"},"warehouse":{"type":"object","properties":{"id":{"type":"number"}},"required":["id"]},"model":{"type":"object","properties":{"id":{"type":"number"}},"required":["id"]}},"required":["comment","count"],"x-readme-ref-name":"PostCreateDecommissioningDto"}

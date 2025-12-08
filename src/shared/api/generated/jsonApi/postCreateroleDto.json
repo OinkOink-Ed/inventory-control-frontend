@@ -1,0 +1,1 @@
+{"type":"object","properties":{"roleName":{"type":"string"}},"required":["roleName"],"x-readme-ref-name":"PostCreateroleDto"}

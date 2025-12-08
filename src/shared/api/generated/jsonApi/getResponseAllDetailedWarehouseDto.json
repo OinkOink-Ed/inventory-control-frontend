@@ -1,0 +1,1 @@
+{"type":"object","properties":{"id":{"type":"number"},"division":{"type":"object","properties":{"id":{"type":"number"},"kabinets":{"type":"array","items":{"type":"object","properties":{"id":{"type":"number"},"number":{"type":"string"}},"required":["id","number"]}}},"required":["id","kabinets"]}},"required":["id"],"x-readme-ref-name":"GetResponseAllDetailedWarehouseDto"}

@@ -1,0 +1,1 @@
+{"type":"object","properties":{"userId":{"type":"number"},"divisionId":{"type":"number"}},"required":["userId","divisionId"],"x-readme-ref-name":"DeliveryCartridgeEventType"}
