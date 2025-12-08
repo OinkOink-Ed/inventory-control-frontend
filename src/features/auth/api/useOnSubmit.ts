@@ -4,8 +4,8 @@ import { authControllerSignIn, type PostAuthDto } from "@api/gen";
 import { useCallback } from "react";
 import type { UseFormReset } from "react-hook-form";
 import { useNavigate } from "react-router";
-import { handlerError } from "@/shared/helpers/handlerError";
 import { ANSWER } from "@/lib/const/Answer";
+import { handlerError } from "@/lib/helpers";
 
 interface useOnSubmitProps {
   reset: UseFormReset<PostAuthDto>;

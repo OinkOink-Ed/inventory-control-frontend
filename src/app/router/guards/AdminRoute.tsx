@@ -4,7 +4,7 @@ import { redirect } from "react-router";
 
 export function AdminRoute() {
   const result = isAuth();
-  if (result === false) {
+  if (!result) {
     return redirect("/auth");
   }
 

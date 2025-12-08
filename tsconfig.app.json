@@ -34,9 +34,9 @@
       "@/components/*": ["src/shared/components/*"],
       "@app-providers/*": ["src/app/providers/*"],
       "@app-stores/*": ["src/app/stores/*"],
+      "@router/*": ["src/app/router/*"],
       "@app/*": ["src/app/*"],
       "@features/*": ["src/features/*"],
-      "@router/*": ["src/router/*"],
       "@widgest/*": ["src/widgest/*"],
       "@/*": ["./src/*"]
     }

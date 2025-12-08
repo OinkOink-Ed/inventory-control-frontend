@@ -39,7 +39,7 @@ export const axiosInstance = axios.create({
   withCredentials: true,
 });
 
-export const refreshAccessToken = async (): Promise<RefreshTokenResponse> => {
+const refreshAccessToken = async (): Promise<RefreshTokenResponse> => {
   const profile = useProfileStore;
 
   try {
@@ -86,7 +86,7 @@ const processQueue = (error: Error | null, token: string | null = null) => {
   failedQueue.forEach((prom) => {
     if (error) {
       prom.reject(
-        error instanceof Error ? error : new Error("Queue processing failed")
+        error instanceof Error ? error : new Error("Queue processing failed"),
       );
     } else {
       if (token === null) {
@@ -187,15 +187,19 @@ axiosInstance.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
-const axiosClient = async <TData, TVariables = unknown>(
-  config: RequestConfig<TVariables>
+const axiosClient = async <
+  TData = unknown,
+  TError = unknown,
+  TVariables = unknown,
+>(
+  config: RequestConfig<TVariables>,
 ): Promise<ResponseConfig<TData>> => {
   const response = await axiosInstance
-    .request({ ...config })
-    .catch((e: unknown) => {
+    .request<TData>({ ...config })
+    .catch((e: TError) => {
       throw e;
     });
 

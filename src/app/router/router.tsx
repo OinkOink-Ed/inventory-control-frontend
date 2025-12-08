@@ -1,5 +1,4 @@
 import { createBrowserRouter } from "react-router";
-import { ErrorBoundary } from "../app/ErrorBoundary/ErrorBoundary";
 import { Suspense } from "react";
 import {
   CartridgeModelPage,
@@ -11,8 +10,6 @@ import {
   UsersPage,
   WarehousePage,
 } from "./lazyImports";
-import { UsersTable } from "../pages/users/UsersTable";
-import { UserCard } from "../pages/users/UserCard/UserCard";
 import { Spinner } from "@/components/ui/spinner";
 import { MainLayout } from "@app/layouts";
 import { PreRequestWrapperForAccess } from "./components/AccessGuard/PreRequestWrapperForAccess";
@@ -22,6 +19,9 @@ import {
   PublicRoute,
   UserAndAdminRoute,
 } from "./guards";
+import { UsersTable } from "@/pages/users/UsersTable";
+import { UserCard } from "@/pages/users/UserCard/UserCard";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 // Spinner можно будет заменить на Skeleton различный в дальнейшем
 
