@@ -1,5 +1,5 @@
-import DataTableColumnHeader from "@/components/DataTable/DataTableColumnHeader";
-import DataTableColumnHeaderMultiSort from "@/components/DataTable/DataTableColumnHeaderMultiSort";
+import DataTableColumnHeader from "@/shared/kit/DataTable/DataTableColumnHeader";
+import DataTableColumnHeaderMultiSort from "@/shared/kit/DataTable/DataTableColumnHeaderMultiSort";
 import { formateDate } from "@/shared/helpers/formateDate";
 import type { GetResponseAllCartridgeInWarehouseDtoSchema } from "@api/gen";
 import { type ColumnDef } from "@tanstack/react-table";

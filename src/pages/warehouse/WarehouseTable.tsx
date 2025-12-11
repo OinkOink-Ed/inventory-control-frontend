@@ -10,9 +10,9 @@ import { DecommissioningCartrdigeForm } from "./DecommissioningCartrdigeForm";
 import { ReceivingCartridgeForm } from "./ReceivingCartridgeForm";
 import { MovementCartridgeForm } from "./MovementCartridgeForm";
 import { Spinner } from "@/components/ui/spinner";
-import { DataTable } from "@/components/DataTable/DataTable";
-import { ActionsForTable } from "@/components/ActionsForTable";
-import { DialogForm } from "@/components/DialogForm";
+import { DataTable } from "@/shared/kit/DataTable/DataTable";
+import { ActionsForTable } from "@/shared/kit/ActionsForTable";
+import { DialogForm } from "@/shared/kit/DialogForm";
 import type { GetResponseAllCartridgeInWarehouseDtoSchema } from "@api/gen";
 
 export function WarehouseTable() {

@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/select";
 import { createDeliveryDtoShema } from "./shema";
 import { useNavigate, useParams } from "react-router";
-import { useChoiceOfKabinetsStore } from "@/app/stores/choiseOfKabinets/useChoiseOfKabinetsStore";
+import { useChoiceOfKabinetsStore } from "@/pages/warehouse/store/choiseOfKabinets/useChoiseOfKabinetsStore";
 import { useEffect } from "react";
 import {
   useDeliveryCartridgeFormApiCartrdgesCreateDelivery,
@@ -30,9 +30,8 @@ import {
   useDeliveryCartridgeFormApiStaffGetAllByDivisions,
 } from "./api/useDeliveryCartridgeFormApi";
 import type { PostCreateDeliveryDtoSchema } from "@api/gen";
-import { deliveryPDF } from "@/shared/helpers/generatedPDF/deliveryPdf";
-import { handlerError } from "@/shared/helpers/handlerError";
 import { ANSWER } from "@/lib/const/Answer";
+import { deliveryPDF, handlerError } from "@/lib/helpers";
 
 export function DeliveryCartridgeForm() {
   const { id } = useParams<{ id: string }>();

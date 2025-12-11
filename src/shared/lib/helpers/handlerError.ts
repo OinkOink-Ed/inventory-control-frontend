@@ -9,7 +9,7 @@ import type {
   ErrorResponseDto408,
   ErrorResponseDto500,
 } from "@api/gen";
-import { useProfileStore } from "@app-stores/profile/useProfileStore";
+import { useProfileStore } from "@features/auth/store/profile/useProfileStore";
 import { ANSWER, type Answer } from "@/lib/const/Answer";
 
 export function handlerError(dataError: unknown): Answer {

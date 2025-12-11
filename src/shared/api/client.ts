@@ -3,7 +3,7 @@ import axios, {
   type AxiosRequestConfig,
   type AxiosResponse,
 } from "axios";
-import { useProfileStore } from "@app-stores/profile/useProfileStore";
+import { useProfileStore } from "@features/auth/store/profile/useProfileStore";
 import { authControllerRefreshToken } from "./gen";
 
 interface RefreshTokenResponse {

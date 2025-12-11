@@ -1,5 +1,5 @@
-import { useChoiceOfStaffStore } from "@/app/stores/choiceOfStaff/useChoiceOfStaffStore";
-import { useChoiceOfKabinetsStore } from "@/app/stores/choiseOfKabinets/useChoiseOfKabinetsStore";
+import { useChoiceOfStaffStore } from "@/pages/warehouse/store/choiceOfStaff/useChoiceOfStaffStore";
+import { useChoiceOfKabinetsStore } from "@/pages/warehouse/store/choiseOfKabinets/useChoiseOfKabinetsStore";
 import { useApiMutation, useApiQuery } from "@/shared/api/hooks/useApi";
 import {
   cartridgeModelControllerGetMogetModelsByWarehousedels,
@@ -22,7 +22,7 @@ export const useDeliveryCartridgeFormApiCartridgeModelGetAll = () => {
     {
       queryKey: ["modelsCartridges"],
       enabled: !!match,
-    }
+    },
   );
 };
 
@@ -37,7 +37,7 @@ export const useDeliveryCartridgeFormApiDivisionIdByWarehouseId = () => {
 
 export const useDeliveryCartridgeFormApiStaffGetAllByDivisions = () => {
   const choiseWarehouse = useChoiceOfStaffStore(
-    (state) => state.warehouseChoices
+    (state) => state.warehouseChoices,
   );
 
   const { id } = useParams<{ id: string }>();
@@ -54,7 +54,7 @@ export const useDeliveryCartridgeFormApiStaffGetAllByDivisions = () => {
     {
       queryKey: ["usersByWarehouse", choiseWarehouse, id],
       enabled: !!match && (!!choiseWarehouse || !!id),
-    }
+    },
   );
 };
 
@@ -69,6 +69,6 @@ export const useDeliveryCartridgeFormApiKabinetsByUserId = () => {
     {
       queryKey: ["kabinetsByUserId", choiseUser],
       enabled: !!match && !!choiseUser,
-    }
+    },
   );
 };

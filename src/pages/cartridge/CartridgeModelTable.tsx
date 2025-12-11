@@ -1,10 +1,10 @@
-import { DataTable } from "@/components/DataTable/DataTable";
+import { DataTable } from "@/shared/kit/DataTable/DataTable";
 import { columns } from "./columns";
 import { useNavigate } from "react-router";
 import { useEffect } from "react";
 import { useCartridgeModelTableApi } from "./api/useCartridgeModelTableApi";
-import { ActionsForTable } from "@/components/ActionsForTable";
-import { DialogForm } from "@/components/DialogForm";
+import { ActionsForTable } from "@/shared/kit/ActionsForTable";
+import { DialogForm } from "@/shared/kit/DialogForm";
 import { handlerError } from "@/shared/helpers/handlerError";
 import { ANSWER } from "@/lib/const/Answer";
 import { Spinner } from "@/components/ui/spinner";

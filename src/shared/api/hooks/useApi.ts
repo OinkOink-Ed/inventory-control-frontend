@@ -2,14 +2,16 @@ import axiosClient from "@/shared/api/client";
 import {
   useMutation,
   useQuery,
+  useSuspenseQuery,
   type QueryKey,
   type UseMutationOptions,
   type UseQueryOptions,
+  type UseSuspenseQueryOptions,
 } from "@tanstack/react-query";
 
 type ApiMutationFunction<TData, TVariables> = (
   data: TVariables,
-  config?: { client?: typeof axiosClient }
+  config?: { client?: typeof axiosClient },
 ) => Promise<TData>;
 
 type ApiQueryFunction<TData> = (config: {
@@ -19,7 +21,7 @@ type ApiQueryFunction<TData> = (config: {
 
 export function useApiMutation<TData, TVariables>(
   apiFunction: ApiMutationFunction<TData, TVariables>,
-  options?: Omit<UseMutationOptions<TData, Error, TVariables>, "mutationFn">
+  options?: Omit<UseMutationOptions<TData, Error, TVariables>, "mutationFn">,
 ) {
   return useMutation({
     mutationFn: (data: TVariables) =>
@@ -30,9 +32,25 @@ export function useApiMutation<TData, TVariables>(
 
 export function useApiQuery<TData>(
   queryFn: ApiQueryFunction<TData>,
-  options: Omit<UseQueryOptions<TData>, "queryFn"> & { queryKey: QueryKey }
+  options: Omit<UseQueryOptions<TData>, "queryFn"> & { queryKey: QueryKey },
 ) {
   return useQuery({
+    ...options,
+    queryFn: (context) =>
+      queryFn({
+        signal: context.signal,
+        client: axiosClient,
+      }),
+  });
+}
+
+export function useApiSuspenseQuery<TData>(
+  queryFn: ApiQueryFunction<TData>,
+  options: Omit<UseSuspenseQueryOptions<TData>, "queryFn"> & {
+    queryKey: QueryKey;
+  },
+) {
+  return useSuspenseQuery({
     ...options,
     queryFn: (context) =>
       queryFn({

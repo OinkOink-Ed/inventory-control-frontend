@@ -1,6 +1,6 @@
-import DataTableColumnHeader from "@/components/DataTable/DataTableColumnHeader";
-import DataTableColumnHeaderMultiSort from "@/components/DataTable/DataTableColumnHeaderMultiSort";
-import DataTableRowActions from "@/components/DataTable/DataTableRowActions";
+import DataTableColumnHeader from "@/shared/kit/DataTable/DataTableColumnHeader";
+import DataTableColumnHeaderMultiSort from "@/shared/kit/DataTable/DataTableColumnHeaderMultiSort";
+import DataTableRowActions from "@/shared/kit/DataTable/DataTableRowActions";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import type { GetResponseAllUserDtoSchema } from "@api/gen";
 import { type ColumnDef } from "@tanstack/react-table";

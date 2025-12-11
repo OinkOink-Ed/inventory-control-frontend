@@ -1,6 +1,6 @@
-import { useChoiceOfStaffStore } from "@/app/stores/choiceOfStaff/useChoiceOfStaffStore";
+import { useChoiceOfStaffStore } from "@/pages/warehouse/store/choiceOfStaff/useChoiceOfStaffStore";
 import { useApiMutation, useApiQuery } from "@/shared/api/hooks/useApi";
-import { useRoleContext } from "@app-providers/RoleProvider/hooks/useRoleContext";
+import { useRoleContext } from "@app-providers/ProfileProvider/hooks/useRoleContext";
 import { useMatch, useParams } from "react-router";
 import {
   cartridgeModelControllerGetMogetModelsByWarehousedels,
@@ -26,10 +26,10 @@ export const useMovementCartridgeFormApiCartridgeModelGetAll = () => {
   );
 };
 export const useMovementCartridgeFormApiWarehouseGetAll = () => {
-  const { roleName } = useRoleContext();
+  const { role } = useRoleContext();
   return useApiQuery(warehouseControllerGetWarehouses, {
     queryKey: ["warehouses"],
-    enabled: roleName !== "staff",
+    enabled: role?.roleName !== "staff",
   });
 };
 

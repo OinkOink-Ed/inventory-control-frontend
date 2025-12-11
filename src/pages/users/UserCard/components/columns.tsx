@@ -1,4 +1,4 @@
-import DataTableColumnHeader from "@/components/DataTable/DataTableColumnHeader";
+import DataTableColumnHeader from "@/shared/kit/DataTable/DataTableColumnHeader";
 import { type ColumnDef } from "@tanstack/react-table";
 import { type GetResponseAcceptedCartridgeByUserDtoMySchema } from "./shema";
 import { formateDate } from "@/shared/helpers/formateDate";

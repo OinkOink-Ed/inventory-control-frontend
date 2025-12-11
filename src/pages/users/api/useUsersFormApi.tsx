@@ -1,6 +1,5 @@
-import { useChoiseOfKabinetsForCreateUser } from "@/app/stores/choiseOfKabinetsForCreateUser/useChoiseOfKabinetsStore";
+import { useChoiseOfKabinetsForCreateUser } from "@/shared/stores/choiseOfKabinetsForCreateUser/useChoiseOfKabinetsStore";
 import { useApiMutation, useApiQuery } from "@/shared/api/hooks/useApi";
-import { useRoleContext } from "@app-providers/RoleProvider/hooks/useRoleContext";
 import { useMatch } from "react-router";
 import {
   divisionControllerGetDivisions,
@@ -9,6 +8,7 @@ import {
   userControllerCreateUser,
   type PostCreateUserDto,
 } from "@api/gen";
+import { useProfileContext } from "@/shared/providers/ProfileProvider";
 
 export const useUsersFormApiCreateUser = () => {
   return useApiMutation((data: PostCreateUserDto) =>
@@ -23,11 +23,11 @@ export const useUsersFormApiGetRole = () => {
 };
 
 export const useUsersFormApiGetDivision = () => {
-  const { roleName } = useRoleContext();
+  const { role } = useProfileContext();
 
   return useApiQuery(divisionControllerGetDivisions, {
     queryKey: ["division"],
-    enabled: roleName !== "staff",
+    enabled: role?.roleName !== "staff",
   });
 };
 

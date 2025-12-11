@@ -1,4 +1,4 @@
-import { DataTable } from "@/components/DataTable/DataTable";
+import { DataTable } from "@/shared/kit/DataTable/DataTable";
 import { columns } from "./columns";
 import { useUserCardTableProps } from "./api/useUserCardTableApi";
 import { type GetResponseAcceptedCartridgeByUserDtoMySchema } from "./shema";
@@ -17,7 +17,7 @@ export default function UserCardtable({ id }: UserCardTableProps) {
       GetResponseAcceptedCartridgeByUserDtoMySchema
     >
       data={data.flatMap((item) =>
-        item.acceptedCartridge.flatMap((item) => item)
+        item.acceptedCartridge.flatMap((item) => item),
       )}
       columns={columns}
       defaultSort="Подразделение"

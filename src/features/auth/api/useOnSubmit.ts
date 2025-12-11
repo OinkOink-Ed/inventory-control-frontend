@@ -1,5 +1,5 @@
 import { queryClientInstans } from "@api/queryClientInstans";
-import { useProfileStore } from "@/app/stores/profile/useProfileStore";
+import { useProfileStore } from "@features/auth/store/profile/useProfileStore";
 import { authControllerSignIn, type PostAuthDto } from "@api/gen";
 import { useCallback } from "react";
 import type { UseFormReset } from "react-hook-form";

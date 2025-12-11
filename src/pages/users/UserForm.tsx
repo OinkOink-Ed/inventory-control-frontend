@@ -27,7 +27,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useEffect } from "react";
-import { useChoiseOfKabinetsForCreateUser } from "@/app/stores/choiseOfKabinetsForCreateUser/useChoiseOfKabinetsStore";
+import { useChoiseOfKabinetsForCreateUser } from "@/shared/stores/choiseOfKabinetsForCreateUser/useChoiseOfKabinetsStore";
 import {
   useUsersFormApiCreateUser,
   useUsersFormApiGetDivision,
@@ -35,9 +35,9 @@ import {
   useUsersFormApiGetRole,
 } from "./api/useUsersFormApi";
 import type { PostCreateUserDto } from "@api/gen";
-import { handlerError } from "@/shared/helpers/handlerError";
 import { ANSWER } from "@/lib/const/Answer";
-import { InputPhone } from "@/components/InputPhone";
+import { InputPhone } from "@/shared/kit/InputPhone";
+import { handlerError } from "@/lib/helpers";
 
 export function UserForm() {
   const navigate = useNavigate();

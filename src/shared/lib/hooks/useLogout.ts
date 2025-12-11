@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import { useCallback } from "react";
 import { authControllerLogout } from "@api/gen";
-import { useProfileStore } from "@app-stores/profile/useProfileStore";
+import { useProfileStore } from "@features/auth/store/profile/useProfileStore";
 import { queryClientInstans } from "@api/queryClientInstans";
 import { ANSWER } from "@/lib/const/Answer";
 import { handlerError } from "../helpers/handlerError";

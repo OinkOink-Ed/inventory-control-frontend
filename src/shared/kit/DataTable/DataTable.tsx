@@ -21,9 +21,9 @@ import {
   type VisibilityState,
 } from "@tanstack/react-table";
 import { type PropsWithChildren, useState } from "react";
-import DataTableToolbar from "@/components/DataTable/DataTableToolbar";
-import DataTableFooter from "@/components/DataTable/DataTableFooter";
-import { DataTableProvider } from "@/components/DataTable/providers/DataTableProvider";
+import DataTableToolbar from "@/shared/kit/DataTable/DataTableToolbar";
+import DataTableFooter from "@/shared/kit/DataTable/DataTableFooter";
+import { DataTableProvider } from "@/shared/kit/DataTable/providers/DataTableProvider";
 import { ToolbarActions } from "./ToolbarActions";
 
 interface DataTableProps<TData, TValue> extends PropsWithChildren {
@@ -118,7 +118,7 @@ export function DataTable<TData, TValue>({
                           ? null
                           : flexRender(
                               header.column.columnDef.header,
-                              header.getContext()
+                              header.getContext(),
                             )}
                       </TableHead>
                     );
@@ -137,7 +137,7 @@ export function DataTable<TData, TValue>({
                     <TableCell key={cell.id} className="pl-6">
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

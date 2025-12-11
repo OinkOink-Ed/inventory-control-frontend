@@ -1,5 +1,5 @@
 import { useApiQuery } from "@/shared/api/hooks/useApi";
-import { useRoleContext } from "@app-providers/RoleProvider/hooks/useRoleContext";
+import { useRoleContext } from "@app-providers/ProfileProvider/context";
 import {
   divisionControllerGetDivisions,
   warehouseControllerGetWarehouses,

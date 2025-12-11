@@ -1,4 +1,4 @@
-import DataTableColumnHeader from "@/components/DataTable/DataTableColumnHeader";
+import DataTableColumnHeader from "@/shared/kit/DataTable/DataTableColumnHeader";
 import { formateDate } from "@/shared/helpers/formateDate";
 import type { GetResponseAllDetailedCartridgeModelDtoSchema } from "@api/gen";
 import { type ColumnDef } from "@tanstack/react-table";
@@ -31,7 +31,7 @@ export const columns: ColumnDef<GetResponseAllDetailedCartridgeModelDtoSchema>[]
       id: "Создатель",
       accessorFn: (row) =>
         `${String(row.creator?.lastname)} ${String(row.creator?.name)} ${String(
-          row.creator?.patronimyc
+          row.creator?.patronimyc,
         )}`,
       header: ({ column }) => {
         return <DataTableColumnHeader column={column} title="Создатель" />;

@@ -1,7 +1,7 @@
 import { useMaskito } from "@maskito/react";
 import { Input } from "./ui/input";
 import React from "react";
-import options from "@/pages/users/mask";
+import options from "@/shared/mask";
 
 interface InputPhoneProps extends React.ComponentProps<"input"> {
   ref?: React.Ref<HTMLInputElement>;

@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { InputPhone } from "@/components/InputPhone";
+import { InputPhone } from "@/shared/kit/InputPhone";
 import { useNavigate } from "react-router";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -27,7 +27,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useEffect, useMemo, useState } from "react";
-import { useChoiseOfKabinetsForCreateUser } from "@/app/stores/choiseOfKabinetsForCreateUser/useChoiseOfKabinetsStore";
+import { useChoiseOfKabinetsForCreateUser } from "@/shared/stores/choiseOfKabinetsForCreateUser/useChoiseOfKabinetsStore";
 
 import { ChevronDown } from "lucide-react";
 import {
@@ -38,12 +38,11 @@ import {
 } from "./api/useUserCardFormApi";
 import { useUserCardApi } from "../api/useUserCardApi";
 import { editCardUserDtoSchemaZOD } from "./shema";
-import { useRoleContext } from "@app-providers/RoleProvider/hooks/useRoleContext";
 import type { PutEditUserDto, PutEditUserDtoSchema } from "@api/gen";
-import { handlerError } from "@/shared/helpers/handlerError";
 import { ANSWER } from "@/lib/const/Answer";
 import { Spinner } from "@/components/ui/spinner";
-import { formatPhoneNumber } from "@/shared/helpers/formatPhoneNumber";
+import { formatPhoneNumber, handlerError } from "@/lib/helpers";
+import { useProfileContext } from "@/shared/providers/ProfileProvider";
 
 interface UserCardFormProps {
   id: number;
@@ -53,7 +52,7 @@ export function UserCardForm({ id }: UserCardFormProps) {
   const navigate = useNavigate();
   const [isFormDisabled, setIsFormDisabled] = useState(true);
 
-  const { roleName } = useRoleContext();
+  const { role } = useProfileContext();
 
   const { data, isSuccess } = useUserCardApi(id);
   const { mutateAsync } = useUserCardFormApi(id);
@@ -312,7 +311,7 @@ export function UserCardForm({ id }: UserCardFormProps) {
                       field.onChange(value ? Number(value) : undefined);
                     }}
                     value={currentValue}
-                    disabled={roleName === "admin" || isFormDisabled}
+                    disabled={role?.roleName === "admin" || isFormDisabled}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -381,7 +380,7 @@ export function UserCardForm({ id }: UserCardFormProps) {
                 : [];
 
               const selectedDivisionNames =
-                roleName === "admin"
+                role?.roleName === "admin"
                   ? currentValues.map(() => {
                       const division = divisionData?.[0];
                       if (division) {
@@ -416,8 +415,8 @@ export function UserCardForm({ id }: UserCardFormProps) {
                   className="h-24 w-[300px]"
                   style={{
                     cursor:
-                      roleName === "admin" ||
-                      roleName === "staff" ||
+                      role?.roleName === "admin" ||
+                      role?.roleName === "staff" ||
                       isFormDisabled
                         ? "not-allowed"
                         : "pointer",
@@ -430,8 +429,8 @@ export function UserCardForm({ id }: UserCardFormProps) {
                         variant="outline"
                         className="w-full justify-between"
                         disabled={
-                          roleName === "admin" ||
-                          roleName === "staff" ||
+                          role?.roleName === "admin" ||
+                          role?.roleName === "staff" ||
                           isFormDisabled
                         }
                       >
@@ -528,8 +527,8 @@ export function UserCardForm({ id }: UserCardFormProps) {
                   className="h-24 w-[300px]"
                   style={{
                     cursor:
-                      roleName === "admin" ||
-                      roleName === "staff" ||
+                      role?.roleName === "admin" ||
+                      role?.roleName === "staff" ||
                       isFormDisabled
                         ? "not-allowed"
                         : "pointer",
@@ -633,8 +632,11 @@ export function UserCardForm({ id }: UserCardFormProps) {
                   setIsFormDisabled(false);
                 }}
                 disabled={
-                  !(roleName === "admin") &&
-                  !(roleName === "admin" && data.role?.roleName === "staff")
+                  !(role?.roleName === "admin") &&
+                  !(
+                    role?.roleName === "admin" &&
+                    data.role?.roleName === "staff"
+                  )
                 }
               >
                 Редактировать

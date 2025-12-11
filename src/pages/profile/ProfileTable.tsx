@@ -1,8 +1,8 @@
-import { DataTable } from "@/components/DataTable/DataTable";
+import { DataTable } from "@/shared/kit/DataTable/DataTable";
 import { columns } from "./columns";
 import { useProfileCardTable } from "./api/useProfileCardFormApi";
 import { type GetResponseAcceptedCartridgeByUserDtoMySchema } from "./shema";
-import { useRoleContext } from "@app-providers/RoleProvider/hooks/useRoleContext";
+import { useRoleContext } from "@app-providers/ProfileProvider/context";
 import { Spinner } from "@/components/ui/spinner";
 
 export default function ProfileTable() {

@@ -1,11 +1,11 @@
 import { useNavigate, useParams } from "react-router";
-import { DataTable } from "@/components/DataTable/DataTable";
+import { DataTable } from "@/shared/kit/DataTable/DataTable";
 import { columns } from "./columns";
 import { useEffect } from "react";
-import { ActionsForTable } from "@/components/ActionsForTable";
+import { ActionsForTable } from "@/shared/kit/ActionsForTable";
 import { useDivisionTableApi } from "./api/useDivisionTableApi";
 import { KabinetsForm } from "./KabinetsForm";
-import { DialogForm } from "@/components/DialogForm";
+import { DialogForm } from "@/shared/kit/DialogForm";
 import { handlerError } from "@/shared/helpers/handlerError";
 import { ANSWER } from "@/lib/const/Answer";
 import { Spinner } from "@/components/ui/spinner";

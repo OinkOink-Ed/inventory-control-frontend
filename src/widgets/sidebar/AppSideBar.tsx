@@ -1,8 +1,7 @@
 import { Archive, LogOut, User } from "lucide-react";
-import { AdminAndUserItemsMenu } from "./components/AdminAndUserItemsMenu";
-import { AdminItemsMenu } from "./components/AdminItemsMenu";
-import { SidebarNavLink } from "./components/SidebarNavLink";
-import { useRoleContext } from "@app-providers/RoleProvider/hooks/useRoleContext";
+import { AdminAndUserItemsMenu } from "./ui/AdminAndUserItemsMenu";
+import { AdminItemsMenu } from "./ui/AdminItemsMenu";
+import { SidebarNavLink } from "./ui/SidebarNavLink";
 import { useMemo } from "react";
 import { useLogout } from "@/lib/hooks/useLogout";
 import {
@@ -15,15 +14,16 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar";
+} from "@/shared/ui/sidebar";
+import { useProfileContext } from "@/shared/providers";
 
 export function AppSideBar() {
   const logoutHandler = useLogout();
 
-  const { roleName } = useRoleContext();
+  const { role } = useProfileContext();
 
-  const isAdmin = useMemo(() => roleName === "admin", [roleName]);
-  const isUser = useMemo(() => roleName === "user", [roleName]);
+  const isAdmin = useMemo(() => role?.roleName === "admin", [role]);
+  const isUser = useMemo(() => role?.roleName === "user", [role]);
   const hasAccess = useMemo(() => isAdmin || isUser, [isAdmin, isUser]);
 
   return (

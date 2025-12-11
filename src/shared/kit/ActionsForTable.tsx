@@ -1,6 +1,6 @@
 import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
-import { useRoleContext } from "@app-providers/RoleProvider/hooks/useRoleContext";
-import { useDialogFormShow } from "@/app/stores/dialogFormShow/useDialogFormShow";
+import { useRoleContext } from "@app-providers/ProfileProvider/context";
+import { useDialogFormShow } from "@/shared/kit/store/dialogFormShow/useDialogFormShow";
 import { memo, useMemo } from "react";
 import { Button } from "./ui/button";
 import {

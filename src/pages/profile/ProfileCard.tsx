@@ -1,9 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
-import { useChoiseOfKabinetsForCreateUser } from "@/app/stores/choiseOfKabinetsForCreateUser/useChoiseOfKabinetsStore";
+import { useChoiseOfKabinetsForCreateUser } from "@/shared/stores/choiseOfKabinetsForCreateUser/useChoiseOfKabinetsStore";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { editCardUserDtoSchemaZOD } from "../users/UserCard/components/shema";
 import { toast } from "sonner";
 import {
   Form,
@@ -29,7 +28,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
-import { InputPhone } from "@/components/InputPhone";
+import { InputPhone } from "@/shared/kit/InputPhone";
 import {
   useProfileCardApi,
   useProfileCardFormApi,
@@ -37,19 +36,19 @@ import {
   useUsersFormApiGetKabinetsByUserIdForEditUser,
   useUsersFormApiGetRole,
 } from "./api/useProfileCardFormApi";
-import { useRoleContext } from "@app-providers/RoleProvider/hooks/useRoleContext";
-import { formatPhoneNumber } from "@/shared/helpers/formatPhoneNumber";
 import type { PutEditUserDto, PutEditUserDtoSchema } from "@api/gen";
-import { handlerError } from "@/shared/helpers/handlerError";
 import { ANSWER } from "@/lib/const/Answer";
 import { Spinner } from "@/components/ui/spinner";
+import { useProfileContext } from "@/shared/providers/ProfileProvider";
+import { formatPhoneNumber, handlerError } from "@/lib/helpers";
+import { editCardUserDtoSchemaZOD } from "./shema";
 
 export function ProfileCard() {
   const navigate = useNavigate();
 
   const [isFormDisabled, setIsFormDisabled] = useState(true);
 
-  const { roleName } = useRoleContext();
+  const { role } = useProfileContext();
 
   const { mutateAsync } = useProfileCardFormApi();
   const { data: roleData, isSuccess: roleSuccess } = useUsersFormApiGetRole();

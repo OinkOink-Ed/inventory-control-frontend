@@ -1,7 +1,7 @@
 import { type ColumnDef } from "@tanstack/react-table";
 import { type GetResponseAcceptedCartridgeByUserDtoMySchema } from "./shema";
-import DataTableColumnHeaderMultiSort from "@/components/DataTable/DataTableColumnHeaderMultiSort";
-import DataTableColumnHeader from "@/components/DataTable/DataTableColumnHeader";
+import DataTableColumnHeaderMultiSort from "@/shared/kit/DataTable/DataTableColumnHeaderMultiSort";
+import DataTableColumnHeader from "@/shared/kit/DataTable/DataTableColumnHeader";
 import { formateDate } from "@/shared/helpers/formateDate";
 
 export const columns: ColumnDef<GetResponseAcceptedCartridgeByUserDtoMySchema>[] =

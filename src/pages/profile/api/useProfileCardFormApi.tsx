@@ -1,4 +1,4 @@
-import { useChoiseOfKabinetsForCreateUser } from "@/app/stores/choiseOfKabinetsForCreateUser/useChoiseOfKabinetsStore";
+import { useChoiseOfKabinetsForCreateUser } from "@/shared/stores/choiseOfKabinetsForCreateUser/useChoiseOfKabinetsStore";
 import { useApiMutation, useApiQuery } from "@/shared/api/hooks/useApi";
 import {
   divisionControllerGetDivisions,
@@ -13,7 +13,7 @@ import { useMatch } from "react-router";
 
 export const useProfileCardFormApi = () => {
   return useApiMutation((data: PutEditUserDto) =>
-    userControllerEditProfile(data)
+    userControllerEditProfile(data),
   );
 };
 
@@ -50,7 +50,7 @@ export const useUsersFormApiGetKabinetsByUserIdForEditUser = () => {
     {
       queryKey: ["kabinetsByUserIdForCreateUser", userChoices],
       enabled: !!useMatch({ path: "/profile/", end: true }) && !!userChoices,
-    }
+    },
   );
 };
 

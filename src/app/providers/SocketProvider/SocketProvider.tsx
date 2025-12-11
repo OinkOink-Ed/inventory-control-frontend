@@ -1,7 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { type PropsWithChildren, useCallback, useEffect } from "react";
 import { io, Socket } from "socket.io-client";
-import { useRoleContext } from "@app-providers/RoleProvider/hooks/useRoleContext";
+
 import type {
   CreateKabinetEventType,
   DecomissioningCartrdigeEventType,
@@ -10,27 +10,28 @@ import type {
   ReceivingCartridgeEventType,
   UpdateUserEventType,
 } from "@api/gen";
-import { useProfileStore } from "@app-stores/profile/useProfileStore";
+import { useProfileStore } from "@features/auth/store/profile/useProfileStore";
 import { useLogout } from "@/lib/hooks/useLogout";
 import { SocketContext } from "./socketContext";
+import { useProfileContext } from "@/shared/providers/ProfileProvider";
 
 export function SocketProvider({ children }: PropsWithChildren) {
   const token = useProfileStore((state) => state.access_token);
   const logoutHandler = useLogout();
-  const { roleName } = useRoleContext();
+  const { role } = useProfileContext();
   const queryClient = useQueryClient();
 
   const registerEventListeners = useCallback(
     (socket: Socket) => {
-      if (roleName === undefined) {
+      if (role?.roleName === undefined) {
         return;
       }
 
-      if (["staff", "user", "admin"].includes(roleName)) {
+      if (["staff", "user", "admin"].includes(role.roleName)) {
         socket.on("invalidateUserCard", async (data: UpdateUserEventType) => {
           const { userId } = data;
 
-          switch (roleName) {
+          switch (role.roleName) {
             case "staff":
               await queryClient.invalidateQueries({
                 queryKey: ["userCard", userId],
@@ -63,7 +64,7 @@ export function SocketProvider({ children }: PropsWithChildren) {
             await queryClient.invalidateQueries({
               queryKey: ["accepted-cartridge", data.userId],
             });
-            switch (roleName) {
+            switch (role.roleName) {
               case "user":
               case "admin":
                 await queryClient.invalidateQueries({
@@ -82,7 +83,7 @@ export function SocketProvider({ children }: PropsWithChildren) {
         });
       }
 
-      if (["user", "admin"].includes(roleName)) {
+      if (["user", "admin"].includes(role.roleName)) {
         socket.on("invalidateModelCartridges", async () => {
           await queryClient.invalidateQueries({
             queryKey: ["modelsCartridgesDetailed"],
@@ -156,11 +157,11 @@ export function SocketProvider({ children }: PropsWithChildren) {
         );
       }
     },
-    [roleName, logoutHandler, queryClient],
+    [role, logoutHandler, queryClient],
   );
 
   useEffect(() => {
-    if (roleName === undefined || !token) {
+    if (role?.roleName === undefined || !token) {
       return;
     }
 
@@ -198,7 +199,7 @@ export function SocketProvider({ children }: PropsWithChildren) {
       newSocket.disconnect();
       newSocket.close();
     };
-  }, [token, registerEventListeners, roleName]);
+  }, [token, registerEventListeners, role]);
 
   return <SocketContext value={undefined}>{children}</SocketContext>;
 }

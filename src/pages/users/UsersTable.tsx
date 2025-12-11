@@ -3,12 +3,12 @@ import { UserForm } from "./UserForm";
 import { facetedUsersData } from "./facetedData";
 import { useNavigate } from "react-router";
 import { useEffect } from "react";
-import { ActionsForTable } from "@/components/ActionsForTable";
+import { ActionsForTable } from "@/shared/kit/ActionsForTable";
 import { useUsersTableApi } from "./api/useUsersTableApi";
-import { DialogForm } from "@/components/DialogForm";
+import { DialogForm } from "@/shared/kit/DialogForm";
 import { handlerError } from "@/shared/helpers/handlerError";
 import { ANSWER } from "@/lib/const/Answer";
-import { DataTable } from "@/components/DataTable/DataTable";
+import { DataTable } from "@/shared/kit/DataTable/DataTable";
 import { Spinner } from "@/components/ui/spinner";
 
 export function UsersTable() {

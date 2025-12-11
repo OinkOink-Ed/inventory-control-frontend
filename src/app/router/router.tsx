@@ -21,7 +21,7 @@ import {
 } from "./guards";
 import { UsersTable } from "@/pages/users/UsersTable";
 import { UserCard } from "@/pages/users/UserCard/UserCard";
-import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { ErrorBoundary } from "@/shared/kit/ErrorBoundary";
 
 // Spinner можно будет заменить на Skeleton различный в дальнейшем
 

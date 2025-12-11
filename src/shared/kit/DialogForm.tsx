@@ -1,4 +1,4 @@
-import { useDialogFormShow } from "@/app/stores/dialogFormShow/useDialogFormShow";
+import { useDialogFormShow } from "@/shared/kit/store/dialogFormShow/useDialogFormShow";
 import {
   Dialog,
   DialogContent,
@@ -8,7 +8,7 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import { type PropsWithChildren } from "react";
-import type { DialogFormShowStore } from "@app-stores/dialogFormShow/type";
+import type { DialogFormShowStore } from "@/shared/kit/store/dialogFormShow/type";
 interface DialogFormProps extends PropsWithChildren {
   title: string;
   name: keyof DialogFormShowStore;

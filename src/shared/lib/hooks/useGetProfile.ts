@@ -1,9 +1,8 @@
-import { useApiQuery } from "@/shared/api/hooks/useApi";
+import { useApiSuspenseQuery } from "@/shared/api/hooks/useApi";
 import { userControllerGetProfile } from "@api/gen";
 
 export const useGetProfile = () => {
-  return useApiQuery(userControllerGetProfile, {
+  return useApiSuspenseQuery(userControllerGetProfile, {
     queryKey: ["profile"],
-    enabled: true,
   });
 };

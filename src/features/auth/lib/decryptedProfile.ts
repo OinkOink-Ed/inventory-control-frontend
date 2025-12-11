@@ -1,6 +1,6 @@
 import { jwtDecode } from "jwt-decode";
-import type { UserDtoInterfaces } from "./types/UserDtoInterfaces";
-import { useProfileStore } from "@app-stores/profile/useProfileStore";
+import { useProfileStore } from "@features/auth/store/profile/useProfileStore";
+import type { UserDtoInterfaces } from "@/lib/helpers";
 
 export function decryptedProfile(): UserDtoInterfaces | false {
   const profile = useProfileStore.getState();

@@ -1,4 +1,4 @@
-import { useProfileStore } from "@app-stores/profile/useProfileStore";
+import { useProfileStore } from "@features/auth/store/profile/useProfileStore";
 import { jwtDecode } from "jwt-decode";
 
 export function isAuth(): boolean {

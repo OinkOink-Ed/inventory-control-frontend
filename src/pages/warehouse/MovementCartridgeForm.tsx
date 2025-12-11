@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/select";
 import { createMovementDtoShema } from "./shema";
 import { useNavigate, useParams } from "react-router";
-import { useChoiceOfStaffStore } from "@/app/stores/choiceOfStaff/useChoiceOfStaffStore";
+import { useChoiceOfStaffStore } from "@/pages/warehouse/store/choiceOfStaff/useChoiceOfStaffStore";
 import { useEffect } from "react";
 import {
   useMovementCartridgeFormApiCartrdgesCreateMovement,
