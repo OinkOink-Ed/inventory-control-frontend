@@ -1,1 +1,0 @@
-{"type":"object","properties":{"oldDivisionId":{"type":"number"},"newDivisionId":{"type":"number"}},"required":["oldDivisionId","newDivisionId"],"x-readme-ref-name":"MovementCartridgeEventType"}

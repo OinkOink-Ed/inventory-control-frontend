@@ -1,1 +1,0 @@
-{"type":"object","properties":{"warehouseId":{"type":"number"}},"required":["warehouseId"],"x-readme-ref-name":"DecomissioningCartrdigeEventType"}

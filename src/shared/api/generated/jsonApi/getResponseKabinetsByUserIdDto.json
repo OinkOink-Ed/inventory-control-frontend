@@ -1,1 +1,0 @@
-{"type":"object","properties":{"id":{"type":"number"},"number":{"type":"string"}},"required":["id","number"],"x-readme-ref-name":"GetResponseKabinetsByUserIdDto"}

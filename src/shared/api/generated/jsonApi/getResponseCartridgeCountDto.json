@@ -1,1 +1,0 @@
-{"type":"object","properties":{"modelName":{"type":"string"},"count":{"type":"number"}},"required":["modelName","count"],"x-readme-ref-name":"GetResponseCartridgeCountDto"}

@@ -196,11 +196,11 @@ const axiosClient = async <
   TVariables = unknown,
 >(
   config: RequestConfig<TVariables>,
-): Promise<ResponseConfig<TData>> => {
+): Promise<ResponseConfig<TData | TError>> => {
   const response = await axiosInstance
-    .request<TData>({ ...config })
-    .catch((e: TError) => {
-      throw e;
+    .request<TData, ResponseConfig<TData | TError>>({ ...config })
+    .catch((e: unknown) => {
+      throw e as ResponseErrorConfig<TError>;
     });
 
   return response;

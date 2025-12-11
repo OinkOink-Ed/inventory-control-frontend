@@ -1,1 +1,0 @@
-{"type":"object","properties":{"id":{"type":"number"},"name":{"type":"string"},"location":{"type":"string"}},"required":["id","name","location"],"x-readme-ref-name":"GetReponseAllDivisionDto"}
