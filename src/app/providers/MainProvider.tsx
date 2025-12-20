@@ -1,7 +1,7 @@
 import { ProfileProvider } from "@/shared/providers/ProfileProvider";
 import { SocketProvider } from "./SocketProvider";
 import type { PropsWithChildren } from "react";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/ui/sidebar";
 
 export function MainProvider({ children }: PropsWithChildren) {
   return (

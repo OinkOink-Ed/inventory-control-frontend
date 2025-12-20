@@ -10,18 +10,18 @@ import {
   UsersPage,
   WarehousePage,
 } from "./lazyImports";
-import { Spinner } from "@/components/ui/spinner";
 import { MainLayout } from "@app/layouts";
-import { PreRequestWrapperForAccess } from "./components/AccessGuard/PreRequestWrapperForAccess";
+import { CanEditGuard } from "./AccessGuard/ui/CanEditGuard";
 import {
   AdminRoute,
   PrivateRoute,
   PublicRoute,
   UserAndAdminRoute,
-} from "./guards";
+} from "./RouteGuard";
 import { UsersTable } from "@/pages/users/UsersTable";
 import { UserCard } from "@/pages/users/UserCard/UserCard";
 import { ErrorBoundary } from "@/shared/kit/ErrorBoundary";
+import { Spinner } from "@/ui/spinner";
 
 // Spinner можно будет заменить на Skeleton различный в дальнейшем
 
@@ -91,9 +91,9 @@ export const router = createBrowserRouter([
               {
                 path: ":id",
                 element: (
-                  <PreRequestWrapperForAccess>
+                  <CanEditGuard>
                     <UserCard />
-                  </PreRequestWrapperForAccess>
+                  </CanEditGuard>
                 ),
               },
             ],

@@ -4,9 +4,7 @@ import path from "path";
 
 export async function getApiSwagger() {
   try {
-    const { data } = 
-    await axios.
-    get<string>("http://backend:3000/docs-yaml", {
+    const { data } = await axios.get<string>("http://backend:3000/docs-yaml", {
       responseType: "text",
     });
 

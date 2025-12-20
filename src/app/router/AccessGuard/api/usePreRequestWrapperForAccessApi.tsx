@@ -1,9 +1,8 @@
-import { useApiQuery } from "@/shared/api";
 import { userControllerCanEditUser } from "@api/gen";
+import { useApiSuspenseQuery } from "@api/hooks/useApi";
 
 export const usePreRequestWrapperForAccessApi = (id: number) => {
-  return useApiQuery(() => userControllerCanEditUser(id), {
+  return useApiSuspenseQuery(() => userControllerCanEditUser(id), {
     queryKey: ["canEdit", id],
-    enabled: !!id,
   });
 };

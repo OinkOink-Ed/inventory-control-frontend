@@ -1,5 +1,5 @@
 import LoginPage from "@/pages/auth/login/LoginPage";
-import { PublicRoute } from "@router/guards";
+import { PublicRoute } from "@router/RouteGuard";
 
 export const authRoutes = [
   {

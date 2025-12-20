@@ -1,4 +1,4 @@
-import { isAuth } from "@router/guards/auth/isAuth";
+import { isAuth } from "@router/model/auth/isAuth";
 import { redirect } from "react-router";
 
 export function PublicRoute() {
