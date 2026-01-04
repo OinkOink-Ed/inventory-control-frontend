@@ -1,6 +1,6 @@
 import { type PropsWithChildren, useMemo } from "react";
 import { useGetProfile } from "@/lib/hooks/useGetProfile";
-import { ProfileContext } from "./hooks/useProfileContext";
+import { ProfileContext } from "@/shared/providers/ProfileProvider/hooks/useProfileContext.ts";
 
 export function ProfileProvider({ children }: PropsWithChildren) {
   const { data } = useGetProfile();

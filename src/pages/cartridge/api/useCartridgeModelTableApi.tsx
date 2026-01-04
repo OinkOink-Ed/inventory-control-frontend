@@ -1,10 +1,8 @@
-import { useMatch } from "react-router";
-import { useApiQuery } from "@/shared/api/hooks/useApi";
+import { useApiSuspenseQuery } from "@/shared/api";
 import { cartridgeModelControllerGetModelsAndTheirCreator } from "@api/gen";
 
 export const useCartridgeModelTableApi = () => {
-  return useApiQuery(cartridgeModelControllerGetModelsAndTheirCreator, {
+  return useApiSuspenseQuery(cartridgeModelControllerGetModelsAndTheirCreator, {
     queryKey: ["modelsCartridgesDetailed"],
-    enabled: !!useMatch({ path: "/cartrideModel", end: true }),
   });
 };

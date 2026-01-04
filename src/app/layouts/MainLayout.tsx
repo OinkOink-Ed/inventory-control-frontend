@@ -1,6 +1,6 @@
 import { Outlet } from "react-router";
 import { Toaster } from "sonner";
-import { AppSideBar } from "@/widgets/sidebar/AppSideBar";
+import { AppSideBar } from "@/widgets/sidebar";
 import { MainProvider } from "@app-providers/MainProvider";
 
 export function MainLayout() {

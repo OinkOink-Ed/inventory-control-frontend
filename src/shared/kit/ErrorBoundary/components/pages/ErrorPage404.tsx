@@ -1,6 +1,6 @@
+import { CountdownMessage } from "@/kit/ErrorBoundary/components/CountdownMessage.tsx";
+import { useErrorBoundary } from "@/kit/ErrorBoundary/hooks/useErrorBoundary.tsx";
 import { ArrowBigLeft, Ghost } from "lucide-react";
-import { useErrorBoundary } from "../../hooks";
-import { CountdownMessage } from "../CountdownMessage";
 
 export function ErrorPage404() {
   const { navigate, cancelRedirect, countdown } = useErrorBoundary();

@@ -1,2 +1,2 @@
-export { ProfileProvider } from "./ProfileProvider";
-export { useProfileContext } from "./ProfileProvider";
+export { ProfileProvider } from "@/shared/providers/ProfileProvider";
+export { useProfileContext } from "@/shared/providers/ProfileProvider";

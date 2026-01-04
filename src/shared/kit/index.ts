@@ -1,5 +1,8 @@
-export { ActionsForTable } from "./ActionsForTable";
-export { DataTable } from "./DataTable";
-export { DialogForm } from "./DialogForm";
-export { ErrorBoundary } from "./ErrorBoundary";
-export { InputPhone } from "./InputPhone";
+export { ActionsForTable } from "@/kit/ActionsForTable.tsx";
+export { DataTable } from "@/kit/DataTable";
+export { DialogForm } from "@/kit/DialogForm";
+export { ErrorBoundary } from "@/kit/ErrorBoundary";
+export { InputPhone } from "@/kit/InputPhone";
+export { DataTableColumnHeader } from "@/kit/DataTable";
+export { DataTableColumnHeaderMultiSort } from "@/kit/DataTable";
+export { DataTableRowActions } from "@/kit/DataTable";

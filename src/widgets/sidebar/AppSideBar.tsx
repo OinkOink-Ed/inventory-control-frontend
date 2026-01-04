@@ -1,9 +1,5 @@
 import { Archive, LogOut, User } from "lucide-react";
-import { AdminAndUserItemsMenu } from "./ui/AdminAndUserItemsMenu";
-import { AdminItemsMenu } from "./ui/AdminItemsMenu";
-import { SidebarNavLink } from "./ui/SidebarNavLink";
 import { useMemo } from "react";
-import { useLogout } from "@/lib/hooks/useLogout";
 import {
   Sidebar,
   SidebarContent,
@@ -16,6 +12,10 @@ import {
   SidebarMenuItem,
 } from "@/shared/ui/sidebar";
 import { useProfileContext } from "@/shared/providers";
+import { useLogout } from "@/lib/hooks";
+import { SidebarNavLink } from "@/widgets/sidebar/ui/SidebarNavLink.tsx";
+import { AdminAndUserItemsMenu } from "@/widgets/sidebar/ui/AdminAndUserItemsMenu.tsx";
+import { AdminItemsMenu } from "@/widgets/sidebar/ui/AdminItemsMenu.tsx";
 
 export function AppSideBar() {
   const logoutHandler = useLogout();

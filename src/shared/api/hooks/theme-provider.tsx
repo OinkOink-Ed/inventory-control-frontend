@@ -1,5 +1,5 @@
+import { ThemeProviderContext } from "@api/hooks/useTheme.tsx";
 import { useEffect, useState } from "react";
-import { ThemeProviderContext } from "./useTheme";
 
 type Theme = "dark" | "light" | "system";
 

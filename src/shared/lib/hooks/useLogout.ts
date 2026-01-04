@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router";
 import { useCallback } from "react";
 import { authControllerLogout } from "@api/gen";
-import { useProfileStore } from "@features/auth/store/profile/useProfileStore";
 import { queryClientInstans } from "@api/queryClientInstans";
 import { ANSWER } from "@/lib/const/Answer";
-import { handlerError } from "../helpers/handlerError";
+import { handlerError } from "@/lib/helpers/handlerError.ts";
+import { useProfileStore } from "@features/auth";
 
 export function useLogout(): () => Promise<void> {
   const refreshToken = useProfileStore((state) => state.refresh_token);

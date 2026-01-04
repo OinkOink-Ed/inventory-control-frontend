@@ -10,9 +10,9 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
+} from "@/ui/select";
 import type { Table } from "@tanstack/react-table";
-import { Button } from "../ui/button";
+import { Button } from "@/ui/button";
 
 export interface DataTableFooterProps<TData> {
   table: Table<TData>;

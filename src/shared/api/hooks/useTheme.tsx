@@ -1,5 +1,5 @@
+import type { ThemeProviderState } from "@api/hooks/theme-provider.tsx";
 import { createContext, use } from "react";
-import type { ThemeProviderState } from "./theme-provider";
 
 const initialState: ThemeProviderState = {
   theme: "system",

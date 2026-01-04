@@ -1,5 +1,5 @@
-import { useChoiseOfKabinetsForCreateUser } from "@/shared/stores/choiseOfKabinetsForCreateUser/useChoiseOfKabinetsStore";
-import { useApiMutation, useApiQuery } from "@/shared/api/hooks/useApi";
+import { useChoiseOfKabinetsForCreateUser } from "@/shared/model";
+import { useApiMutation, useApiSuspenseQuery } from "@/shared/api";
 import {
   divisionControllerGetDivisions,
   kabinetControllerGetKabinetsByDivisionIdForCreateUser,
@@ -9,7 +9,6 @@ import {
   userControllerGetProfileCard,
   type PutEditUserDto,
 } from "@api/gen";
-import { useMatch } from "react-router";
 
 export const useProfileCardFormApi = () => {
   return useApiMutation((data: PutEditUserDto) =>
@@ -18,23 +17,20 @@ export const useProfileCardFormApi = () => {
 };
 
 export const useProfileCardApi = () => {
-  return useApiQuery(userControllerGetProfileCard, {
+  return useApiSuspenseQuery(userControllerGetProfileCard, {
     queryKey: ["profileCard"],
-    enabled: !!useMatch({ path: "/profile/", end: true }),
   });
 };
 
 export const useUsersFormApiGetRole = () => {
-  return useApiQuery(roleControllerGetRoles, {
+  return useApiSuspenseQuery(roleControllerGetRoles, {
     queryKey: ["roles"],
-    enabled: !!useMatch({ path: "/profile/", end: true }),
   });
 };
 
 export const useUsersFormApiGetDivision = () => {
-  return useApiQuery(divisionControllerGetDivisions, {
+  return useApiSuspenseQuery(divisionControllerGetDivisions, {
     queryKey: ["division"],
-    enabled: !!useMatch({ path: "/profile/", end: true }),
   });
 };
 
@@ -42,21 +38,19 @@ export const useUsersFormApiGetDivision = () => {
 export const useUsersFormApiGetKabinetsByUserIdForEditUser = () => {
   const { userChoices } = useChoiseOfKabinetsForCreateUser();
 
-  return useApiQuery(
+  return useApiSuspenseQuery(
     () =>
       kabinetControllerGetKabinetsByDivisionIdForCreateUser({
         divisionIds: encodeURIComponent(JSON.stringify(userChoices)),
       }),
     {
       queryKey: ["kabinetsByUserIdForCreateUser", userChoices],
-      enabled: !!useMatch({ path: "/profile/", end: true }) && !!userChoices,
     },
   );
 };
 
 export const useProfileCardTable = (id: number | false) => {
-  return useApiQuery(userControllerGetCardProfileAcceptedCartridge, {
+  return useApiSuspenseQuery(userControllerGetCardProfileAcceptedCartridge, {
     queryKey: ["accepted-cartridge", id],
-    enabled: !!useMatch({ path: "/profile/" }) && !!id,
   });
 };

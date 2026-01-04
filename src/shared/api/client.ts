@@ -3,8 +3,8 @@ import axios, {
   type AxiosRequestConfig,
   type AxiosResponse,
 } from "axios";
-import { useProfileStore } from "@features/auth/store/profile/useProfileStore";
-import { authControllerRefreshToken } from "./gen";
+import { useProfileStore } from "@features/auth";
+import { authControllerRefreshToken } from "@gen-api";
 
 interface RefreshTokenResponse {
   token: string;

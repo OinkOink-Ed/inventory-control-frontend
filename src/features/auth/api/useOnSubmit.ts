@@ -1,11 +1,11 @@
-import { queryClientInstans } from "@api/queryClientInstans";
-import { useProfileStore } from "@features/auth/store/profile/useProfileStore";
+import { useProfileStore } from "@features/auth/model/store/profile/useProfileStore";
 import { authControllerSignIn, type PostAuthDto } from "@api/gen";
 import { useCallback } from "react";
 import type { UseFormReset } from "react-hook-form";
 import { useNavigate } from "react-router";
-import { ANSWER } from "@/lib/const/Answer";
+import { ANSWER } from "@/lib/const";
 import { handlerError } from "@/lib/helpers";
+import { queryClientInstans } from "@api/index";
 
 interface useOnSubmitProps {
   reset: UseFormReset<PostAuthDto>;

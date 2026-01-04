@@ -1,15 +1,15 @@
 import { Book, LayoutDashboard, PackageCheck, User2 } from "lucide-react";
 import { useNavigate } from "react-router";
 import { memo, useEffect, useMemo } from "react";
+import { handlerError } from "@/lib/helpers";
+import { SidebarMenuButton, SidebarMenuItem } from "@/shared/ui/sidebar";
+import { ANSWER } from "@/lib/const";
 import {
   useAppSideBarApiDivisionGetAll,
   useAppSideBarApiWarehouseGetAll,
-} from "../api/useAppSideBarApi";
-import { handlerError } from "@/lib/helpers";
-import { SidebarMenuButton, SidebarMenuItem } from "@/shared/ui/sidebar";
-import { SidebarNavLink } from "./SidebarNavLink";
-import { CollapsibleMenu } from "./CollapsibleMenu";
-import { ANSWER } from "@/lib/const";
+} from "@/widgets/sidebar/api/useAppSideBarApi.tsx";
+import { SidebarNavLink } from "@/widgets/sidebar/ui/SidebarNavLink.tsx";
+import { CollapsibleMenu } from "@/widgets/sidebar/ui/CollapsibleMenu.tsx";
 
 export const AdminAndUserItemsMenu = memo(function AdminAndUserItemsMenu() {
   const navigate = useNavigate();

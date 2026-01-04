@@ -5,7 +5,7 @@
     "useDefineForClassFields": true,
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "module": "ESNext",
-    "types": ["vite/client"],
+    "types": ["vite/client", "node"],
     "skipLibCheck": true,
 
     /* Bundler mode */
@@ -35,10 +35,11 @@
       "@/ui/*": ["src/shared/ui/*"],
       "@app-providers/*": ["src/app/providers/*"],
       "@app-stores/*": ["src/app/stores/*"],
+      "@pages/*": ["src/pages/*"],
       "@router/*": ["src/app/router/*"],
       "@app/*": ["src/app/*"],
       "@features/*": ["src/features/*"],
-      "@widgest/*": ["src/widgest/*"],
+      "@widgets/*": ["src/widgets/*"],
       "@/*": ["./src/*"]
     }
   },

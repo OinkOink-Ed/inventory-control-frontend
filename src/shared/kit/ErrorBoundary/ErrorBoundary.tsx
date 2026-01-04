@@ -1,7 +1,11 @@
+import {
+  ErrorPage403,
+  ErrorPage404,
+  ErrorPageAny,
+} from "@/kit/ErrorBoundary/components/index.ts";
+import { useErrorBoundary } from "@/kit/ErrorBoundary/hooks/useErrorBoundary.tsx";
 import { CustomErrorForbidden } from "@/lib/errors/CustomErrorForbidden";
 import { isRouteErrorResponse } from "react-router";
-import { ErrorPage403, ErrorPage404, ErrorPageAny } from "./components";
-import { useErrorBoundary } from "./hooks";
 
 export function ErrorBoundary() {
   const { error } = useErrorBoundary();

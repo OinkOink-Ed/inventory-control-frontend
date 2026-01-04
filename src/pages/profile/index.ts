@@ -1,0 +1,9 @@
+export { ProfilePageLaze } from "@pages/profile/ui";
+export { ProfileTable } from "@pages/profile/ui";
+export { ProfileCard } from "@pages/profile/ui";
+export { useUsersFormApiGetRole } from "@pages/profile/api";
+export { useUsersFormApiGetKabinetsByUserIdForEditUser } from "@pages/profile/api";
+export { useUsersFormApiGetDivision } from "@pages/profile/api";
+export { useProfileCardTable } from "@pages/profile/api";
+export { useProfileCardFormApi } from "@pages/profile/api";
+export { useProfileCardApi } from "@pages/profile/api";

@@ -1,1 +1,1 @@
-export { MainProvider } from "./MainProvider";
+export { MainProvider } from "@app-providers/MainProvider.tsx";

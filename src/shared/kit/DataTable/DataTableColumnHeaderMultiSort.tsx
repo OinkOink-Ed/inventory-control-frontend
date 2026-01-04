@@ -1,4 +1,5 @@
 import { ArrowDown, ArrowUp, ArrowUpDown, EyeOff } from "lucide-react";
+import { type Column } from "@tanstack/react-table";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -6,16 +7,15 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { type Column } from "@tanstack/react-table";
-import { Button } from "../ui/button";
+} from "@/ui/dropdown-menu.tsx";
+import { Button } from "@/ui/button.tsx";
 
 interface DataTableColumnHeaderMultiSort<TData, TValue> {
   column: Column<TData, TValue>;
   title: string;
 }
 
-export default function DataTableColumnHeaderMultiSort<TData, TValue>({
+export function DataTableColumnHeaderMultiSort<TData, TValue>({
   column,
   title,
 }: DataTableColumnHeaderMultiSort<TData, TValue>) {

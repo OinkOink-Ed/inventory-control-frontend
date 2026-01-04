@@ -5,7 +5,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/ui/table";
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -24,7 +24,7 @@ import { type PropsWithChildren, useState } from "react";
 import DataTableToolbar from "@/shared/kit/DataTable/DataTableToolbar";
 import DataTableFooter from "@/shared/kit/DataTable/DataTableFooter";
 import { DataTableProvider } from "@/shared/kit/DataTable/providers/DataTableProvider";
-import { ToolbarActions } from "./ToolbarActions";
+import { ToolbarActions } from "@/kit/DataTable/ToolbarActions.tsx";
 
 interface DataTableProps<TData, TValue> extends PropsWithChildren {
   columns: ColumnDef<TData, TValue>[];

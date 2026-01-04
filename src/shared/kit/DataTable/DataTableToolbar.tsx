@@ -1,5 +1,5 @@
 import { X } from "lucide-react";
-import { Input } from "../ui/input";
+import { Input } from "@/ui/input";
 import { type Table } from "@tanstack/react-table";
 import DataTableFacetedFilter from "./DataTableFacetedFilter";
 import DataTableView from "./DataTableView";
@@ -10,9 +10,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../ui/dialog";
+} from "@/ui/dialog";
 import { useDataTableActions } from "./hooks/useDataTableActions";
-import { Button } from "../ui/button";
+import { Button } from "@/ui/button";
 
 interface CountValues {
   name: string;

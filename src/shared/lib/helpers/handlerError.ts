@@ -1,6 +1,5 @@
 import { AxiosError } from "axios";
 import { toast } from "sonner";
-import { queryClientInstans } from "../../shared/api/queryClientInstans";
 import type {
   ErrorResponseDto400,
   ErrorResponseDto401,
@@ -9,8 +8,9 @@ import type {
   ErrorResponseDto408,
   ErrorResponseDto500,
 } from "@api/gen";
-import { useProfileStore } from "@features/auth/store/profile/useProfileStore";
 import { ANSWER, type Answer } from "@/lib/const/Answer";
+import { queryClientInstans } from "@api/queryClientInstans";
+import { useProfileStore } from "@features/auth";
 
 export function handlerError(dataError: unknown): Answer {
   const profile = useProfileStore;

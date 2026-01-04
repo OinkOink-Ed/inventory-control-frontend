@@ -1,10 +1,8 @@
-import { useApiQuery } from "@/shared/api/hooks/useApi";
+import { useApiSuspenseQuery } from "@/shared/api";
 import { userControllerGetAll } from "@api/gen";
-import { useMatch } from "react-router";
 
 export const useUsersTableApi = () => {
-  return useApiQuery(userControllerGetAll, {
+  return useApiSuspenseQuery(userControllerGetAll, {
     queryKey: ["users", "table"],
-    enabled: !!useMatch({ path: "/users", end: true }),
   });
 };

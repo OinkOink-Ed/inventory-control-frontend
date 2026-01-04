@@ -1,7 +1,7 @@
-import { SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
+import { SidebarMenuButton, SidebarMenuItem } from "@/ui/sidebar";
+import { SidebarNavLink } from "@/widgets/sidebar/ui/SidebarNavLink.tsx";
 import { Book } from "lucide-react";
 import { memo } from "react";
-import { SidebarNavLink } from "./SidebarNavLink";
 
 export const AdminItemsMenu = memo(function AdminItemsMenu() {
   return (

@@ -1,1 +1,1 @@
-export { CustomErrorForbidden } from "./CustomErrorForbidden";
+export { CustomErrorForbidden } from "@/lib/errors/CustomErrorForbidden.ts";

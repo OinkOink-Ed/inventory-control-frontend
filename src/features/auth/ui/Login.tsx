@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { authRequestDtoSchemaZOD } from "../model/shema";
 import type { PostAuthDto } from "@api/gen";
 import {
   Form,
@@ -9,10 +8,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { useOnSubmit } from "../api/useOnSubmit";
+} from "@/ui/form";
+import { Input } from "@/ui/input";
+import { Button } from "@/ui/button";
+import { useOnSubmit } from "@features/auth/api/useOnSubmit.ts";
+import { authRequestDtoSchemaZOD } from "@features/auth/model/shema.ts";
 
 export function Login() {
   const form = useForm<PostAuthDto>({

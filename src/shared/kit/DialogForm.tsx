@@ -6,7 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "./ui/dialog";
+} from "@/ui/dialog";
 import { type PropsWithChildren } from "react";
 import type { DialogFormShowStore } from "@/shared/kit/store/dialogFormShow/type";
 interface DialogFormProps extends PropsWithChildren {

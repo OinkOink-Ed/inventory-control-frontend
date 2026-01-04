@@ -1,27 +1,23 @@
 import { createBrowserRouter } from "react-router";
 import { Suspense } from "react";
-import {
-  CartridgeModelPage,
-  DashboardPage,
-  DivisionPage,
-  LoginPage,
-  ProfilePage,
-  ReportsPage,
-  UsersPage,
-  WarehousePage,
-} from "./lazyImports";
 import { MainLayout } from "@app/layouts";
-import { CanEditGuard } from "./AccessGuard/ui/CanEditGuard";
-import {
-  AdminRoute,
-  PrivateRoute,
-  PublicRoute,
-  UserAndAdminRoute,
-} from "./RouteGuard";
-import { UsersTable } from "@/pages/users/UsersTable";
-import { UserCard } from "@/pages/users/UserCard/UserCard";
-import { ErrorBoundary } from "@/shared/kit/ErrorBoundary";
+import { ErrorBoundary } from "@/shared/kit";
 import { Spinner } from "@/ui/spinner";
+import { UsersTable } from "@features/users";
+import { UserCard } from "@/pages/user-card";
+import { DashboardPageLazy } from "@/pages/dashboards";
+import { LoginPageLazy } from "@/pages/auth";
+import { WarehousePageLazy } from "@/pages/warehouse";
+import { DivisionPageLazy } from "@/pages/division";
+import { UsersPageLzy } from "@/pages/users";
+import { CartridgeModelPageLazy } from "@/pages/cartridge";
+import { ProfilePageLaze } from "@/pages/profile";
+import { ReportsPageLazy } from "@/pages/reports";
+import { CanEditGuard } from "@router/wrapper/CanEditGuard.tsx";
+import { PublicRoute } from "@router/RouteGuard/Public.tsx";
+import { PrivateRoute } from "@router/RouteGuard/Private.tsx";
+import { UserAndAdminRoute } from "@router/RouteGuard/UserAndAdminRoute.tsx";
+import { AdminRoute } from "@router/RouteGuard/AdminRoute.tsx";
 
 // Spinner можно будет заменить на Skeleton различный в дальнейшем
 
@@ -29,7 +25,7 @@ export const router = createBrowserRouter([
   {
     path: "auth",
     loader: PublicRoute,
-    element: <LoginPage />,
+    element: <LoginPageLazy />,
   },
 
   {
@@ -47,7 +43,7 @@ export const router = createBrowserRouter([
         path: "warehouse/:id",
         element: (
           <Suspense key="warehouse" fallback={<Spinner />}>
-            <WarehousePage />
+            <WarehousePageLazy />
           </Suspense>
         ),
         errorElement: <ErrorBoundary />,
@@ -58,7 +54,7 @@ export const router = createBrowserRouter([
 
         element: (
           <Suspense key="dashboard" fallback={<Spinner />}>
-            <DashboardPage />
+            <DashboardPageLazy />
           </Suspense>
         ),
         errorElement: <ErrorBoundary />,
@@ -68,7 +64,7 @@ export const router = createBrowserRouter([
         path: "division/:id",
         element: (
           <Suspense key="division" fallback={<Spinner />}>
-            <DivisionPage />
+            <DivisionPageLazy />
           </Suspense>
         ),
         errorElement: <ErrorBoundary />,
@@ -80,7 +76,7 @@ export const router = createBrowserRouter([
             path: "users",
             element: (
               <Suspense key="users" fallback={<Spinner />}>
-                <UsersPage />
+                <UsersPageLzy />
               </Suspense>
             ),
             children: [
@@ -103,7 +99,7 @@ export const router = createBrowserRouter([
             path: "cartrideModel",
             element: (
               <Suspense key="cartrideModel" fallback={<Spinner />}>
-                <CartridgeModelPage />
+                <CartridgeModelPageLazy />
               </Suspense>
             ),
             errorElement: <ErrorBoundary />,
@@ -115,7 +111,7 @@ export const router = createBrowserRouter([
         path: "profile",
         element: (
           <Suspense key="profile" fallback={<Spinner />}>
-            <ProfilePage />
+            <ProfilePageLaze />
           </Suspense>
         ),
         errorElement: <ErrorBoundary />,
@@ -125,7 +121,7 @@ export const router = createBrowserRouter([
         // TODO Подумать какие отчёты нужны
         element: (
           <Suspense key="reports" fallback={<Spinner />}>
-            <ReportsPage />
+            <ReportsPageLazy />
           </Suspense>
         ),
         errorElement: <ErrorBoundary />,

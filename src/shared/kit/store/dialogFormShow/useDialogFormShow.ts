@@ -1,5 +1,8 @@
+import type {
+  DialogFormShowActions,
+  DialogFormShowStore,
+} from "@/kit/store/dialogFormShow/type.ts";
 import { create } from "zustand";
-import { type DialogFormShowActions, type DialogFormShowStore } from "./type";
 
 export const useDialogFormShow = create<
   DialogFormShowStore & DialogFormShowActions

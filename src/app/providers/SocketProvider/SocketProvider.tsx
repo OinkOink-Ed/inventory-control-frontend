@@ -10,10 +10,10 @@ import type {
   ReceivingCartridgeEventType,
   UpdateUserEventType,
 } from "@api/gen";
-import { useProfileStore } from "@features/auth/store/profile/useProfileStore";
-import { useLogout } from "@/lib/hooks/useLogout";
-import { SocketContext } from "./socketContext";
-import { useProfileContext } from "@/shared/providers/ProfileProvider";
+import { useProfileStore } from "@features/auth";
+import { useLogout } from "@/lib/hooks";
+import { useProfileContext } from "@/shared/providers";
+import { SocketContext } from "@app-providers/SocketProvider/socketContext.ts";
 
 export function SocketProvider({ children }: PropsWithChildren) {
   const token = useProfileStore((state) => state.access_token);

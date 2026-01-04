@@ -1,6 +1,4 @@
-import { useChoiceOfStaffStore } from "@/pages/warehouse/store/choiceOfStaff/useChoiceOfStaffStore";
-import { useChoiceOfKabinetsStore } from "@/pages/warehouse/store/choiseOfKabinets/useChoiseOfKabinetsStore";
-import { useApiMutation, useApiQuery } from "@/shared/api/hooks/useApi";
+import { useApiMutation, useApiQuery } from "@/shared/api";
 import {
   cartridgeModelControllerGetMogetModelsByWarehousedels,
   deliveryControllerCreate,
@@ -8,6 +6,8 @@ import {
   kabinetControllerGetKabinetsByUserId,
   userControllerGetAllByDivisions,
 } from "@api/gen";
+import { useChoiceOfStaffStore } from "@features/warehouse/model/store/choiceOfStaff/useChoiceOfStaffStore.ts";
+import { useChoiceOfKabinetsStore } from "@features/warehouse/model/store/choiseOfKabinets/useChoiseOfKabinetsStore.ts";
 import { useMatch, useParams } from "react-router";
 
 export const useDeliveryCartridgeFormApiCartrdgesCreateDelivery = () => {

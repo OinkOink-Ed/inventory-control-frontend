@@ -1,1 +1,1 @@
-export type { UserDtoInterfaces } from "./UserDtoInterfaces";
+export type { UserDtoInterfaces } from "@/lib/helpers/types/UserDtoInterfaces.ts";

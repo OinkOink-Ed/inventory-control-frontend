@@ -6,18 +6,16 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+} from "@/ui/dropdown-menu";
 import { type ReactNode } from "react";
-import { Button } from "../ui/button";
+import { Button } from "@/ui/button";
 
 interface DataTableRowActionsProps {
   linkToCard: ReactNode;
 }
 
 //Улучшить для выбора действия и их работы (Пока что не трубется?)
-export default function DataTableRowActions({
-  linkToCard,
-}: DataTableRowActionsProps) {
+export function DataTableRowActions({ linkToCard }: DataTableRowActionsProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

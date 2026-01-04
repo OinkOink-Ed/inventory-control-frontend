@@ -1,5 +1,5 @@
-import { CustomErrorForbidden } from "@/lib/errors/CustomErrorForbidden";
-import { isAuth } from "@router/model/auth/isAuth";
+import { CustomErrorForbidden } from "@/lib/errors";
+import { isAuth } from "@router/isAuth";
 import { redirect } from "react-router";
 
 export function UserAndAdminRoute() {
@@ -9,6 +9,7 @@ export function UserAndAdminRoute() {
     return redirect("/auth");
   }
 
+  //Тут тоже что-то не так с проверкой
   if (result.role.roleName !== "user" && result.role.roleName !== "admin") {
     const error = new CustomErrorForbidden("Нет доступа к странице!", 403);
     throw error;

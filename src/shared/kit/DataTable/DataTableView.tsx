@@ -4,8 +4,8 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { Button } from "../ui/button";
+} from "@/ui/dropdown-menu";
+import { Button } from "@/ui/button";
 
 export interface DataTableViewProps<TData> {
   table: Table<TData>;

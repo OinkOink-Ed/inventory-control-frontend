@@ -1,18 +1,18 @@
 import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
-import { useRoleContext } from "@app-providers/ProfileProvider/context";
 import { useDialogFormShow } from "@/shared/kit/store/dialogFormShow/useDialogFormShow";
 import { memo, useMemo } from "react";
-import { Button } from "./ui/button";
+import { Button } from "@/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
+} from "@/ui/dropdown-menu";
+import { useProfileContext } from "@/shared/providers/index.ts";
 
 export const ActionsForTable = memo(function ActionsForTable() {
   const toggleShow = useDialogFormShow((state) => state.toggleDialogForm);
 
-  const { roleName } = useRoleContext();
+  const { roleName } = useProfileContext();
   const baseActions = useMemo(
     () => [
       <Button

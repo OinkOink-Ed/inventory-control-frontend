@@ -1,5 +1,4 @@
-import { ThemeProvider } from "@api/index";
-import { queryClientInstans } from "@api/queryClientInstans";
+import { queryClientInstans, ThemeProvider } from "@api/index";
 import { router } from "@router/router";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider } from "react-router";

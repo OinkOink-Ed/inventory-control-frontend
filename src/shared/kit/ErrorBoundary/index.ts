@@ -1,1 +1,1 @@
-export { ErrorBoundary } from "./ErrorBoundary";
+export { ErrorBoundary } from "@/kit/ErrorBoundary/ErrorBoundary.tsx";

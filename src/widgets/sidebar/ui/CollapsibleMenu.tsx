@@ -2,18 +2,18 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+} from "@/ui/collapsible";
 import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubItem,
-} from "@/components/ui/sidebar";
+} from "@/ui/sidebar";
+import type { MenuItem } from "@/widgets/sidebar/model/types.ts";
+import { SidebarNavLink } from "@/widgets/sidebar/ui/SidebarNavLink.tsx";
 import { ChevronRight } from "lucide-react";
 import { memo, type ReactNode } from "react";
-import { type MenuItem } from "../types/MenuItem";
 import { useLocation } from "react-router";
-import { SidebarNavLink } from "./SidebarNavLink";
 
 interface CollapsibleMenuProps {
   name: string;

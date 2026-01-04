@@ -1,6 +1,5 @@
-import { useChoiseOfKabinetsForCreateUser } from "@/shared/stores/choiseOfKabinetsForCreateUser/useChoiseOfKabinetsStore";
-import { useApiMutation, useApiQuery } from "@/shared/api/hooks/useApi";
-import { useMatch } from "react-router";
+import { useChoiseOfKabinetsForCreateUser } from "@/shared/model";
+import { useApiMutation, useApiSuspenseQuery } from "@/shared/api";
 import {
   divisionControllerGetDivisions,
   kabinetControllerGetKabinetsByDivisionIdForCreateUser,
@@ -8,7 +7,6 @@ import {
   userControllerCreateUser,
   type PostCreateUserDto,
 } from "@api/gen";
-import { useProfileContext } from "@/shared/providers/ProfileProvider";
 
 export const useUsersFormApiCreateUser = () => {
   return useApiMutation((data: PostCreateUserDto) =>
@@ -17,17 +15,14 @@ export const useUsersFormApiCreateUser = () => {
 };
 
 export const useUsersFormApiGetRole = () => {
-  return useApiQuery(roleControllerGetRoles, {
+  return useApiSuspenseQuery(roleControllerGetRoles, {
     queryKey: ["roles"],
   });
 };
 
 export const useUsersFormApiGetDivision = () => {
-  const { role } = useProfileContext();
-
-  return useApiQuery(divisionControllerGetDivisions, {
+  return useApiSuspenseQuery(divisionControllerGetDivisions, {
     queryKey: ["division"],
-    enabled: role?.roleName !== "staff",
   });
 };
 
@@ -36,7 +31,7 @@ export const useUsersFormApiGetKabinetsByUserIdForCreateUser = () => {
     (state) => state.userChoices,
   );
 
-  return useApiQuery(
+  return useApiSuspenseQuery(
     () => {
       return kabinetControllerGetKabinetsByDivisionIdForCreateUser({
         divisionIds: encodeURIComponent(JSON.stringify(choiseDivision)),
@@ -44,7 +39,6 @@ export const useUsersFormApiGetKabinetsByUserIdForCreateUser = () => {
     },
     {
       queryKey: ["kabinetsByUserIdForCreateUser", choiseDivision],
-      enabled: !!useMatch({ path: "/users/*" }) && !!choiseDivision,
     },
   );
 };

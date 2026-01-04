@@ -1,1 +1,1 @@
-export { deliveryPDF } from "./deliveryPdf";
+export { deliveryPDF } from "@/lib/helpers/generatedPDF/deliveryPdf.ts";

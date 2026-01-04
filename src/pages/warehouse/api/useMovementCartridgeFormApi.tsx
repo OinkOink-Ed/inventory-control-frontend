@@ -1,6 +1,4 @@
-import { useChoiceOfStaffStore } from "@/pages/warehouse/store/choiceOfStaff/useChoiceOfStaffStore";
-import { useApiMutation, useApiQuery } from "@/shared/api/hooks/useApi";
-import { useRoleContext } from "@app-providers/ProfileProvider/hooks/useRoleContext";
+import { useApiMutation, useApiQuery } from "@/shared/api";
 import { useMatch, useParams } from "react-router";
 import {
   cartridgeModelControllerGetMogetModelsByWarehousedels,
@@ -9,6 +7,8 @@ import {
   warehouseControllerGetWarehouses,
   type PostCreateMovementDto,
 } from "@api/gen";
+import { useProfileContext } from "@/shared/providers/index.ts";
+import { useChoiceOfStaffStore } from "@features/warehouse/model/store/choiceOfStaff/useChoiceOfStaffStore.ts";
 
 export const useMovementCartridgeFormApiCartrdgesCreateMovement = () => {
   return useApiMutation((data: PostCreateMovementDto) =>
@@ -26,7 +26,7 @@ export const useMovementCartridgeFormApiCartridgeModelGetAll = () => {
   );
 };
 export const useMovementCartridgeFormApiWarehouseGetAll = () => {
-  const { role } = useRoleContext();
+  const { role } = useProfileContext();
   return useApiQuery(warehouseControllerGetWarehouses, {
     queryKey: ["warehouses"],
     enabled: role?.roleName !== "staff",

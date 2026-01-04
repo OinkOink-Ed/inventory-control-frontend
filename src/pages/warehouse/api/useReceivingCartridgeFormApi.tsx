@@ -1,4 +1,4 @@
-import { useApiMutation, useApiQuery } from "@/shared/api/hooks/useApi";
+import { useApiMutation, useApiQuery } from "@/shared/api";
 import {
   cartridgeModelControllerGetMogetModelsByWarehousedels,
   receivingControllerCreate,
@@ -8,7 +8,7 @@ import { useMatch, useParams } from "react-router";
 
 export const useReceivingCartridgeFormApiCartrdgesCreateReceiving = () => {
   return useApiMutation((data: PostCreateReceivingDto) =>
-    receivingControllerCreate(data)
+    receivingControllerCreate(data),
   );
 };
 
@@ -20,6 +20,6 @@ export const useReceivingCartridgeFormApiCreateCartridgeModelGetAll = () => {
     {
       queryKey: ["modelsCartridges"],
       enabled: !!useMatch({ path: "/warehouse/:id", end: true }),
-    }
+    },
   );
 };

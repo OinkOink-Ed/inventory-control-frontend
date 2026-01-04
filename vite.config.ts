@@ -1,3 +1,4 @@
+import babel from "vite-plugin-babel";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import tailwindcss from "@tailwindcss/vite";
@@ -8,6 +9,11 @@ import { resolve } from "path";
 export default defineConfig({
   plugins: [
     react(),
+    babel({
+      babelConfig: {
+        plugins: ["babel-plugin-react-compiler"],
+      },
+    }),
     tailwindcss(),
     {
       name: "api-shema",
@@ -28,10 +34,11 @@ export default defineConfig({
       "@/ui": resolve(__dirname, "src/shared/ui"),
       "@app-providers": resolve(__dirname, "src/app/providers"),
       "@app-stores": resolve(__dirname, "src/app/stores"),
+      "@pages": resolve(__dirname, "src/pages"),
       "@router": resolve(__dirname, "src/app/router"),
       "@app": resolve(__dirname, "src/app"),
       "@features": resolve(__dirname, "src/features"),
-      "@widgest": resolve(__dirname, "src/widgest"),
+      "@widgets": resolve(__dirname, "src/widgets"),
       "@": resolve(__dirname, "./src"),
     },
   },

@@ -3,8 +3,8 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { Separator } from "../ui/separator";
+} from "@/ui/dropdown-menu";
+import { Separator } from "@/ui/separator";
 import {
   Command,
   CommandEmpty,
@@ -12,11 +12,11 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "../ui/command";
+} from "@/ui/command";
 import { type Column } from "@tanstack/react-table";
 import { cn } from "@/shared/lib/utils";
-import { Button } from "../ui/button";
-import { Badge } from "../ui/badge";
+import { Button } from "@/ui/button";
+import { Badge } from "@/ui/badge";
 
 interface DataTableFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>;
@@ -100,22 +100,22 @@ export default function DataTableFacetedFilter<TData, TValue>({
                       }
                       const filterValues = Array.from(selectedValues);
                       column?.setFilterValue(
-                        filterValues.length ? filterValues : undefined
+                        filterValues.length ? filterValues : undefined,
                       );
                     }}
                   >
                     <div
                       className={cn(
-                        "mr-2 flex h-4 w-4 self-center rounded-sm border border-primary",
+                        "border-primary mr-2 flex h-4 w-4 self-center rounded-sm border",
                         isSelected
                           ? "bg-primary text-primary-foreground"
-                          : "opacity-50 [&_svg]:invisible"
+                          : "opacity-50 [&_svg]:invisible",
                       )}
                     >
                       <Check />
                     </div>
                     {
-                      <option.icon className="mr-2 h-4 w-4 self-center text-muted-foreground" />
+                      <option.icon className="text-muted-foreground mr-2 h-4 w-4 self-center" />
                     }
                     <span className="self-center">{option.label}</span>
                     {facets?.get(option.value) && (

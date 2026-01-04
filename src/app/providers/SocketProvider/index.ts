@@ -1,1 +1,1 @@
-export { SocketProvider } from "./SocketProvider";
+export { SocketProvider } from "@app-providers/SocketProvider/SocketProvider.tsx";

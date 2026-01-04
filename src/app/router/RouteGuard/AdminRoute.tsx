@@ -1,5 +1,5 @@
-import { CustomErrorForbidden } from "@/lib/errors/CustomErrorForbidden";
-import { isAuth } from "@router/model/auth/isAuth";
+import { CustomErrorForbidden } from "@/lib/errors";
+import { isAuth } from "@router/isAuth";
 import { redirect } from "react-router";
 
 export function AdminRoute() {
@@ -8,6 +8,7 @@ export function AdminRoute() {
     return redirect("/auth");
   }
 
+  //Какой-то вопрос я хотел тут решить
   if (result.role.roleName !== "admin") {
     const error = new CustomErrorForbidden("Нет доступа к странице!", 403);
     throw error;

@@ -1,12 +1,12 @@
-export { ANSWER } from "./const";
-export { CustomErrorForbidden } from "./errors";
+export { ANSWER } from "@/lib/const";
+export { CustomErrorForbidden } from "@/lib/errors";
 export {
   decryptedProfile,
   deliveryPDF,
   formateDate,
   formatPhoneNumber,
   handlerError,
-} from "./helpers";
-export type { UserDtoInterfaces } from "./helpers";
-export { useGetProfile, useIsMobile, useLogout } from "./hooks";
-export { cn } from "./utils";
+} from "@/lib/helpers";
+export type { UserDtoInterfaces } from "@/lib/helpers";
+export { useGetProfile, useIsMobile, useLogout } from "@/lib/hooks";
+export { cn } from "@/lib/utils";

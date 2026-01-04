@@ -1,5 +1,5 @@
 import { useMaskito } from "@maskito/react";
-import { Input } from "./ui/input";
+import { Input } from "@/ui/input";
 import React from "react";
 import options from "@/shared/mask";
 

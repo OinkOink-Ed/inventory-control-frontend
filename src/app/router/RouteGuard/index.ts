@@ -1,4 +1,4 @@
-export { AdminRoute } from "./AdminRoute";
-export { PrivateRoute } from "./Private";
-export { PublicRoute } from "./Public";
-export { UserAndAdminRoute } from "./UserAndAdminRoute";
+export { AdminRoute } from "@router/RouteGuard/AdminRoute.tsx";
+export { PrivateRoute } from "@router/RouteGuard/Private.tsx";
+export { PublicRoute } from "@router/RouteGuard/Public.tsx";
+export { UserAndAdminRoute } from "@router/RouteGuard/UserAndAdminRoute.tsx";
