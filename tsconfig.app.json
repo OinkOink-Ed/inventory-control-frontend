@@ -1,0 +1,47 @@
+{
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "target": "ES2022",
+    "useDefineForClassFields": true,
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "types": ["vite/client", "node"],
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
+
+    "baseUrl": ".",
+    "paths": {
+      "@gen-api": ["src/shared/api/gen/index.ts"],
+      "@client": ["src/shared/api/client.ts"],
+      "@api/*": ["src/shared/api/*"],
+      "@/lib/*": ["src/shared/lib/*"],
+      "@/hooks/*": ["src/shared/hooks/*"],
+      "@/kit/*": ["src/shared/kit/*"],
+      "@/ui/*": ["src/shared/ui/*"],
+      "@app-providers/*": ["src/app/providers/*"],
+      "@app-stores/*": ["src/app/stores/*"],
+      "@pages/*": ["src/pages/*"],
+      "@router/*": ["src/app/router/*"],
+      "@app/*": ["src/app/*"],
+      "@features/*": ["src/features/*"],
+      "@widgets/*": ["src/widgets/*"],
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src"]
+}
